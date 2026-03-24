@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="text-center mb-5">
+
+    <h1>🎨 Bienvenido artista</h1>
+    <p>Gestiona tu perfil y explora talento</p>
+
+</div>
+
+<div class="row text-center">
+
+    <div class="col-md-4">
+        <a href="/artists/" class="btn btn-primary w-100 p-3">
+            🎭 Ver artistas
+        </a>
+    </div>
+
+    <div class="col-md-4">
+        <a href="/artists/perfil/" class="btn btn-success w-100 p-3">
+            👤 Mi perfil
+        </a>
+    </div>
+
+    <div class="col-md-4">
+        <a href="/accounts/logout/" class="btn btn-danger w-100 p-3">
+            🚪 Cerrar sesión
+        </a>
+    </div>
+
+</div>
+
+{% endblock %}

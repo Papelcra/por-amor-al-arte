@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2 class="text-center mb-4">👤 Mis agrupaciones</h2>
+
+<div class="row">
+
+    {% for grupo in grupos %}
+
+        <div class="col-md-4 mb-4">
+
+            <a href="/groups/{{ grupo.id }}/" style="text-decoration:none; color:inherit;">
+
+                <div class="card shadow h-100">
+
+                    {% if grupo.profile_image %}
+                        <img src="{{ grupo.profile_image.url }}" class="card-img-top" style="height:250px; object-fit:cover;">
+                    {% endif %}
+
+                    <div class="card-body">
+                        <h5>{{ grupo.name }}</h5>
+                        <p>{{ grupo.description|truncatewords:20 }}</p>
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+    {% empty %}
+        <p class="text-center">No tienes agrupaciones aún.</p>
+    {% endfor %}
+
+</div>
+
+{% endblock %}

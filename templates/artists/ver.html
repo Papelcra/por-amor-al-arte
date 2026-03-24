@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="card mx-auto" style="max-width: 600px;">
+
+    {% if artista.profile_image %}
+        <img src="{{ artista.profile_image.url }}" class="card-img-top">
+    {% endif %}
+
+    <div class="card-body text-center">
+        <h3>{{ artista.stage_name }}</h3>
+        <p>{{ artista.description }}</p>
+
+        <h5>Géneros:</h5>
+        {% for genero in artista.genres.all %}
+            <span class="badge bg-primary me-1">{{ genero.nombre }}</span>   <!-- ← CORREGIDO -->
+        {% endfor %}
+    </div>
+
+</div>
+
+{% endblock %}

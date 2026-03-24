@@ -1,0 +1,37 @@
+{% load socialaccount %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container mt-5">
+
+<h2 class="text-center">Iniciar sesión</h2>
+
+<form method="post" class="mt-4">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit" class="btn btn-primary w-100">
+        Ingresar
+    </button>
+</form>
+
+<hr>
+
+<div class="text-center">
+    <a href="{% provider_login_url 'google' %}" class="btn btn-danger">
+        Iniciar con Google
+    </a>
+</div>
+
+<p class="text-center mt-3">
+    ¿No tienes cuenta?
+    <a href="/accounts/signup/">Regístrate</a>
+</p>
+
+</body>
+</html>

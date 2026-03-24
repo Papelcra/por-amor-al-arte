@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Catálogo de Artistas</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'core:home' %}">Por Amor al Arte</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <aside class="col-md-3">
+                <div class="card p-3 shadow-sm">
+                    <h5>Filtros</h5>
+                    <hr>
+                    <p><strong>Línea seleccionada:</strong> {{ linea_id|default:"Todas" }}</p>
+                    <a href="{% url 'catalog:list' %}" class="btn btn-sm btn-secondary w-100">Limpiar filtros</a>
+                </div>
+            </aside>
+
+            <main class="col-md-9">
+                <h2>Nuestros Artistas y Agrupaciones</h2>
+                
+                <div class="row row-cols-1 row-cols-md-3 g-4 mt-2">
+                    {% for artista in artistas %}
+                    <div class="col">
+                        <div class="card h-100 shadow-sm">
+                            {% if artista.profile_image %}
+                            <img src="{{ artista.profile_image.url }}" class="card-img-top" alt="{{ artista.stage_name }}">
+                            {% endif %}
+                            <div class="card-body">
+                                <h5 class="card-title">{{ artista.stage_name }}</h5>
+                                <p class="card-text text-truncate">{{ artista.description }}</p>
+                            </div>
+                            <div class="card-footer bg-white border-0 text-center">
+                                <span class="badge bg-primary">Artista</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p>No se encontraron artistas en esta línea.</p>
+                    {% endfor %}
+
+                    {% for grupo in agrupaciones %}
+                    <div class="col">
+                        <div class="card h-100 border-info shadow-sm">
+                            {% if grupo.profile_image %}
+                            <img src="{{ grupo.profile_image.url }}" class="card-img-top" alt="{{ grupo.name }}">
+                            {% endif %}
+                            <div class="card-body">
+                                <h5 class="card-title">{{ grupo.name }}</h5>
+                                <p class="card-text text-truncate">{{ grupo.description }}</p>
+                            </div>
+                            <div class="card-footer bg-white border-0 text-center">
+                                <span class="badge bg-info text-dark">Agrupación</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </main>
+        </div>
+    </div>
+</body>
+</html>

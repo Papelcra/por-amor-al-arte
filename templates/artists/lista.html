@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Artistas</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+
+        .filtros {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        select, button {
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            background-color: #222;
+            color: white;
+            cursor: pointer;
+        }
+
+        .contenedor {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .card-body {
+            padding: 15px;
+        }
+
+        .genero {
+            display: inline-block;
+            background: #444;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 5px;
+            margin: 2px;
+            font-size: 12px;
+        }
+
+        .btn {
+            display: block;
+            margin-top: 10px;
+            text-align: center;
+            background: #222;
+            color: white;
+            padding: 8px;
+            border-radius: 6px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>🎨 Artistas</h2>
+
+    <!-- 🔍 FILTROS -->
+    <form method="GET" class="filtros">
+
+        <!-- Géneros -->
+        <select name="genre">
+            <option value="">Todos los géneros</option>
+            {% for genero in generos %}
+                <option value="{{ genero.id }}"
+                    {% if request.GET.genre == genero.id|stringformat:"s" %}selected{% endif %}>
+                    {{ genero.nombre }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <!-- Líneas artísticas -->
+        <select name="line">
+            <option value="">Todas las líneas</option>
+            {% for linea in lineas %}
+                <option value="{{ linea.id }}"
+                    {% if request.GET.line == linea.id|stringformat:"s" %}selected{% endif %}>
+                    {{ linea.nombre }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Filtrar</button>
+    </form>
+
+    <!-- 🧱 LISTA -->
+    <div class="contenedor">
+
+        {% for artista in artistas %}
+        <div class="card">
+
+            <!-- Imagen -->
+            {% if artista.profile_image %}
+                <img src="{{ artista.profile_image.url }}">
+            {% else %}
+                <img src="https://via.placeholder.com/300x180">
+            {% endif %}
+
+            <div class="card-body">
+                <h3>{{ artista.user.username }}</h3>
+
+                <p>{{ artista.description }}</p>
+
+                <!-- 🎭 GÉNEROS -->
+                <p><strong>Géneros:</strong><br>
+                    {% for genero in artista.genres.all %}
+                        <span class="genero">{{ genero.nombre }}</span>
+                    {% empty %}
+                        <span>No tiene géneros</span>
+                    {% endfor %}
+                </p>
+
+                <!-- 🎼 LÍNEA ARTÍSTICA -->
+                <p><strong>Línea:</strong>
+                    {{ artista.linea_artistica.name|default:"Sin línea" }}
+                </p>
+
+                <!-- BOTÓN -->
+                <a href="{% url 'artists:ver_artista' artista.id %}" class="btn">
+                    Ver perfil
+                </a>
+            </div>
+
+        </div>
+        {% endfor %}
+
+    </div>
+
+</body>
+</html>
+{% endblock %}

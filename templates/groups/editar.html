@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2 class="text-center mb-4">✏️ Editar agrupación</h2>
+
+<form method="POST" enctype="multipart/form-data" class="card p-4 shadow">
+
+    {% csrf_token %}
+
+    <div class="mb-3">
+        <label>Nombre</label>
+        {{ form.name }}
+    </div>
+
+    <div class="mb-3">
+        <label>Descripción</label>
+        {{ form.description }}
+    </div>
+
+    <div class="mb-3">
+        <label>Imagen</label>
+        {{ form.profile_image }}
+    </div>
+
+    <div class="mb-3">
+        <label>Miembros</label>
+        {{ form.members }}
+    </div>
+
+    <button class="btn btn-warning w-100">
+        Guardar cambios
+    </button>
+
+</form>
+
+{% endblock %}
