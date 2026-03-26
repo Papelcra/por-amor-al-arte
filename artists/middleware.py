@@ -12,9 +12,10 @@ class CompleteProfileMiddleware:
 
             # Rutas que NO deben redirigir (para evitar loops)
             allowed_paths = [
-                '/artists/perfil/',
-                '/accounts/logout/',
-                '/admin/',
+                    '/artists/perfil/',
+                    '/artists/ver/',
+                    '/accounts/logout/',
+                    '/admin/',
             ]
 
             if any(request.path.startswith(path) for path in allowed_paths):

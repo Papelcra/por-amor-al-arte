@@ -2,58 +2,259 @@
 
 {% block content %}
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Perfil Artista</title>
+<div class="container py-5">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <div class="card artist-card mx-auto overflow-hidden fade-in">
 
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-    </style>
-</head>
-
-<body>
-
-<div class="container mt-5">
-
-    <h2 class="text-center mb-4">🎭 Completa tu perfil artístico</h2>
-
-    <form method="POST" enctype="multipart/form-data" class="card p-4 shadow">
-        {% csrf_token %}
-
-        <div class="mb-3">
-            <label class="form-label">Nombre artístico</label>
-            {{ form.stage_name }}
+        <!-- 🎨 HERO -->
+        <div class="image-top">
+            <div class="overlay">
+                <h2>Haz que tu talento brille ✨</h2>
+                <p>Tu arte merece ser descubierto</p>
+            </div>
         </div>
+        
+        <!-- 🧾 FORM -->
+        <div class="card-body p-5">
 
-        <div class="mb-3">
-            <label class="form-label">Descripción</label>
-            {{ form.description }}
+            <h3 class="text-center title-gradient mb-2">
+                🎭 Crea tu perfil artístico
+            </h3>
+
+            <p class="text-center text-muted small mb-4">
+                🎧 Más de 500 artistas ya están compartiendo su talento
+            </p>
+
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <!-- Nombre -->
+                <div class="mb-3">
+                    <label>Nombre artístico</label>
+                    {{ form.stage_name }}
+                </div>
+
+                <!-- Descripción -->
+                <div class="mb-3">
+                    <label>Descripción</label>
+                    {{ form.description }}
+                </div>
+
+                <!-- Imagen -->
+                <div class="mb-3 text-center">
+                    <label class="d-block mb-2">Imagen</label>
+
+                    <div class="image-preview mb-2">
+                        <img id="preview" src="https://via.placeholder.com/100">
+                    </div>
+
+                    {{ form.profile_image }}
+                </div>
+
+                <!-- Géneros -->
+                <div class="mb-3">
+                    <label>Géneros (máx 3)</label>
+                    <div class="genres-container">
+                        {% for checkbox in form.genres %}
+                            {{ checkbox.tag }}
+                            <label for="{{ checkbox.id_for_label }}">{{ checkbox.choice_label }}</label>
+                        {% endfor %}
+                    </div>
+                    <small id="genre-warning" class="text-danger d-none">
+                        ⚠️ Solo puedes seleccionar hasta 3 géneros
+                    </small>
+                </div>
+
+                <!-- Preview perfil -->
+                <div class="preview-card mt-4 p-3">
+                    <h6 class="text-muted">Vista previa</h6>
+                    <div class="d-flex align-items-center gap-3">
+                        <img id="preview-card-img" src="https://via.placeholder.com/60">
+                        <div>
+                            <strong id="preview-name">Tu nombre artístico</strong>
+                            <p id="preview-desc" class="mb-0 small text-muted">
+                                Tu descripción aparecerá aquí...
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botón -->
+                <button type="submit" class="btn btn-main w-100 mt-4">
+                    🚀 Publicar mi talento
+                </button>
+
+            </form>
+
         </div>
-
-        <div class="mb-3">
-            <label class="form-label">Imagen</label>
-            {{ form.profile_image }}
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Géneros</label>
-            {{ form.genres }}
-        </div>
-
-        <button type="submit" class="btn btn-success w-100">
-            Guardar perfil
-        </button>
-    </form>
+    </div>
 
 </div>
 
-</body>
-</html>
+<style>
+/* 🌤 FONDO */
+body {
+    background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+}
+
+/* 💎 CARD */
+.artist-card {
+    max-width: 650px;
+    border-radius: 20px;
+    background: white;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+}
+
+/* 🎞 ANIMACION ENTRADA */
+.fade-in {
+    animation: fadeIn 0.8s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px);}
+    to { opacity: 1; transform: translateY(0);}
+}
+
+/* 🎨 HERO */
+.image-top {
+    height: 220px;
+    background: url('https://images.unsplash.com/photo-1511379938547-c1f69419868d') center/cover;
+    animation: zoomHero 10s ease-in-out infinite alternate;
+}
+
+@keyframes zoomHero {
+    from { background-size: 100%; }
+    to { background-size: 110%; }
+}
+
+/* OVERLAY */
+.overlay {
+    height: 100%;
+    background: linear-gradient(180deg, rgba(59,130,246,0.6), rgba(96,165,250,0.6));
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 20px;
+}
+
+/* TITULO */
+.title-gradient {
+    background: linear-gradient(90deg, #3b82f6, #60a5fa);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* INPUTS */
+input, textarea, select {
+    width: 100%;
+    border-radius: 10px !important;
+    padding: 10px !important;
+    border: 1px solid #bae6fd !important;
+    background: #f0f9ff !important;
+}
+
+input:focus, textarea:focus {
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 8px rgba(59,130,246,0.3);
+}
+
+/* PREVIEW IMG */
+.image-preview img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 3px solid #93c5fd;
+}
+
+/* GENEROS */
+.genres-container label {
+    background: #d8b4fe; /* morado pastel */
+    padding: 6px 12px;
+    border-radius: 15px;
+    margin: 4px;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.genres-container input {
+    display: none;
+}
+
+.genres-container input:checked + label {
+    background: #7c3aed; /* morado intenso */
+    color: white;
+}
+
+/* PREVIEW CARD */
+.preview-card {
+    background: #f0f9ff;
+    border-radius: 12px;
+}
+
+/* BOTON */
+.btn-main {
+    background: linear-gradient(135deg, #3b82f6, #60a5fa);
+    color: white;
+    border-radius: 10px;
+    padding: 12px;
+    font-weight: bold;
+    border: none;
+    transition: 0.3s;
+}
+
+.btn-main:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 10px 25px rgba(59,130,246,0.35);
+}
+</style>
+
+<script>
+// 📸 PREVIEW IMAGEN
+const input = document.querySelector('input[type="file"]');
+const preview = document.getElementById('preview');
+const previewCardImg = document.getElementById('preview-card-img');
+
+if(input){
+    input.addEventListener('change', e => {
+        const file = e.target.files[0];
+        if(file){
+            const url = URL.createObjectURL(file);
+            preview.src = url;
+            previewCardImg.src = url;
+        }
+    });
+}
+
+// ✍️ PREVIEW TEXTO
+const nameInput = document.querySelector('input[name="stage_name"]');
+const descInput = document.querySelector('textarea[name="description"]');
+
+nameInput?.addEventListener('input', e => {
+    document.getElementById('preview-name').innerText = e.target.value || "Tu nombre artístico";
+});
+
+descInput?.addEventListener('input', e => {
+    document.getElementById('preview-desc').innerText = e.target.value || "Tu descripción aparecerá aquí...";
+});
+
+// 🎵 LIMITE GENEROS
+const checkboxes = document.querySelectorAll('.genres-container input');
+const warning = document.getElementById('genre-warning');
+
+checkboxes.forEach(cb => {
+    cb.addEventListener('change', () => {
+        const checked = document.querySelectorAll('.genres-container input:checked');
+        
+        if(checked.length > 3){
+            cb.checked = false;
+            warning.classList.remove('d-none');
+        } else {
+            warning.classList.add('d-none');
+        }
+    });
+});
+</script>
 
 {% endblock %}

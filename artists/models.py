@@ -10,7 +10,7 @@ class Artist(models.Model):
     description = models.TextField()
     profile_image = models.ImageField(upload_to='artists/', null=True, blank=True)
 
-    genres = models.ManyToManyField(Genre, blank=True)
+    genres = models.ManyToManyField(Genre)
 
     def __str__(self):
         return self.stage_name

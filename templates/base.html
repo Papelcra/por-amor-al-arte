@@ -72,22 +72,21 @@
 
                     {% if user.role == 'artist' %}
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'artists:perfil' %}">
-                            ✏️ Editar perfil
-                        </a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'artists:perfil' %}">
+                                ✏️ Editar perfil
+                            </a>
+                        </li>
 
-                    {% if request.user.artist %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'artists:ver_artista' request.user.artist.id %}">
-                            👁️ Ver mi perfil
-                        </a>
-                    </li>
+                        {% if request.user.artist_id %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'artists:ver' request.user.artist.id %}">
+                                👁️ Ver mi perfil
+                            </a>
+                        </li>
+                        {% endif %}
+
                     {% endif %}
-
-                    {% endif %}
-
                     <li class="nav-item">
                         <a class="nav-link text-danger" href="/accounts/logout/">
                             Cerrar sesión

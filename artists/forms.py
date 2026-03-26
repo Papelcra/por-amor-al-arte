@@ -1,6 +1,6 @@
-# artists/forms.py
 from django import forms
 from .models import Artist
+from catalog.models import Genre
 
 class ArtistForm(forms.ModelForm):
     class Meta:
