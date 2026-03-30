@@ -23,13 +23,20 @@ def perfil_artista(request):
             artist.save()
             form.save_m2m()
             # 🔹 Redirige a la página de ver perfil
-            return redirect('artists:ver', id=artist.id)
+            return redirect('artists:perfil')
         else:
             print("❌ ERRORES:", form.errors)
     else:
         form = ArtistForm(instance=artist)
 
-    return render(request, 'artists/perfil.html', {'form': form})
+    @login_required
+    def ver_perfil(request):
+        if request.user.role != 'artist':   
+            return redirect('core:home')
+
+        artist = get_object_or_404(Artist, user=request.user)
+        return render(request, 'artists/ver.html', {'artist': artist})
+    return render(request, 'core/home_artist.html', {'form': form})
 # 📋 LISTA DE ARTISTAS
 def lista_artistas(request):
 
@@ -56,7 +63,6 @@ def lista_artistas(request):
 
 
 def ver_artista(request, id):
-    print("🔥 ENTRE A VER_ARTISTA")
     artista = get_object_or_404(Artist, id=id)
     return render(request, 'artists/ver.html', {'artista': artista})
 

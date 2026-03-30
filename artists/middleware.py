@@ -31,7 +31,7 @@ class CompleteProfileMiddleware:
                         not artist.description or
                         not artist.genres.exists()
                     ):
-                        return redirect('/artists/perfil/')
+                        return redirect('/core/home_artist/')
 
                 except Artist.DoesNotExist:
                     return redirect('/artists/perfil/')
