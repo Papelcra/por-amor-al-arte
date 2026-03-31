@@ -5,112 +5,457 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Por Amor al Arte | Directorio Público</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    
     <style>
-        .hero-section { background: #f8f9fa; padding: 60px 0; border-bottom: 1px solid #dee2e6; }
-        .line-card { transition: transform 0.2s; cursor: pointer; text-decoration: none; color: inherit; }
-        .line-card:hover { transform: translateY(-5px); }
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Helvetica Neue', Arial, sans-serif; margin: 0; }
+
+        .topbar {
+            background: #212529;
+            padding: 7px 0;
+            text-align: center;
+            font-size: .82rem;
+        }
+        .topbar a {
+            color: rgba(255,255,255,.6);
+            margin: 0 9px;
+            text-decoration: none;
+            transition: color .2s;
+            font-size: 1rem;
+        }
+        .topbar a:hover { color: #fff; }
+
+        .navbar-brand { font-weight: 800; font-size: 1.05rem; }
+        .nav-link { font-size: .87rem; font-weight: 500; }
+        .btn-artistas {
+            background-color: #2cb0e8;
+            color: #fff !important;
+            border: none;
+            border-radius: 4px;
+            padding: 7px 18px;
+            font-weight: 700;
+            font-size: .82rem;
+            letter-spacing: .5px;
+            text-transform: uppercase;
+            transition: background .2s;
+        }
+        .btn-artistas:hover { background-color: #20abc7; color: #fff !important; }
+
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            text-align: center;
+            color: #fff;
+        }
+        .hero-video {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+        }
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,.62);
+            z-index: 1;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            padding: 60px 20px 40px;
+            width: 100%;
+        }
+        .hero-logo {
+            width: 280px;
+            max-width: 100%;
+            margin-bottom: 22px;
+            filter: drop-shadow(0 2px 16px rgba(0,0,0,.4));
+        }
+        .hero-pretitle {
+            font-size: .72rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: rgba(132, 199, 250, 0.75);
+            margin-bottom: 4px;
+            font-family: 'Cormorant Garamond', serif;
+        }
+        .hero-dash {
+            font-family: 'Great Vibes', cursive;
+            font-size: clamp(2.1rem, 5.5vw, 3.2rem);
+            font-weight: 400;
+            letter-spacing: 1px;
+            color: #e6ebf1;
+            text-shadow: 0 2px 8px rgba(0,0,0,.3);
+            margin-bottom: 20px;
+            line-height: 1.1;
+        }
+
+        .btn-hero {
+            background-color: #20abc7;
+            color: #fff;
+            font-weight: 700;
+            font-size: .82rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border: none;
+            border-radius: 4px;
+            padding: 14px 36px;
+            text-decoration: none;
+            transition: background .2s, transform .15s;
+            display: inline-block;
+            margin-bottom: 50px;
+        }
+        .btn-hero:hover { background-color: #20abc7; color: #fff; transform: translateY(-2px); }
+
+        .hero-gallery {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            overflow: hidden;
+            padding-bottom: 0;
+        }
+        .gallery-track {
+            display: flex;
+            gap: 4px;
+            animation: scrollGallery 30s linear infinite;
+            width: max-content;
+        }
+        .gallery-track:hover { animation-play-state: paused; }
+        .gallery-item {
+            width: 220px;
+            height: 147px;
+            flex-shrink: 0;
+            border-radius: 4px;
+            overflow: hidden;
+            background: rgba(255,255,255,.08);
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: .85;
+            transition: opacity .3s;
+        }
+        .gallery-item img:hover { opacity: 1; }
+        @keyframes scrollGallery {
+            0%   { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .section-conoce { background: #1a1a1a; padding: 60px 20px; text-align: center; color: #fff; }
+        .section-conoce h2 { font-size: clamp(1.1rem, 2.5vw, 1.6rem); font-weight: 900; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 28px; }
+        .btn-conoce { background: transparent; border: 2px solid #fff; color: #fff; font-weight: 700; font-size: .8rem; letter-spacing: 2px; text-transform: uppercase; border-radius: 4px; padding: 12px 32px; text-decoration: none; transition: all .2s; display: inline-block; }
+        .btn-conoce:hover { background: #fff; color: #1a1a1a; }
+
+        .section-lineas { background: #fff; padding: 72px 0; text-align: center; }
+        .lineas-pretitle { font-size: .7rem; letter-spacing: 3px; text-transform: uppercase; color: #6c757d; font-weight: 600; margin-bottom: 6px; }
+        .lineas-title { font-size: clamp(1.15rem, 2.5vw, 1.7rem); font-weight: 900; text-transform: uppercase; color: #212529; letter-spacing: 1px; line-height: 1.2; margin-bottom: 36px; }
+        .linea-card { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; min-height: 110px; padding: 22px 12px; background: #fff; border: 1px solid #dee2e6; border-top: 3px solid #0d6efd; border-radius: 6px; text-decoration: none; color: #212529; font-weight: 700; font-size: .8rem; letter-spacing: .5px; text-transform: uppercase; box-shadow: 0 2px 8px rgba(0,0,0,.06); transition: all .22s ease; cursor: pointer; }
+        .linea-card:hover { background-color: #0d6efd; border-color: #0d6efd; color: #fff; transform: translateY(-5px); box-shadow: 0 10px 28px rgba(13,110,253,.22); }
+        .linea-icon { font-size: 1.7rem; color: #0d6efd; margin-bottom: 10px; transition: color .22s; }
+        .linea-card:hover .linea-icon { color: rgba(255,255,255,.9); }
+
+        .section-como { background: #f8f9fa; padding: 70px 20px; text-align: center; }
+        .section-como h6 { font-size: .72rem; letter-spacing: 3px; text-transform: uppercase; color: #6c757d; font-weight: 700; }
+        .section-como p { font-size: .95rem; color: #6c757d; max-width: 640px; margin: 0 auto; line-height: 1.85; }
+        .btn-contacto { background: #20abc7; color: #fff; font-weight: 700; font-size: .8rem; letter-spacing: 2px; text-transform: uppercase; border: none; border-radius: 4px; padding: 12px 32px; text-decoration: none; display: inline-block; transition: background .2s; }
+        .btn-contacto:hover { background: #20abc7; color: #fff; }
+
+        .section-contact { position: relative; min-height: 320px; display: flex; align-items: center; overflow: hidden; }
+        .contact-bg { position: absolute; inset: 0; background-image: url('https://poramoralarte.art/wp-content/uploads/2021/07/austin-kehmeier-lyiKExA4zQA-unsplash.jpg'); background-size: cover; background-position: center; z-index: 0; }
+        .contact-overlay { position: absolute; inset: 0; background: rgba(0,0,0,.65); z-index: 1; }
+        .contact-content { position: relative; z-index: 2; width: 100%; text-align: center; color: #fff; padding: 50px 20px; }
+        .contact-content h5 { font-size: .72rem; letter-spacing: 4px; text-transform: uppercase; color: rgba(255,255,255,.7); font-weight: 600; margin-bottom: 10px; }
+        .contact-content a { font-size: 1.5rem; font-weight: 900; color: #fff; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; transition: color .2s; }
+        .contact-content a:hover { color: rgba(255,255,255,.75); }
+
+        .section-stats { background: #212529; padding: 68px 0; text-align: center; color: #fff; }
+        .stats-pretitle { font-size: .72rem; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,.45); font-weight: 600; margin-bottom: 4px; }
+        .stats-caption { font-size: .8rem; color: rgba(255,255,255,.3); max-width: 520px; margin: 0 auto 48px; line-height: 1.6; }
+        .stat-number { font-size: clamp(2.4rem, 5vw, 3.8rem); font-weight: 900; line-height: 1; color: #fff; }
+        .stat-label { font-size: .65rem; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,.45); margin-top: 8px; }
+        .stat-col { border-right: 1px solid rgba(255,255,255,.08); }
+        .stat-col:last-child { border-right: none; }
+
+        footer { background: #212529; border-top: 1px solid rgba(255,255,255,.06); padding: 50px 0 22px; text-align: center; color: rgba(255,255,255,.5); }
+        .footer-logo { width: 85px; margin-bottom: 14px; opacity: .88; }
+        .footer-desc { font-size: .78rem; color: rgba(255,255,255,.35); max-width: 320px; margin: 0 auto 10px; line-height: 1.7; }
+        .footer-location { font-size: .72rem; color: rgba(255,255,255,.22); margin-bottom: 16px; }
+        .footer-social a { color: rgba(255,255,255,.38); font-size: 1rem; margin: 0 7px; text-decoration: none; transition: color .2s; }
+        .footer-social a:hover { color: #fff; }
+        footer hr { border-color: rgba(255,255,255,.08); margin: 24px 0 16px; }
+        .footer-nav a { color: rgba(255,255,255,.3); font-size: .73rem; text-decoration: none; margin: 0 9px; transition: color .2s; }
+        .footer-nav a:hover { color: rgba(255,255,255,.8); }
+        .footer-copy { font-size: .7rem; color: rgba(255,255,255,.18); margin-top: 10px; }
     </style>
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="{% url 'core:home' %}">🎨 Por Amor al Arte</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'catalog:list' %}">Nuestros artistas</a>
-                    </li>
-                    <li class="nav-item"><a class="nav-link" href="#">Nuestro propósito</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Nosotros</a></li>
-                    
-                    <li class="nav-item ms-lg-3">
-                        {% if user.is_authenticated %}
-                            <div class="dropdown">
-                                <button class="btn btn-outline-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                                    Hola, {{ user.username }}
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end">
-                                    <li><a class="dropdown-item" href="{% url 'core:home' %}">Mi Panel</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li>
-                                        <form method="post" action="{% url 'account_logout' %}">
-                                            {% csrf_token %}
-                                            <button type="submit" class="dropdown-item text-danger">Cerrar Sesión</button>
-                                        </form>
-                                    </li>
-                                </ul>
-                            </div>
-                        {% else %}
-                            <a class="btn btn-primary px-4" href="{% url 'account_login' %}">Iniciar Sesión</a>
-                        {% endif %}
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+<!-- ══ BARRA SOCIAL ══ -->
+<div class="topbar">
+    <a href="https://www.instagram.com/art.poramoralarte/" target="_blank"><i class="bi bi-instagram"></i></a>
+    <a href="https://www.youtube.com/playlist?list=PLu32vwxQBE6IXudGxXpuFo2eJYGyWcdfO" target="_blank"><i class="bi bi-youtube"></i></a>
+    <a href="https://api.whatsapp.com/send?phone=573214992165&text=%20Hola%2C%20me%20interesa%20saber%20sobre..." target="_blank"><i class="bi bi-whatsapp"></i></a>
+    <a href="https://open.spotify.com/show/1CpJfAOq66YxpTam9ODVLJ?si=9832d92ad358473b" target="_blank"><i class="bi bi-spotify"></i></a>
+</div>
 
-    <header class="hero-section text-center">
-        <div class="container">
-            <h1 class="display-4 fw-bold">Apoya a tus artistas favoritos</h1>
-            <p class="lead mb-4">Explora nuestro directorio y conecta con el talento local por línea artística.</p>
+<!-- ══ NAVBAR ══ -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm sticky-top">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="{% url 'core:home' %}">🎨 Por Amor al Arte</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto ms-lg-3">
+                <li class="nav-item"><a class="nav-link active" href="{% url 'core:home' %}">Home</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Nosotros</a>
+                    <ul class="dropdown-menu dropdown-menu-dark">
+                        <li><a class="dropdown-item" href="#">Nuestro Propósito</a></li>
+                        <li><a class="dropdown-item" href="#">Experiencia</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="#">Formalizarte – Desarrollo Web</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Bienes de Interés Cultural Religioso</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Contáctanos</a></li>
+            </ul>
+            <ul class="navbar-nav align-items-center gap-2">
+                <li class="nav-item ms-lg-2">
+                    {% if user.is_authenticated %}
+                        <div class="dropdown">
+                            <button class="btn btn-outline-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">Hola, {{ user.username }}</button>
+                            <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end">
+                                <li><a class="dropdown-item" href="{% url 'core:home' %}">Mi Panel</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <form method="post" action="{% url 'account_logout' %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="dropdown-item text-danger">Cerrar Sesión</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    {% else %}
+                        <a class="btn btn-primary btn-sm px-3" href="{% url 'account_login' %}">Iniciar Sesión</a>
+                    {% endif %}
+                </li>
+            </ul>
         </div>
-    </header>
+    </div>
+</nav>
 
-    <div class="container my-5">
-        <div class="row g-4">
-            <div class="col-md-4">
-                <a href="{% url 'catalog:list' %}?linea=1" class="card h-100 shadow-sm line-card p-4 text-center border-primary">
-                    <h5 class="mb-0">Artes Escénicas</h5>
-                </a>
+<!-- ══ HERO CON VIDEO DE FONDO ══ -->
+<section class="hero">
+    <video class="hero-video" autoplay muted loop playsinline>
+        <source src="https://poramoralarte.art/wp-content/uploads/2023/05/video-PAAA.mp4" type="video/mp4">
+    </video>
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+        <img src="https://poramoralarte.art/wp-content/uploads/2023/05/LOGO-COLOR_Mesa-de-trabajo-1-02-1024x1024.png"
+             alt="Por Amor al Arte Logo"
+             class="hero-logo">
+        <p class="hero-pretitle">Un Proyecto Cultural</p>
+        
+    </div>
+
+  
+</section>
+
+<!-- ══ SECCIÓN BLANCA: TEXTO + CARRUSEL ══ -->
+<section style="background:#fff; padding: 70px 0 0;">
+    <div class="container">
+        <div class="row align-items-center g-4">
+
+            <!-- COLUMNA IZQUIERDA: texto -->
+            <div class="col-lg-5 text-center text-lg-start">
+                <p style="font-size:.72rem; letter-spacing:4px; text-transform:uppercase; color:#20abc7; margin-bottom:10px;">
+                    – POR AMOR AL ARTE –
+                </p>
+                <h1 style="font-size:clamp(2rem,4.5vw,3.5rem); font-weight:900; text-transform:uppercase; color:#20abc7; line-height:1.1; margin-bottom:24px;">
+                    Somos por y para<br>los artistas
+                </h1>
+                <p style="font-style:italic; color:#666; font-size:.95rem; line-height:1.85; max-width:480px; margin:0 auto 0;">
+                    Desarrollamos herramientas para facilitar procesos de Crowdfunding en beneficio de artistas
+                    independientes, incentivando procesos de formalización y visibilidad
+                </p>
             </div>
-            <div class="col-md-4">
-                <a href="{% url 'catalog:list' %}?linea=2" class="card h-100 shadow-sm line-card p-4 text-center border-primary">
-                    <h5 class="mb-0">Música</h5>
-                </a>
+
+            <!-- COLUMNA DERECHA: carrusel automático -->
+            <div class="col-lg-7 p-0" style="overflow:hidden;">
+                <div style="position:relative; height:400px; overflow:hidden;">
+                    <div id="heroCarousel" style="display:flex; gap:6px; height:100%;">
+                        <div style="min-width:calc(50% - 3px); height:100%; border-radius:4px; overflow:hidden;">
+                            <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=600&h=800&fit=crop" style="width:100%; height:100%; object-fit:cover; filter:grayscale(100%);">
+                        </div>
+                        <div style="min-width:calc(50% - 3px); height:100%; border-radius:4px; overflow:hidden;">
+                            <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=600&h=800&fit=crop" style="width:100%; height:100%; object-fit:cover; filter:grayscale(100%);">
+                        </div>
+                        <div style="min-width:calc(50% - 3px); height:100%; border-radius:4px; overflow:hidden;">
+                            <img src="https://images.unsplash.com/photo-1471478331149-c72f17e33c73?w=600&h=800&fit=crop" style="width:100%; height:100%; object-fit:cover; filter:grayscale(100%);">
+                        </div>
+                        <div style="min-width:calc(50% - 3px); height:100%; border-radius:4px; overflow:hidden;">
+                            <img src="https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=600&h=800&fit=crop" style="width:100%; height:100%; object-fit:cover; filter:grayscale(100%);">
+                        </div>
+                        <div style="min-width:calc(50% - 3px); height:100%; border-radius:4px; overflow:hidden;">
+                            <img src="https://images.unsplash.com/photo-1508854710579-5cecc3a9ff17?w=600&h=800&fit=crop" style="width:100%; height:100%; object-fit:cover; filter:grayscale(100%);">
+                        </div>
+                        <div style="min-width:calc(50% - 3px); height:100%; border-radius:4px; overflow:hidden;">
+                            <img src="https://images.unsplash.com/photo-1506157786151-b8491531f063?w=600&h=800&fit=crop" style="width:100%; height:100%; object-fit:cover; filter:grayscale(100%);">
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-4">
-                <a href="{% url 'catalog:list' %}?linea=3" class="card h-100 shadow-sm line-card p-4 text-center border-primary">
-                    <h5 class="mb-0">Artes Plásticas y Visual</h5>
-                </a>
-            </div>
-            <div class="col-md-4">
-                <a href="{% url 'catalog:list' %}?linea=4" class="card h-100 shadow-sm line-card p-4 text-center border-primary">
-                    <h5 class="mb-0">Audiovisuales y Medios</h5>
-                </a>
-            </div>
-            <div class="col-md-4">
-                <a href="{% url 'catalog:list' %}?linea=5" class="card h-100 shadow-sm line-card p-4 text-center border-primary">
-                    <h5 class="mb-0">Literatura</h5>
-                </a>
-            </div>
-            <div class="col-md-4">
-                <a href="{% url 'catalog:list' %}?linea=6" class="card h-100 shadow-sm line-card p-4 text-center border-primary">
-                    <h5 class="mb-0">Artesanías y Oficios</h5>
-                </a>
-            </div>
-            <div class="col-md-4">
-                <a href="{% url 'catalog:list' %}?linea=7" class="card h-100 shadow-sm line-card p-4 text-center border-primary">
-                    <h5 class="mb-0">Artes Integradas</h5>
-                </a>
-            </div>
-            <div class="col-md-4">
-                <a href="{% url 'catalog:list' %}?linea=8" class="card h-100 shadow-sm line-card p-4 text-center border-primary">
-                    <h5 class="mb-0">Formación y Mediación</h5>
-                </a>
-            </div>
-            <div class="col-md-4">
-                <a href="{% url 'catalog:list' %}?linea=9" class="card h-100 shadow-sm line-card p-4 text-center border-primary">
-                    <h5 class="mb-0">Investigación y Doc.</h5>
-                </a>
-            </div>
+
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Botón centrado debajo -->
+    <div style="text-align:center; padding: 40px 0 0;">
+        <a href="{% url 'catalog:list' %}" class="btn-hero" style="margin-bottom:0;">
+            Conoce a nuestros artistas
+        </a>
+    </div>
+</section>
+
+<!-- ══ CONOCE NUESTRO PROYECTO ══ -->
+<section class="section-conoce">
+    <div class="container">
+        <h2>Conoce Nuestro Proyecto</h2>
+        <a href="{% url 'catalog:list' %}" class="btn-conoce">Todos nuestros artistas</a>
+    </div>
+</section>
+
+<!-- ══ LÍNEAS ARTÍSTICAS ══ -->
+<section class="section-lineas">
+    <div class="container">
+        <p class="lineas-pretitle">Explora por disciplina</p>
+        <h2 class="lineas-title">Apoya a tus artistas favoritos<br>por línea artística</h2>
+        <div class="row g-3">
+            <div class="col-6 col-md-4 col-lg-3"><a href="{% url 'catalog:list' %}?linea=1" class="linea-card"><i class="bi bi-mask linea-icon"></i>Artes Escénicas</a></div>
+            <div class="col-6 col-md-4 col-lg-3"><a href="{% url 'catalog:list' %}?linea=2" class="linea-card"><i class="bi bi-music-note-beamed linea-icon"></i>Música</a></div>
+            <div class="col-6 col-md-4 col-lg-3"><a href="{% url 'catalog:list' %}?linea=3" class="linea-card"><i class="bi bi-palette linea-icon"></i>Artes Plásticas y Visual</a></div>
+            <div class="col-6 col-md-4 col-lg-3"><a href="{% url 'catalog:list' %}?linea=4" class="linea-card"><i class="bi bi-camera-video linea-icon"></i>Audiovisuales y Medios</a></div>
+            <div class="col-6 col-md-4 col-lg-3"><a href="{% url 'catalog:list' %}?linea=5" class="linea-card"><i class="bi bi-book linea-icon"></i>Literatura</a></div>
+            <div class="col-6 col-md-4 col-lg-3"><a href="{% url 'catalog:list' %}?linea=6" class="linea-card"><i class="bi bi-gem linea-icon"></i>Artesanías y Oficios</a></div>
+            <div class="col-6 col-md-4 col-lg-3"><a href="{% url 'catalog:list' %}?linea=7" class="linea-card"><i class="bi bi-stars linea-icon"></i>Artes Integradas</a></div>
+            <div class="col-6 col-md-4 col-lg-3"><a href="{% url 'catalog:list' %}?linea=8" class="linea-card"><i class="bi bi-mortarboard linea-icon"></i>Formación y Mediación</a></div>
+            <div class="col-6 col-md-4 col-lg-3 offset-lg-0 mx-auto mx-lg-0"><a href="{% url 'catalog:list' %}?linea=9" class="linea-card"><i class="bi bi-journal-text linea-icon"></i>Investigación y Doc.</a></div>
+        </div>
+        <div class="mt-5">
+            <a href="{% url 'catalog:list' %}" class="btn-hero" style="margin-bottom:0">Conoce a nuestros artistas</a>
+        </div>
+    </div>
+</section>
+
+<!-- ══ ¿CÓMO FUNCIONA? ══ -->
+<section class="section-como">
+    <div class="container">
+        <h6 class="fw-bold">¿Cómo funciona nuestro proyecto?</h6>
+        <hr class="my-3 border-secondary opacity-50 mx-auto" style="max-width:300px">
+        <p>Hemos desarrollado este portal en el cual los artistas pueden exponer su proyecto cultural a públicos de diferentes países, quienes a su vez pueden aportar a la construcción del arte y la cultura mediante donaciones directamente a su artista favorito.</p>
+        <hr class="my-3 border-secondary opacity-50 mx-auto" style="max-width:300px">
+        <a href="{% url 'core:home' %}" class="btn-contacto mt-2">Contáctanos</a>
+    </div>
+</section>
+
+<!-- ══ CONTACTO CON IMAGEN REAL ══ -->
+<section class="section-contact">
+    <div class="contact-bg"></div>
+    <div class="contact-overlay"></div>
+    <div class="contact-content">
+        <h5>Contáctanos si quieres sumarte:</h5>
+        <a href="https://api.whatsapp.com/send?phone=573214992165&text=%20Hola%2C%20me%20interesa%20saber%20sobre..." target="_blank"><i class="bi bi-whatsapp me-2"></i>+57 321 499 21 65</a>
+    </div>
+</section>
+
+<!-- ══ ESTADÍSTICAS ══ -->
+<section class="section-stats">
+    <div class="container">
+        <p class="stats-pretitle">Por Amor al Arte</p>
+        <p class="stats-caption">Un proyecto ProCultura que nació en el 2022 gracias a la colaboración del Ministerio de Cultura de Colombia, bajo la estrategia Jóvenes en Movimiento 2022</p>
+        <div class="row g-4">
+            <div class="col-6 col-md-3 stat-col"><div class="stat-number" data-target="23">23</div><div class="stat-label">Artistas Beneficiados</div></div>
+            <div class="col-6 col-md-3 stat-col"><div class="stat-number" data-target="6">6</div><div class="stat-label">Municipios Impactados</div></div>
+            <div class="col-6 col-md-3 stat-col"><div class="stat-number">+25</div><div class="stat-label">Millones Recaudados</div></div>
+            <div class="col-6 col-md-3 stat-col"><div class="stat-number">+5</div><div class="stat-label">Años de Trayectoria</div></div>
+        </div>
+    </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+    <div class="container">
+        <img src="https://poramoralarte.art/wp-content/uploads/2023/05/LOGO-BLANCO_Mesa-de-trabajo-1-05-e1684190190926.png" alt="Por Amor al Arte" class="footer-logo">
+        <p class="footer-desc">Un proyecto desarrollado en alianza con la Corporación Germina, creado gracias a la convocatoria Jóvenes en Movimiento 2022 - Ministerio de Cultura de Colombia</p>
+        <p class="footer-location">Cundinamarca - Colombia</p>
+        <div class="footer-social mb-3">
+            <a href="https://www.instagram.com/art.poramoralarte/" target="_blank"><i class="bi bi-instagram"></i></a>
+            <a href="https://www.youtube.com/playlist?list=PLu32vwxQBE6IXudGxXpuFo2eJYGyWcdfO" target="_blank"><i class="bi bi-youtube"></i></a>
+            <a href="mailto:info@poramoralarte.art"><i class="bi bi-envelope"></i></a>
+            <a href="https://api.whatsapp.com/send?phone=573214992165&text=%20Hola%2C%20me%20interesa%20saber%20sobre..." target="_blank"><i class="bi bi-whatsapp"></i></a>
+            <a href="https://open.spotify.com/show/1CpJfAOq66YxpTam9ODVLJ?si=9832d92ad358473b" target="_blank"><i class="bi bi-spotify"></i></a>
+        </div>
+        <hr>
+        <nav class="footer-nav mb-2">
+            <a href="{% url 'core:home' %}">Home</a>
+            <a href="{% url 'core:home' %}">Nosotros</a>
+            <a href="#">Nuestro Propósito</a>
+            <a href="#">Experiencia</a>
+            <a href="#">Formalizarte – Desarrollo Web</a>
+            <a href="#">Bienes de Interés Cultural Religioso</a>
+            <a href="#">Contáctanos</a>
+        </nav>
+        <p class="footer-copy">© {% now "Y" %} POR AMOR AL ARTE</p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Contador de estadísticas
+    const statsObs = new IntersectionObserver(entries => {
+        if (!entries[0].isIntersecting) return;
+        document.querySelectorAll('.stat-number[data-target]').forEach(el => {
+            const target = parseInt(el.dataset.target);
+            let n = 0;
+            const step = Math.max(1, Math.ceil(target / 40));
+            const t = setInterval(() => {
+                n = Math.min(n + step, target);
+                el.textContent = n;
+                if (n >= target) clearInterval(t);
+            }, 45);
+        });
+        statsObs.disconnect();
+    }, { threshold: .3 });
+    const statsEl = document.querySelector('.section-stats');
+    if (statsEl) statsObs.observe(statsEl);
+
+    // Carrusel automático sección blanca
+    (function() {
+        const track = document.getElementById('heroCarousel');
+        if (!track) return;
+        track.style.transition = 'transform 0.7s ease';
+        let pos = 0;
+        const total = track.children.length;
+        setInterval(() => {
+            pos = (pos + 1) % total;
+            const itemWidth = track.children[0].offsetWidth + 6;
+            track.style.transform = `translateX(-${pos * itemWidth}px)`;
+        }, 2500);
+    })();
+</script>
 </body>
 </html>
