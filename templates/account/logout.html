@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+    .logout-bg {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        background: radial-gradient(circle at 20% 30%, #27a4b4 0%, #2883ad 40%, #207fb3 100%);
+        border-radius: 40px;
+        padding: 80px;
+    }
+
+    .logout-card {
+        background: #ffffff;
+        border: 2px solid #000;
+        border-radius: 30px;
+        padding: 40px;
+        text-align: center;
+        box-shadow: 0 40px 100px rgba(0,0,0,0.3);
+        max-width: 700px;
+        width: 120%;
+    }
+
+    .logout-title {
+        font-weight: 900;
+        margin-bottom: 15px;
+    }
+
+    .btn-logout {
+        background: #000;
+        color: #fff;
+        border: none;
+        padding: 12px 20px;
+        font-weight: bold;
+        border-radius: 8px;
+        transition: 0.3s;
+    }
+
+    .btn-logout:hover {
+        background: #222;
+        transform: scale(1.05);
+    }
+
+    .btn-cancel {
+        margin-top: 10px;
+        display: inline-block;
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="logout-bg">
+
+        <div class="logout-card">
+            <h3 class="logout-title">¿Cerrar sesión?</h3>
+
+            <p class="text-muted">
+                Tu sesión actual se cerrará.  
+                Siempre puedes volver cuando quieras 🎨
+            </p>
+
+            <form method="POST" action="{% url 'account_logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-logout w-100">
+                    Cerrar sesión
+                </button>
+            </form>
+
+            <a href="/" class="btn-cancel">
+                ← Cancelar
+            </a>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

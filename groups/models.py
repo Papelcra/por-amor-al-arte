@@ -9,7 +9,11 @@ class Group(models.Model):
     description = models.TextField()
     profile_image = models.ImageField(upload_to='groups/', null=True, blank=True)
 
-    members = models.ManyToManyField(Artist, blank=True)
+    members = models.ManyToManyField(
+    Artist,
+    blank=True,
+    related_name='groups'
+    )
     genres = models.ManyToManyField(Genre, blank=True)
 
     # 🔥 CLAVE

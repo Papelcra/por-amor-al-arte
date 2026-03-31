@@ -2,23 +2,148 @@
 
 {% block content %}
 
-<div class="text-center mb-5">
-    <h1>👥 Panel de Agrupaciones</h1>
-    <p>Gestiona tus grupos artísticos</p>
-</div>
+<style>
 
-<div class="row text-center">
+/* 🌈 Fondo */
+.bg-dashboard {
+    background: radial-gradient(circle at top right, #e3f2fd, #f9fcff);
+    min-height: 80vh;
+    padding: 40px 20px;
+}
 
-    <div class="col-md-6">
-        <a href="/groups/" class="btn btn-primary w-100 p-3">
-            📋 Ver agrupaciones
-        </a>
-    </div>
+/* 💎 Card glass */
+.dashboard-card {
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(14px);
+    border-radius: 22px;
+    padding: 30px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+    border: 1px solid rgba(255,255,255,0.6);
+    transition: all 0.3s ease;
+}
 
-    <div class="col-md-6">
-        <a href="/groups/crear/" class="btn btn-success w-100 p-3">
-            ➕ Crear agrupación
-        </a>
+.dashboard-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 25px 60px rgba(0,0,0,0.15);
+}
+
+/* 🎯 Botones */
+.btn-dashboard {
+    border-radius: 14px;
+    padding: 15px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary-custom {
+    background: linear-gradient(135deg, #0288d1, #4fc3f7);
+    color: white;
+    border: none;
+}
+
+.btn-primary-custom:hover {
+    box-shadow: 0 12px 30px rgba(3,169,244,0.4);
+    transform: translateY(-2px);
+}
+
+.btn-success-custom {
+    background: linear-gradient(135deg, #2e7d32, #66bb6a);
+    color: white;
+    border: none;
+}
+
+.btn-success-custom:hover {
+    box-shadow: 0 12px 30px rgba(76,175,80,0.4);
+    transform: translateY(-2px);
+}
+
+/* 👥 Icono grande */
+.icon-big {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+/* Texto */
+.title-main {
+    font-weight: 700;
+    color: #0288d1;
+}
+
+.subtitle {
+    color: #6b7280;
+}
+
+</style>
+
+<div class="bg-dashboard">
+
+    <div class="container">
+
+        <!-- 🧠 HEADER -->
+        <div class="text-center mb-5">
+            <h1 class="title-main">👥 Panel de Agrupaciones</h1>
+            <p class="subtitle">Administra tus grupos artísticos de forma sencilla</p>
+        </div>
+
+        <!-- 🔥 ACCIONES -->
+        <div class="row g-4">
+
+            <!-- 📋 VER TODOS LOS GRUPOS -->
+            <div class="col-md-4">
+                <div class="dashboard-card text-center">
+
+                    <div class="icon-big">📋</div>
+
+                    <h4>Todas las agrupaciones</h4>
+                    <p class="text-muted mb-4">
+                        Explora todas las agrupaciones registradas en el sistema
+                    </p>
+
+                    <a href="{% url 'groups:lista_grupos' %}" class="btn btn-dashboard btn-primary-custom w-100">
+                        Ver todas
+                    </a>
+
+                </div>
+            </div>
+
+            <!-- 👥 MIS GRUPOS -->
+            <div class="col-md-4">
+                <div class="dashboard-card text-center">
+
+                    <div class="icon-big">👥</div>
+
+                    <h4>Mis agrupaciones</h4>
+                    <p class="text-muted mb-4">
+                        Administra y edita los grupos que has creado
+                    </p>
+
+                    <a href="{% url 'groups:mis_grupos' %}" class="btn btn-dashboard btn-primary-custom w-100">
+                        Ver mis grupos
+                    </a>
+
+                </div>
+            </div>
+
+            <!-- ➕ CREAR GRUPO -->
+            <div class="col-md-4">
+                <div class="dashboard-card text-center">
+
+                    <div class="icon-big">➕</div>
+
+                    <h4>Crear agrupación</h4>
+                    <p class="text-muted mb-4">
+                        Registra un nuevo grupo artístico y gestiona sus integrantes
+                    </p>
+
+                    <a href="{% url 'groups:crear_grupo' %}" class="btn btn-dashboard btn-success-custom w-100">
+                        Crear ahora
+                    </a>
+
+                </div>
+            </div>
+
+        </div>
+
     </div>
 
 </div>

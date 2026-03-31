@@ -16,7 +16,7 @@ body {
     margin: 0;
 }
 
-/* 🎨 IMAGEN IZQUIERDA (CORREGIDA) */
+/* 🎨 IMAGEN IZQUIERDA */
 .bg-art {
     background-image: url("https://images.unsplash.com/photo-1549880338-65ddcdfd017b?q=80&w=2070&auto=format&fit=crop");
     background-size: cover;
@@ -24,7 +24,6 @@ body {
     position: relative;
 }
 
-/* Overlay oscuro (encima de imagen) */
 .bg-art::before {
     content: "";
     position: absolute;
@@ -32,20 +31,19 @@ body {
     background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8));
 }
 
-/* Contenido encima */
 .bg-art-content {
     position: relative;
     z-index: 2;
 }
 
-/* 🌈 LADO DERECHO */
+/* 🌈 DERECHA */
 .bg-register {
     background: radial-gradient(circle at top left, #d9f1ff, #f8fcff);
 }
 
 /* Card */
 .register-card {
-    background: rgba(255,255,255,0.8);
+    background: rgba(255,255,255,0.85);
     backdrop-filter: blur(12px);
     border-radius: 22px;
     padding: 45px;
@@ -78,6 +76,11 @@ body {
     border-radius: 14px;
     color: white;
     font-weight: 600;
+    transition: 0.2s;
+}
+
+.btn-register:hover {
+    transform: translateY(-2px);
 }
 
 /* Selector tipo usuario */
@@ -139,7 +142,21 @@ body {
                 <form method="post">
                     {% csrf_token %}
 
-                    <!-- 👇 NUEVO: Tipo de usuario -->
+                    <!-- 🚨 MENSAJES DE ERROR -->
+                    {% if form.errors %}
+                        <div class="alert alert-danger">
+                            <strong>Ups...</strong> revisa los datos:
+                            <ul class="mb-0">
+                                {% for field in form %}
+                                    {% for error in field.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+
+                    <!-- 👇 Tipo de usuario -->
                     <div class="mb-4">
                         <label class="form-label fw-semibold">Tipo de cuenta</label>
                         <div class="user-type">
@@ -154,25 +171,25 @@ body {
                     <!-- Usuario -->
                     <div class="input-group mb-3">
                         <span class="input-icon">👤</span>
-                        {{ form.username|add_class:"form-control" }}
+                        {{ form.username|add_class:"form-control"|attr:"placeholder:Usuario" }}
                     </div>
 
                     <!-- Email -->
                     <div class="input-group mb-3">
                         <span class="input-icon">📧</span>
-                        {{ form.email|add_class:"form-control" }}
+                        {{ form.email|add_class:"form-control"|attr:"placeholder:Correo electrónico" }}
                     </div>
 
                     <!-- Password -->
                     <div class="input-group mb-3">
                         <span class="input-icon">🔒</span>
-                        {{ form.password1|add_class:"form-control" }}
+                        {{ form.password1|add_class:"form-control"|attr:"placeholder:Contraseña" }}
                     </div>
 
                     <!-- Confirmar -->
                     <div class="input-group mb-4">
                         <span class="input-icon">🔒</span>
-                        {{ form.password2|add_class:"form-control" }}
+                        {{ form.password2|add_class:"form-control"|attr:"placeholder:Confirmar contraseña" }}
                     </div>
 
                     <button type="submit" class="btn btn-register w-100 py-3 mb-3">

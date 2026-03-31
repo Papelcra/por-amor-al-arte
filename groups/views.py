@@ -45,48 +45,36 @@ def lista_grupos(request):
 
 
 # 🔍 VER GRUPO
-def ver_grupo(request, id):
-    grupo = get_object_or_404(Group, id=id)
-    return render(request, 'groups/ver.html', {'grupo': grupo})
-
-
-# ✏️ EDITAR GRUPO
-@login_required
-def editar_grupo(request, id):
-
-    grupo = get_object_or_404(Group, id=id)
-
-    # 🔒 Solo el dueño puede editar
-    if grupo.owner != request.user:
-        return redirect('core:home')
-
-    if request.method == 'POST':
-        form = GroupForm(request.POST, request.FILES, instance=grupo)
-
-        if form.is_valid():
-            grupo = form.save(commit=False)
-            grupo.save()
-
-            form.save_m2m()
-
-            # 🔥 Actualizar miembros con exclusividad
-            miembros = form.cleaned_data.get('members')
-            grupo.members.clear()
-
-            for artista in miembros:
-                if not Group.objects.filter(members=artista).exclude(id=grupo.id).exists():
-                    grupo.members.add(artista)
-
-            return redirect('groups:mis_grupos')
-
-    else:
-        form = GroupForm(instance=grupo)
-
-    return render(request, 'groups/editar.html', {
-        'form': form,
+def ver_grupo(request, group_id):
+    grupo = get_object_or_404(Group, id=group_id)
+    return render(request, 'groups/ver_grupo.html', {
         'grupo': grupo
     })
 
+
+# ✏️ EDITAR GRUPO
+def editar_grupo(request, group_id):
+    grupo = get_object_or_404(Group, id=group_id)
+
+    # 🔒 Seguridad: solo el dueño puede editar
+    if grupo.owner != request.user:
+        return redirect('lista_grupos')
+
+    if request.method == 'POST':
+        form = GroupForm(request.POST, request.FILES, instance=grupo)
+        if form.is_valid():
+            grupo = form.save(commit=False)
+            grupo.owner = request.user
+            grupo.save()
+            form.save_m2m()
+            return redirect('groups:ver_grupo', group_id=grupo.id)
+    else:
+        form = GroupForm(instance=grupo)
+
+    return render(request, 'groups/editar_grupo.html', {
+        'form': form,
+        'grupo': grupo
+    })
 
 # 📂 MIS GRUPOS
 @login_required
