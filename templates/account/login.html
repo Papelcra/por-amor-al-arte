@@ -82,7 +82,7 @@
     box-shadow: 0 0 0 4px rgba(3,169,244,0.15) !important;
 }
 
-/* Botón */
+/* Botón login */
 .btn-login {
     background: linear-gradient(135deg, #0288d1, #4fc3f7);
     border: none;
@@ -97,6 +97,21 @@
     box-shadow: 0 12px 30px rgba(3,169,244,0.4);
 }
 
+/* Botón Google */
+.btn-google {
+    border-radius: 14px;
+    background: white;
+    border: 1px solid #e5e7eb;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-google:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    background: #f8fbff;
+}
+
 /* Links */
 .link-blue {
     color: #0288d1;
@@ -107,22 +122,12 @@
     text-decoration: underline;
 }
 
-/* Quitar estilo feo del provider */
-ul.socialaccount_providers {
-    list-style: none;
-    padding: 0;
-}
-
-ul.socialaccount_providers li {
-    margin: 0;
-}
-
 </style>
 
 <div class="container-fluid vh-100 p-0">
     <div class="row h-100">
 
-        <!-- 🔥 IZQUIERDA (TU DISEÑO ORIGINAL RESTAURADO) -->
+        <!-- IZQUIERDA -->
         <div class="col-lg-6 d-none d-lg-flex align-items-center justify-content-center position-relative overflow-hidden"
              style="background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&w=2070&auto=format&fit=crop') center/cover no-repeat;">
 
@@ -145,7 +150,7 @@ ul.socialaccount_providers li {
             </div>
         </div>
 
-        <!-- 💎 DERECHA -->
+        <!-- DERECHA -->
         <div class="col-lg-6 d-flex align-items-center justify-content-center bg-login">
 
             <div class="login-card w-100" style="max-width: 420px;">
@@ -186,8 +191,16 @@ ul.socialaccount_providers li {
 
                 <div class="text-center text-muted mb-3">o continúa con</div>
 
+                <!-- BOTÓN GOOGLE -->
                 <div class="text-center mb-4">
-                    {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+                    <a href="{% provider_login_url 'google' process='login' %}" 
+                       class="btn btn-google w-100 py-3 d-flex align-items-center justify-content-center gap-2">
+
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" 
+                             style="width:20px;">
+
+                        Continuar con Google
+                    </a>
                 </div>
 
                 <div class="text-center">

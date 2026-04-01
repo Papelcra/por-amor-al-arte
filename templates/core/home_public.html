@@ -77,6 +77,38 @@
             padding: 60px 20px 40px;
             width: 100%;
         }
+
+        .btn-artistas-hero {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #fff;
+            color: #0d2d45;
+            font-weight: 800;
+            font-size: .85rem;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            border: none;
+            border-radius: 4px;
+            padding: 16px 40px;
+            text-decoration: none;
+            transition: all .25s;
+            margin-top: 10px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.35);
+        }
+        .btn-artistas-hero:hover {
+            background: #3ab4e0;
+            color: #fff;
+            transform: translateY(-3px);
+            box-shadow: 0 14px 40px rgba(58,180,224,0.5);
+        }
+        .btn-artistas-hero i {
+            font-size: 1.1rem;
+            transition: transform .2s;
+        }
+        .btn-artistas-hero:hover i {
+            transform: translateX(4px);
+        }
         .hero-logo {
             width: 280px;
             max-width: 100%;
@@ -117,7 +149,7 @@
             display: inline-block;
             margin-bottom: 50px;
         }
-        .btn-hero:hover { background-color: #20abc7; color: #fff; transform: translateY(-2px); }
+        .btn-hero:hover { background-color: #1799b3; color: #fff; transform: translateY(-2px); }
 
         .hero-gallery {
             position: relative;
@@ -159,6 +191,144 @@
         .btn-conoce { background: transparent; border: 2px solid #fff; color: #fff; font-weight: 700; font-size: .8rem; letter-spacing: 2px; text-transform: uppercase; border-radius: 4px; padding: 12px 32px; text-decoration: none; transition: all .2s; display: inline-block; }
         .btn-conoce:hover { background: #fff; color: #1a1a1a; }
 
+        /* ══ SECCIÓN ARTISTAS ══ */
+        .section-artistas {
+            background: #f4f8fb;
+            padding: 80px 0;
+        }
+        .artistas-pretitle {
+            font-size: .72rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #1a8fc4;
+            font-weight: 700;
+            margin-bottom: 6px;
+            text-align: center;
+        }
+        .artistas-title {
+            font-size: clamp(1.4rem, 3vw, 2.2rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            color: #0d2d45;
+            letter-spacing: 1px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .artistas-sub {
+            text-align: center;
+            color: #5a7a90;
+            font-size: .9rem;
+            margin-bottom: 50px;
+        }
+        .artistas-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            margin-bottom: 48px;
+        }
+        .artistas-divider span {
+            display: block;
+            height: 1px;
+            width: 70px;
+            background: linear-gradient(to right, transparent, #3ab4e0);
+        }
+        .artistas-divider i { color: #3ab4e0; font-size: .9rem; }
+
+        /* Cards de artistas */
+        .artist-card {
+            background: #fff;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1.5px solid #c2dff0;
+            box-shadow: 0 4px 18px rgba(0,80,160,0.07);
+            transition: transform .3s, box-shadow .3s, border-color .3s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        .artist-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 18px 40px rgba(30,140,210,0.18);
+            border-color: #3ab4e0;
+            color: inherit;
+        }
+        .artist-card-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+        .artist-card-avatar {
+            width: 100%;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(145deg, #1578a8, #3ab4e0 60%, #1a8fc4);
+        }
+        .artist-card-avatar svg {
+            width: 80px;
+            height: 80px;
+            opacity: .9;
+        }
+        .artist-card-body {
+            padding: 18px 20px 20px;
+        }
+        .artist-card-name {
+            font-weight: 800;
+            font-size: 1rem;
+            color: #0d2d45;
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .artist-card-linea {
+            font-size: .75rem;
+            color: #1a8fc4;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        .artist-card-desc {
+            font-size: .82rem;
+            color: #5a7a90;
+            line-height: 1.5;
+            margin-bottom: 14px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }   
+        .artist-badge {
+            display: inline-block;
+            background: #e8f6fc;
+            color: #1a8fc4;
+            border: 1px solid #3ab4e0;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: .7rem;
+            font-weight: 600;
+            margin: 2px 2px 0 0;
+        }
+        .btn-ver-todos {
+            display: inline-block;
+            background: #1a8fc4;
+            color: #fff;
+            font-weight: 700;
+            font-size: .82rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border-radius: 4px;
+            padding: 14px 36px;
+            text-decoration: none;
+            transition: background .2s, transform .15s;
+            margin-top: 48px;
+        }
+        .btn-ver-todos:hover { background: #1578a8; color: #fff; transform: translateY(-2px); }
+
         .section-lineas { background: #fff; padding: 72px 0; text-align: center; }
         .lineas-pretitle { font-size: .7rem; letter-spacing: 3px; text-transform: uppercase; color: #6c757d; font-weight: 600; margin-bottom: 6px; }
         .lineas-title { font-size: clamp(1.15rem, 2.5vw, 1.7rem); font-weight: 900; text-transform: uppercase; color: #212529; letter-spacing: 1px; line-height: 1.2; margin-bottom: 36px; }
@@ -171,7 +341,7 @@
         .section-como h6 { font-size: .72rem; letter-spacing: 3px; text-transform: uppercase; color: #6c757d; font-weight: 700; }
         .section-como p { font-size: .95rem; color: #6c757d; max-width: 640px; margin: 0 auto; line-height: 1.85; }
         .btn-contacto { background: #20abc7; color: #fff; font-weight: 700; font-size: .8rem; letter-spacing: 2px; text-transform: uppercase; border: none; border-radius: 4px; padding: 12px 32px; text-decoration: none; display: inline-block; transition: background .2s; }
-        .btn-contacto:hover { background: #20abc7; color: #fff; }
+        .btn-contacto:hover { background: #1799b3; color: #fff; }
 
         .section-contact { position: relative; min-height: 320px; display: flex; align-items: center; overflow: hidden; }
         .contact-bg { position: absolute; inset: 0; background-image: url('https://poramoralarte.art/wp-content/uploads/2021/07/austin-kehmeier-lyiKExA4zQA-unsplash.jpg'); background-size: cover; background-position: center; z-index: 0; }
@@ -228,11 +398,11 @@
                         <li><a class="dropdown-item" href="#">Experiencia</a></li>
                     </ul>
                 </li>
-                <li class="nav-item"><a class="nav-link" href="#">Formalizarte – Desarrollo Web</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Bienes de Interés Cultural Religioso</a></li>
                 <li class="nav-item"><a class="nav-link" href="#">Contáctanos</a></li>
+                 <li class="nav-item"><a class="nav-link" href="{% url 'artists:lista' %}">Nuestros Artistas</a></li>
             </ul>
             <ul class="navbar-nav align-items-center gap-2">
+               
                 <li class="nav-item ms-lg-2">
                     {% if user.is_authenticated %}
                         <div class="dropdown">
@@ -269,18 +439,13 @@
              alt="Por Amor al Arte Logo"
              class="hero-logo">
         <p class="hero-pretitle">Un Proyecto Cultural</p>
-        
     </div>
-
-  
 </section>
 
 <!-- ══ SECCIÓN BLANCA: TEXTO + CARRUSEL ══ -->
 <section style="background:#fff; padding: 70px 0 0;">
     <div class="container">
         <div class="row align-items-center g-4">
-
-            <!-- COLUMNA IZQUIERDA: texto -->
             <div class="col-lg-5 text-center text-lg-start">
                 <p style="font-size:.72rem; letter-spacing:4px; text-transform:uppercase; color:#20abc7; margin-bottom:10px;">
                     – POR AMOR AL ARTE –
@@ -293,39 +458,22 @@
                     independientes, incentivando procesos de formalización y visibilidad
                 </p>
             </div>
-
-            <!-- COLUMNA DERECHA: carrusel automático -->
             <div class="col-lg-7 p-0" style="overflow:hidden;">
                 <div style="position:relative; height:400px; overflow:hidden;">
                     <div id="heroCarousel" style="display:flex; gap:6px; height:100%;">
-                        <div style="min-width:calc(50% - 3px); height:100%; border-radius:4px; overflow:hidden;">
-                            <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=600&h=800&fit=crop" style="width:100%; height:100%; object-fit:cover; filter:grayscale(100%);">
-                        </div>
-                        <div style="min-width:calc(50% - 3px); height:100%; border-radius:4px; overflow:hidden;">
-                            <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=600&h=800&fit=crop" style="width:100%; height:100%; object-fit:cover; filter:grayscale(100%);">
-                        </div>
-                        <div style="min-width:calc(50% - 3px); height:100%; border-radius:4px; overflow:hidden;">
-                            <img src="https://images.unsplash.com/photo-1471478331149-c72f17e33c73?w=600&h=800&fit=crop" style="width:100%; height:100%; object-fit:cover; filter:grayscale(100%);">
-                        </div>
-                        <div style="min-width:calc(50% - 3px); height:100%; border-radius:4px; overflow:hidden;">
-                            <img src="https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=600&h=800&fit=crop" style="width:100%; height:100%; object-fit:cover; filter:grayscale(100%);">
-                        </div>
-                        <div style="min-width:calc(50% - 3px); height:100%; border-radius:4px; overflow:hidden;">
-                            <img src="https://images.unsplash.com/photo-1508854710579-5cecc3a9ff17?w=600&h=800&fit=crop" style="width:100%; height:100%; object-fit:cover; filter:grayscale(100%);">
-                        </div>
-                        <div style="min-width:calc(50% - 3px); height:100%; border-radius:4px; overflow:hidden;">
-                            <img src="https://images.unsplash.com/photo-1506157786151-b8491531f063?w=600&h=800&fit=crop" style="width:100%; height:100%; object-fit:cover; filter:grayscale(100%);">
-                        </div>
+                        <div style="min-width:calc(50% - 3px); height:100%; border-radius:4px; overflow:hidden;"><img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=600&h=800&fit=crop" style="width:100%; height:100%; object-fit:cover; filter:grayscale(100%);"></div>
+                        <div style="min-width:calc(50% - 3px); height:100%; border-radius:4px; overflow:hidden;"><img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=600&h=800&fit=crop" style="width:100%; height:100%; object-fit:cover; filter:grayscale(100%);"></div>
+                        <div style="min-width:calc(50% - 3px); height:100%; border-radius:4px; overflow:hidden;"><img src="https://images.unsplash.com/photo-1471478331149-c72f17e33c73?w=600&h=800&fit=crop" style="width:100%; height:100%; object-fit:cover; filter:grayscale(100%);"></div>
+                        <div style="min-width:calc(50% - 3px); height:100%; border-radius:4px; overflow:hidden;"><img src="https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=600&h=800&fit=crop" style="width:100%; height:100%; object-fit:cover; filter:grayscale(100%);"></div>
+                        <div style="min-width:calc(50% - 3px); height:100%; border-radius:4px; overflow:hidden;"><img src="https://images.unsplash.com/photo-1508854710579-5cecc3a9ff17?w=600&h=800&fit=crop" style="width:100%; height:100%; object-fit:cover; filter:grayscale(100%);"></div>
+                        <div style="min-width:calc(50% - 3px); height:100%; border-radius:4px; overflow:hidden;"><img src="https://images.unsplash.com/photo-1506157786151-b8491531f063?w=600&h=800&fit=crop" style="width:100%; height:100%; object-fit:cover; filter:grayscale(100%);"></div>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
-
-    <!-- Botón centrado debajo -->
     <div style="text-align:center; padding: 40px 0 0;">
-        <a href="{% url 'catalog:list' %}" class="btn-hero" style="margin-bottom:0;">
+        <a href="{% url 'artists:lista' %}" class="btn-hero" style="margin-bottom:0;">
             Conoce a nuestros artistas
         </a>
     </div>
@@ -335,7 +483,71 @@
 <section class="section-conoce">
     <div class="container">
         <h2>Conoce Nuestro Proyecto</h2>
-        <a href="{% url 'catalog:list' %}" class="btn-conoce">Todos nuestros artistas</a>
+        <a href="{% url 'artists:lista' %}" class="btn-conoce">Todos nuestros artistas</a>
+    </div>
+</section>
+
+<!-- ══ SECCIÓN ARTISTAS DESTACADOS ══ -->
+<section class="section-artistas" id="artistas">
+    <div class="container">
+
+        <p class="artistas-pretitle">Directorio de talento</p>
+        <h2 class="artistas-title">Nuestros Artistas</h2>
+        <p class="artistas-sub">Descubre a los creadores que forman parte de nuestra comunidad cultural</p>
+
+        <div class="artistas-divider">
+            <span></span>
+            <i class="bi bi-heart-fill"></i>
+            <span></span>
+        </div>
+
+        <div class="row g-4">
+            {% for artista in artistas_destacados %}
+            <div class="col-sm-6 col-lg-3">
+                <a href="{% url 'artists:ver' artista.id %}" class="artist-card">
+
+                    {% if artista.profile_image %}
+                        <img src="{{ artista.profile_image.url }}" class="artist-card-img" alt="{{ artista.stage_name }}">
+                    {% else %}
+                        <div class="artist-card-avatar">
+                            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" fill="none">
+                                <circle cx="50" cy="50" r="48" fill="rgba(255,255,255,0.10)" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
+                                <circle cx="50" cy="36" r="18" fill="rgba(255,255,255,0.88)"/>
+                                <path d="M14 88 C14 65 86 65 86 88" fill="rgba(255,255,255,0.88)"/>
+                            </svg>
+                        </div>
+                    {% endif %}
+
+                    <div class="artist-card-body">
+                        <p class="artist-card-name">{{ artista.stage_name|default:artista.user.username }}</p>
+                        <p class="artist-card-linea">
+                            <i class="bi bi-geo-alt me-1"></i>
+                            {{ artista.linea_artistica.name|default:"Artista independiente" }}
+                        </p>
+                        <p class="artist-card-desc">{{ artista.description|default:"Artista de nuestra comunidad." }}</p>
+                        <div>
+                            {% for genero in artista.genres.all|slice:":3" %}
+                                <span class="artist-badge">{{ genero.nombre }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                </a>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center py-5">
+                <i class="bi bi-people" style="font-size:3rem; color:#c2dff0;"></i>
+                <p style="color:#5a7a90; margin-top:14px;">Aún no hay artistas registrados.</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="text-center">
+            <a href="{% url 'artists:lista' %}" class="btn-ver-todos">
+                Ver todos los artistas <i class="bi bi-arrow-right ms-2"></i>
+            </a>
+        </div>
+
     </div>
 </section>
 
@@ -345,18 +557,18 @@
         <p class="lineas-pretitle">Explora por disciplina</p>
         <h2 class="lineas-title">Apoya a tus artistas favoritos<br>por línea artística</h2>
         <div class="row g-3">
-            <div class="col-6 col-md-4 col-lg-3"><a href="{% url 'catalog:list' %}?linea=1" class="linea-card"><i class="bi bi-mask linea-icon"></i>Artes Escénicas</a></div>
-            <div class="col-6 col-md-4 col-lg-3"><a href="{% url 'catalog:list' %}?linea=2" class="linea-card"><i class="bi bi-music-note-beamed linea-icon"></i>Música</a></div>
-            <div class="col-6 col-md-4 col-lg-3"><a href="{% url 'catalog:list' %}?linea=3" class="linea-card"><i class="bi bi-palette linea-icon"></i>Artes Plásticas y Visual</a></div>
-            <div class="col-6 col-md-4 col-lg-3"><a href="{% url 'catalog:list' %}?linea=4" class="linea-card"><i class="bi bi-camera-video linea-icon"></i>Audiovisuales y Medios</a></div>
-            <div class="col-6 col-md-4 col-lg-3"><a href="{% url 'catalog:list' %}?linea=5" class="linea-card"><i class="bi bi-book linea-icon"></i>Literatura</a></div>
-            <div class="col-6 col-md-4 col-lg-3"><a href="{% url 'catalog:list' %}?linea=6" class="linea-card"><i class="bi bi-gem linea-icon"></i>Artesanías y Oficios</a></div>
-            <div class="col-6 col-md-4 col-lg-3"><a href="{% url 'catalog:list' %}?linea=7" class="linea-card"><i class="bi bi-stars linea-icon"></i>Artes Integradas</a></div>
-            <div class="col-6 col-md-4 col-lg-3"><a href="{% url 'catalog:list' %}?linea=8" class="linea-card"><i class="bi bi-mortarboard linea-icon"></i>Formación y Mediación</a></div>
-            <div class="col-6 col-md-4 col-lg-3 offset-lg-0 mx-auto mx-lg-0"><a href="{% url 'catalog:list' %}?linea=9" class="linea-card"><i class="bi bi-journal-text linea-icon"></i>Investigación y Doc.</a></div>
+            <div class="col-6 col-md-4 col-lg-3"><a href="{% url 'artists:lista' %}?line=1" class="linea-card"><i class="bi bi-mask linea-icon"></i>Artes Escénicas</a></div>
+            <div class="col-6 col-md-4 col-lg-3"><a href="{% url 'artists:lista' %}?line=2" class="linea-card"><i class="bi bi-music-note-beamed linea-icon"></i>Música</a></div>
+            <div class="col-6 col-md-4 col-lg-3"><a href="{% url 'artists:lista' %}?line=3" class="linea-card"><i class="bi bi-palette linea-icon"></i>Artes Plásticas y Visual</a></div>
+            <div class="col-6 col-md-4 col-lg-3"><a href="{% url 'artists:lista' %}?line=4" class="linea-card"><i class="bi bi-camera-video linea-icon"></i>Audiovisuales y Medios</a></div>
+            <div class="col-6 col-md-4 col-lg-3"><a href="{% url 'artists:lista' %}?line=5" class="linea-card"><i class="bi bi-book linea-icon"></i>Literatura</a></div>
+            <div class="col-6 col-md-4 col-lg-3"><a href="{% url 'artists:lista' %}?line=6" class="linea-card"><i class="bi bi-gem linea-icon"></i>Artesanías y Oficios</a></div>
+            <div class="col-6 col-md-4 col-lg-3"><a href="{% url 'artists:lista' %}?line=7" class="linea-card"><i class="bi bi-stars linea-icon"></i>Artes Integradas</a></div>
+            <div class="col-6 col-md-4 col-lg-3"><a href="{% url 'artists:lista' %}?line=8" class="linea-card"><i class="bi bi-mortarboard linea-icon"></i>Formación y Mediación</a></div>
+            <div class="col-6 col-md-4 col-lg-3 offset-lg-0 mx-auto mx-lg-0"><a href="{% url 'artists:lista' %}?line=9" class="linea-card"><i class="bi bi-journal-text linea-icon"></i>Investigación y Doc.</a></div>
         </div>
         <div class="mt-5">
-            <a href="{% url 'catalog:list' %}" class="btn-hero" style="margin-bottom:0">Conoce a nuestros artistas</a>
+            <a href="{% url 'artists:lista' %}" class="btn-hero" style="margin-bottom:0">Conoce a nuestros artistas</a>
         </div>
     </div>
 </section>
@@ -415,8 +627,6 @@
             <a href="{% url 'core:home' %}">Nosotros</a>
             <a href="#">Nuestro Propósito</a>
             <a href="#">Experiencia</a>
-            <a href="#">Formalizarte – Desarrollo Web</a>
-            <a href="#">Bienes de Interés Cultural Religioso</a>
             <a href="#">Contáctanos</a>
         </nav>
         <p class="footer-copy">© {% now "Y" %} POR AMOR AL ARTE</p>
@@ -425,7 +635,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // Contador de estadísticas
     const statsObs = new IntersectionObserver(entries => {
         if (!entries[0].isIntersecting) return;
         document.querySelectorAll('.stat-number[data-target]').forEach(el => {
@@ -443,7 +652,6 @@
     const statsEl = document.querySelector('.section-stats');
     if (statsEl) statsObs.observe(statsEl);
 
-    // Carrusel automático sección blanca
     (function() {
         const track = document.getElementById('heroCarousel');
         if (!track) return;

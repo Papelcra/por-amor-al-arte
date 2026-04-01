@@ -335,7 +335,7 @@
                 </p>
 
                 <p><strong>Línea:</strong>
-                    {{ artista.linea_artistica.name|default:"Sin línea" }}
+                    {{ artista.groups.all|join:", "|default:"Sin línea" }}
                 </p>
 
                 <a href="{% url 'artists:ver' artista.id %}" class="btn-ver">
