@@ -1,3 +1,5 @@
+# artists/middleware.py
+
 from django.shortcuts import redirect
 from .models import Artist
 
@@ -10,12 +12,14 @@ class CompleteProfileMiddleware:
 
         if request.user.is_authenticated:
 
-            # Rutas que NO deben redirigir (para evitar loops)
             allowed_paths = [
-                    '/artists/perfil/',
-                    '/artists/ver/',
-                    '/accounts/logout/',
-                    '/admin/',
+                '/artists/perfil/',
+                '/artists/ver/',
+                '/accounts/',        # ← cubre logout, login, google callback
+                '/admin/',
+                '/core/',            # ← FIX: evita el loop con home_artist
+                '/media/',
+                '/static/',
             ]
 
             if any(request.path.startswith(path) for path in allowed_paths):
@@ -25,13 +29,12 @@ class CompleteProfileMiddleware:
                 try:
                     artist = Artist.objects.get(user=request.user)
 
-                    # 🔥 Validación completa
                     if (
                         not artist.stage_name or
                         not artist.description or
                         not artist.genres.exists()
                     ):
-                        return redirect('/core/home_artist/')
+                        return redirect('/artists/perfil/')  # ← FIX: redirige a perfil, no a home_artist
 
                 except Artist.DoesNotExist:
                     return redirect('/artists/perfil/')

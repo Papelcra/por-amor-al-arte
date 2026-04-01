@@ -156,6 +156,8 @@ LOGOUT_REDIRECT_URL = '/accounts/login/'
 
 ACCOUNT_SIGNUP_FORM_CLASS = 'users.forms.CustomSignupForm'
 
+ACCOUNT_ADAPTER = 'users.adapter.MyAccountAdapter'
+SOCIALACCOUNT_ADAPTER = 'users.adapter.MySocialAccountAdapter'  # ← agrega esta línea
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = True
