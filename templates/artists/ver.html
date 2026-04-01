@@ -2,27 +2,312 @@
 
 {% block content %}
 
-<div class="container my-5">
-    <div class="card mx-auto shadow-lg" style="max-width: 600px; border-radius: 15px; overflow: hidden; background: #f8f0ff;">
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,700;1,400&family=Great+Vibes&display=swap');
 
-        {% if artista.profile_image %}
-            <img src="{{ artista.profile_image.url }}" class="card-img-top" style="object-fit: cover; height: 300px;">
-        {% else %}
-            <div style="height: 300px; background: #d8c4ff; display: flex; align-items: center; justify-content: center;">
-                <span style="color: #fff; font-weight: bold;">Sin imagen</span>
+    .perfil-hero {
+        min-height: 100vh;
+        background: #fff;
+        position: relative;
+        padding: 80px 20px;
+        overflow: hidden;
+    }
+
+    .perfil-hero::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background:
+            radial-gradient(ellipse at 10% 50%, rgba(32,171,199,0.07) 0%, transparent 60%),
+            radial-gradient(ellipse at 90% 20%, rgba(32,171,199,0.05) 0%, transparent 50%);
+        z-index: 0;
+    }
+
+    .perfil-content {
+        position: relative;
+        z-index: 2;
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    /* ── ENCABEZADO ── */
+    .perfil-pretitle {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: .75rem;
+        letter-spacing: 5px;
+        text-transform: uppercase;
+        color: #20abc7;
+        margin-bottom: 4px;
+        text-align: center;
+    }
+
+    .perfil-name {
+        font-family: 'Great Vibes', cursive;
+        font-size: clamp(2.5rem, 6vw, 4.5rem);
+        color: #212529;
+        text-align: center;
+        line-height: 1.1;
+        margin-bottom: 6px;
+    }
+
+    .dash-divider {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        margin: 20px 0 50px;
+    }
+    .dash-divider span {
+        display: block;
+        height: 1px;
+        width: 80px;
+        background: linear-gradient(to right, transparent, #20abc7);
+    }
+    .dash-divider span:last-child {
+        background: linear-gradient(to left, transparent, #20abc7);
+    }
+    .dash-divider i { color: #20abc7; font-size: .7rem; }
+
+    /* ── LAYOUT DOS COLUMNAS ── */
+    .perfil-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 50px;
+        align-items: start;
+    }
+
+    @media (max-width: 768px) {
+        .perfil-grid { grid-template-columns: 1fr; gap: 30px; }
+    }
+
+    /* ── CARRUSEL ── */
+    .carousel-inner img {
+        width: 100%;
+        height: 420px;
+        object-fit: cover;
+        border-radius: 4px;
+        filter: grayscale(15%);
+        transition: filter 0.3s;
+    }
+    .carousel-inner img:hover { filter: grayscale(0%); }
+
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 40px;
+        height: 40px;
+        background: #20abc7;
+        border-radius: 50%;
+        top: 50%;
+        transform: translateY(-50%);
+        opacity: 1;
+    }
+    .carousel-control-prev { left: -20px; }
+    .carousel-control-next { right: -20px; }
+
+    .carousel-indicators [data-bs-target] {
+        background-color: #20abc7;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+    }
+
+    /* Placeholder sin imágenes */
+    .gallery-empty {
+        height: 420px;
+        border: 2px dashed #dee2e6;
+        border-radius: 4px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: #adb5bd;
+        font-size: .85rem;
+        letter-spacing: 1px;
+    }
+    .gallery-empty i { font-size: 2.5rem; margin-bottom: 12px; color: #dee2e6; }
+
+    /* ── INFO ── */
+    .perfil-section-label {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: .72rem;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        color: #20abc7;
+        margin-bottom: 10px;
+    }
+
+    .perfil-description {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1.15rem;
+        color: #555;
+        line-height: 1.9;
+        font-style: italic;
+        margin-bottom: 36px;
+    }
+
+    .genre-badge {
+        display: inline-block;
+        border: 1px solid #20abc7;
+        color: #20abc7;
+        font-size: .68rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        padding: 5px 14px;
+        border-radius: 2px;
+        margin: 4px;
+        font-family: 'Cormorant Garamond', serif;
+        font-weight: 700;
+    }
+
+    /* ── FOTO DE PERFIL ── */
+    .profile-img-circle {
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #20abc7;
+        margin: 0 auto 16px;
+        display: block;
+    }
+    .profile-img-placeholder {
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        background: #f0fbfd;
+        border: 3px solid #20abc7;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 16px;
+        color: #20abc7;
+        font-size: 2rem;
+    }
+
+    /* ── BOTONES ── */
+    .btn-teal {
+        background: #20abc7;
+        color: #fff;
+        font-size: .78rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        border: none;
+        border-radius: 4px;
+        padding: 12px 30px;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.2s;
+        margin-top: 30px;
+    }
+    .btn-teal:hover { background: #1799b3; color: #fff; transform: translateY(-2px); }
+
+    .btn-outline-teal {
+        background: transparent;
+        color: #20abc7;
+        font-size: .78rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        border: 1.5px solid #20abc7;
+        border-radius: 4px;
+        padding: 12px 30px;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.2s;
+        margin-top: 30px;
+        margin-left: 12px;
+    }
+    .btn-outline-teal:hover { background: #20abc7; color: #fff; transform: translateY(-2px); }
+</style>
+
+<div class="perfil-hero">
+    <div class="perfil-content">
+
+        <!-- Encabezado -->
+        <p class="perfil-pretitle">Perfil de artista</p>
+        <p class="perfil-name">{{ artista.stage_name }}</p>
+
+        <div class="dash-divider">
+            <span></span>
+            <i class="bi bi-heart-fill"></i>
+            <span></span>
+        </div>
+
+        <!-- Grid dos columnas -->
+        <div class="perfil-grid">
+
+            <!-- COLUMNA IZQUIERDA: carrusel -->
+            <div style="position: relative; padding: 0 24px;">
+                {% if artista.images.all %}
+                    <div id="perfilCarousel" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-indicators">
+                            {% for img in artista.images.all %}
+                                <button type="button" data-bs-target="#perfilCarousel"
+                                        data-bs-slide-to="{{ forloop.counter0 }}"
+                                        {% if forloop.first %}class="active"{% endif %}></button>
+                            {% endfor %}
+                        </div>
+                        <div class="carousel-inner">
+                            {% for img in artista.images.all %}
+                                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                    <img src="{{ img.image.url }}" alt="Imagen {{ forloop.counter }}">
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#perfilCarousel" data-bs-slide="prev">
+                            <i class="bi bi-chevron-left" style="font-size:.9rem;"></i>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#perfilCarousel" data-bs-slide="next">
+                            <i class="bi bi-chevron-right" style="font-size:.9rem;"></i>
+                        </button>
+                    </div>
+                {% elif artista.profile_image %}
+                    <img src="{{ artista.profile_image.url }}"
+                         style="width:100%; height:420px; object-fit:cover; border-radius:4px; filter:grayscale(15%);">
+                {% else %}
+                    <div class="gallery-empty">
+                        <i class="bi bi-images"></i>
+                        <p>Sin imágenes aún</p>
+                    </div>
+                {% endif %}
             </div>
-        {% endif %}
 
-        <div class="card-body text-center px-4 py-4">
-            <h2 class="fw-bold mb-3" style="color: #6b3fa0;">{{ artista.stage_name }}</h2>
-            <p class="text-muted mb-4">{{ artista.description }}</p>
-
-            <h5 class="mb-3" style="color: #6b3fa0;">Géneros:</h5>
+            <!-- COLUMNA DERECHA: info -->
             <div>
-                {% for genero in artista.genres.all %}
-                    <span class="badge rounded-pill me-1 mb-1" style="background-color: #d8b4ff; color: #4a0c7a;">{{ genero.nombre }}</span>
-                {% endfor %}
+                <!-- Foto de perfil pequeña -->
+                {% if artista.profile_image %}
+                    <img src="{{ artista.profile_image.url }}" class="profile-img-circle">
+                {% else %}
+                    <div class="profile-img-placeholder">
+                        <i class="bi bi-person"></i>
+                    </div>
+                {% endif %}
+
+                <!-- Descripción -->
+                <p class="perfil-section-label">Sobre el artista</p>
+                <p class="perfil-description">{{ artista.description }}</p>
+
+                <!-- Géneros -->
+                <p class="perfil-section-label">Géneros</p>
+                <div style="margin-bottom: 10px;">
+                    {% for genero in artista.genres.all %}
+                        <span class="genre-badge">{{ genero.nombre }}</span>
+                    {% empty %}
+                        <span style="color:#adb5bd; font-size:.8rem;">Sin géneros registrados</span>
+                    {% endfor %}
+                </div>
+
+                <!-- Botones -->
+                {% if request.user == artista.user %}
+                    <a href="{% url 'artists:editar' %}" class="btn-teal">
+                        <i class="bi bi-pencil me-2"></i>Editar perfil
+                    </a>
+                {% endif %}
+                <a href="{% url 'artists:lista' %}" class="btn-outline-teal">
+                    <i class="bi bi-arrow-left me-2"></i>Ver todos
+                </a>
             </div>
+
         </div>
     </div>
 </div>

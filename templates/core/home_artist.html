@@ -3,172 +3,357 @@
 {% block content %}
 
 <style>
-    /* 🌊 FONDO AZUL CLARO SUAVE - Igual que en las otras páginas */
-    .page-background {
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,700;1,400&family=Great+Vibes&display=swap');
+
+    .dashboard-hero {
         min-height: 100vh;
-        padding: 100px 20px 80px;
-        background: linear-gradient(135deg, 
-            #7be3ff 0%, 
-            #5fd9ff 25%, 
-            #40ceff 50%, 
-            #1ec4ff 75%, 
-            #00b8ff 100%);
-        
-        background-image: 
-            radial-gradient(circle at 30% 25%, rgba(255,255,255,0.35) 0%, transparent 60%),
-            url("data:image/svg+xml,%3Csvg viewBox='0 0 500 500' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.06'/%3E%3C/svg%3E");
-        
-        background-size: cover;
-        background-attachment: fixed;
+        background: #f1f5f7;
         position: relative;
-    }
-
-    .page-background::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: rgba(0, 120, 160, 0.08);
-        pointer-events: none;
-    }
-
-    .content-wrapper {
-        position: relative;
-        z-index: 2;
-        max-width: 900px;
-        margin: 0 auto;
-    }
-
-    /* 🖋️ TÍTULO PRINCIPAL */
-    .welcome-title {
-        font-weight: 900;
-        font-size: 3.2rem;
-        color: #ffffff;
-        text-transform: uppercase;
-        letter-spacing: 3px;
-        text-shadow: 4px 4px 0 #0077aa,
-                     -3px -3px 0 #0077aa;
-        margin-bottom: 8px;
-    }
-
-    .welcome-subtitle {
-        font-size: 1.35rem;
-        color: rgba(255, 255, 255, 0.95);
-        font-weight: 500;
-        text-shadow: 1px 1px 3px rgba(0, 119, 170, 0.6);
-    }
-
-    /* 🪐 TARJETAS / BOTONES */
-    .action-card {
-        border-radius: 28px;
-        border: 4px solid #ffffff;
-        background: rgba(240, 252, 255, 0.94);
-        box-shadow: 0 25px 70px rgba(0, 110, 150, 0.35);
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        height: 100%;
         display: flex;
         align-items: center;
         justify-content: center;
-        text-decoration: none;
-        color: inherit;
-        padding: 28px 20px;
-        font-size: 1.35rem;
-        font-weight: 800;
-        letter-spacing: 1px;
+        overflow: hidden;
+        padding: 80px 20px;
+    }
+
+    .dashboard-hero::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background:
+            radial-gradient(ellipse at 10% 50%, rgba(32,171,199,0.07) 0%, transparent 60%),
+            radial-gradient(ellipse at 90% 20%, rgba(32,171,199,0.05) 0%, transparent 50%);
+        z-index: 0;
+    }
+
+    .dashboard-content {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        max-width: 1100px;
+        margin: 0 auto;
         text-align: center;
     }
 
-    .action-card:hover {
-        transform: translateY(-12px);
-        box-shadow: 0 40px 95px rgba(0, 110, 150, 0.45);
+    .dash-pretitle {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: .78rem;
+        letter-spacing: 5px;
+        text-transform: uppercase;
+        color: #20abc7;
+        margin-bottom: 6px;
     }
 
-    /* Colores específicos por botón */
-    .btn-artistas {
-        background: linear-gradient(135deg, #0077aa, #0099cc);
-        color: white;
+    .dash-script {
+        font-family: 'Great Vibes', cursive;
+        font-size: clamp(2.5rem, 6vw, 4rem);
+        color: #212529;
+        margin-bottom: 4px;
+        line-height: 1.1;
+    }
+
+    .dash-title {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: clamp(1rem, 2.5vw, 1.3rem);
+        font-weight: 400;
+        color: rgba(0,0,0,0.35);
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        margin-bottom: 40px;
+    }
+
+    .dash-divider {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        margin-bottom: 50px;
+    }
+    .dash-divider span {
+        display: block;
+        height: 1px;
+        width: 80px;
+        background: linear-gradient(to right, transparent, #20abc7);
+    }
+    .dash-divider span:last-child {
+        background: linear-gradient(to left, transparent, #20abc7);
+    }
+    .dash-divider i { color: #20abc7; font-size: .7rem; }
+
+    /* ── CARRUSEL ── */
+    .gallery-section {
+        margin-bottom: 60px;
+    }
+
+    .gallery-section-title {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: .72rem;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        color: #adb5bd;
+        margin-bottom: 20px;
+    }
+
+    .carousel-inner img {
+        width: 100%;
+        height: 420px;
+        object-fit: cover;
+        border-radius: 4px;
+        filter: grayscale(20%);
+        transition: filter 0.3s;
+    }
+
+    .carousel-inner img:hover { filter: grayscale(0%); }
+
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 44px;
+        height: 44px;
+        background: #20abc7;
+        border-radius: 50%;
+        top: 50%;
+        transform: translateY(-50%);
+        opacity: 1;
+    }
+    .carousel-control-prev { left: -22px; }
+    .carousel-control-next { right: -22px; }
+
+    .carousel-indicators [data-bs-target] {
+        background-color: #20abc7;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+    }
+
+    /* Overlay con botón eliminar */
+    .carousel-img-wrapper {
+        position: relative;
+    }
+    .btn-delete-img {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: rgba(220,53,69,0.85);
+        color: #fff;
         border: none;
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        font-size: .8rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s;
+        z-index: 10;
     }
+    .btn-delete-img:hover { background: #dc3545; }
 
-    .btn-artistas:hover {
-        background: linear-gradient(135deg, #00b8ff, #0077aa);
-        color: white;
+    /* Placeholder sin imágenes */
+    .gallery-empty {
+        height: 200px;
+        border: 2px dashed #dee2e6;
+        border-radius: 4px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: #adb5bd;
+        font-size: .85rem;
+        letter-spacing: 1px;
     }
+    .gallery-empty i { font-size: 2rem; margin-bottom: 10px; color: #dee2e6; }
 
-    .btn-mi-perfil {
-        background: linear-gradient(135deg, #00a36c, #00c48a);
-        color: white;
-        border: none;
+    /* Botón subir imagen */
+    .btn-upload {
+        background: transparent;
+        border: 1.5px solid #20abc7;
+        color: #20abc7;
+        font-size: .78rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        border-radius: 4px;
+        padding: 10px 24px;
+        cursor: pointer;
+        transition: all 0.2s;
+        margin-top: 16px;
     }
+    .btn-upload:hover { background: #20abc7; color: #fff; }
 
-    .btn-mi-perfil:hover {
-        background: linear-gradient(135deg, #00d4a3, #00a36c);
-        color: white;
+    /* ── TARJETAS ── */
+    .art-card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        padding: 40px 20px;
+        border: 1px solid #dee2e6;
+        border-top: 3px solid #20abc7;
+        background: #fff;
+        border-radius: 4px;
+        color: #212529;
+        transition: all 0.3s ease;
+        min-height: 180px;
+        overflow: hidden;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.06);
     }
-
-    .btn-crear-perfil {
-        background: linear-gradient(135deg, #f59e0b, #fbbf24);
-        color: #1e3a4f;
-        border: none;
-        font-weight: 900;
+    .art-card:hover {
+        border-color: #20abc7;
+        background: #f0fbfd;
+        transform: translateY(-6px);
+        box-shadow: 0 16px 40px rgba(32,171,199,0.15);
+        color: #212529;
     }
-
-    .btn-crear-perfil:hover {
-        background: linear-gradient(135deg, #fbbf24, #f59e0b);
-        color: #1e3a4f;
+    .art-card-icon {
+        font-size: 2rem;
+        color: #20abc7;
+        margin-bottom: 16px;
+        transition: transform 0.3s ease;
     }
-
-    .btn-logout {
-        background: linear-gradient(135deg, #dc2626, #ef4444);
-        color: white;
-        border: none;
+    .art-card:hover .art-card-icon { transform: scale(1.15); }
+    .art-card-label {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1.15rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 6px;
+        color: #212529;
     }
-
-    .btn-logout:hover {
-        background: linear-gradient(135deg, #ef4444, #b91c1c);
-        color: white;
+    .art-card-desc { font-size: .72rem; color: #adb5bd; letter-spacing: 1px; text-transform: uppercase; }
+    .art-card-bg-num {
+        position: absolute;
+        bottom: -10px;
+        right: 10px;
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 5rem;
+        font-weight: 700;
+        color: rgba(0,0,0,0.04);
+        line-height: 1;
+        pointer-events: none;
+        user-select: none;
     }
+    .art-card-gold { border-top-color: #c9a84c; }
+    .art-card-gold .art-card-icon { color: #c9a84c; }
+    .art-card-gold:hover { border-color: #c9a84c; background: #fdf9f0; box-shadow: 0 16px 40px rgba(201,168,76,0.12); }
+    .art-card-danger { border-top-color: #dc3545; }
+    .art-card-danger .art-card-icon { color: #dc3545; }
+    .art-card-danger:hover { border-color: #dc3545; background: #fff5f5; box-shadow: 0 16px 40px rgba(220,53,69,0.1); }
 </style>
 
-<div class="page-background">
-    <div class="content-wrapper">
-        <div class="text-center mb-5">
-            <h1 class="welcome-title">🎨 Bienvenido artista</h1>
-            <p class="welcome-subtitle">Gestiona tu perfil y explora talento</p>
+<div class="dashboard-hero">
+    <div class="dashboard-content">
+
+        <!-- Encabezado -->
+        <p class="dash-pretitle">Panel de artista</p>
+        <p class="dash-script">Bienvenido</p>
+        <p class="dash-title">{{ request.user.username }}</p>
+
+        <div class="dash-divider">
+            <span></span>
+            <i class="bi bi-heart-fill"></i>
+            <span></span>
         </div>
 
-        <div class="row g-4">
+        <!-- ── CARRUSEL DE IMÁGENES ── -->
+        <div class="gallery-section">
+            <p class="gallery-section-title">Mi galería de imágenes</p>
 
-            <!-- Ver artistas -->
+            {% if images %}
+                <div style="position:relative; padding: 0 30px;">
+                    <div id="artistCarousel" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-indicators">
+                            {% for img in images %}
+                                <button type="button" data-bs-target="#artistCarousel"
+                                        data-bs-slide-to="{{ forloop.counter0 }}"
+                                        {% if forloop.first %}class="active"{% endif %}></button>
+                            {% endfor %}
+                        </div>
+                        <div class="carousel-inner">
+                            {% for img in images %}
+                                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                    <div class="carousel-img-wrapper">
+                                        <img src="{{ img.image.url }}" alt="Imagen {{ forloop.counter }}">
+                                        <!-- Botón eliminar -->
+                                        <form method="post" style="display:inline;">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="delete_image" value="{{ img.id }}">
+                                            <button type="submit" class="btn-delete-img" title="Eliminar">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#artistCarousel" data-bs-slide="prev">
+                            <i class="bi bi-chevron-left" style="font-size:.9rem;"></i>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#artistCarousel" data-bs-slide="next">
+                            <i class="bi bi-chevron-right" style="font-size:.9rem;"></i>
+                        </button>
+                    </div>
+                </div>
+            {% else %}
+                <div class="gallery-empty">
+                    <i class="bi bi-images"></i>
+                    <p>Aún no tienes imágenes en tu galería</p>
+                </div>
+            {% endif %}
+            
+            <!-- Formulario subir imagen -->
+            <form method="post" action="{% url 'artists:perfil' %}" enctype="multipart/form-data" style="margin-top:20px;">
+                {% csrf_token %}
+                <input type="hidden" name="upload_image" value="1">
+                <label for="id_image" class="btn-upload">
+                    <i class="bi bi-cloud-upload me-2"></i>Subir imagen
+                </label>
+                <input type="file" id="id_image" name="image" accept="image/*"
+                       style="display:none;"
+                       onchange="this.form.submit()">
+            </form>
+        </div>
+
+        <!-- ── TARJETAS ── -->
+        <div class="row g-4">
             <div class="col-md-4">
-                <a href="{% url 'artists:lista' %}" class="action-card btn-artistas">
-                    🎭 Ver artistas
+                <a href="{% url 'artists:lista' %}" class="art-card">
+                    <i class="bi bi-people art-card-icon"></i>
+                    <p class="art-card-label">Ver artistas</p>
+                    <p class="art-card-desc">Directorio completo</p>
+                    <span class="art-card-bg-num">01</span>
                 </a>
             </div>
-
-            <!-- Mi perfil o Crear perfil -->
             <div class="col-md-4">
                 {% if request.user.artist %}
-                    <a href="{% url 'artists:ver' request.user.artist.id %}" 
-                       class="action-card btn-mi-perfil">
-                        👤 Mi perfil
+                    <a href="{% url 'artists:ver' request.user.artist.id %}" class="art-card">
+                        <i class="bi bi-person-circle art-card-icon"></i>
+                        <p class="art-card-label">Mi perfil</p>
+                        <p class="art-card-desc">Ver y editar</p>
+                        <span class="art-card-bg-num">02</span>
                     </a>
                 {% else %}
-                    <a href="{% url 'artists:perfil' %}" 
-                       class="action-card btn-crear-perfil">
-                        ✏️ Crear mi perfil
+                    <a href="{% url 'artists:perfil' %}" class="art-card art-card-gold">
+                        <i class="bi bi-pencil-square art-card-icon"></i>
+                        <p class="art-card-label">Crear mi perfil</p>
+                        <p class="art-card-desc">Únete al directorio</p>
+                        <span class="art-card-bg-num">02</span>
                     </a>
                 {% endif %}
             </div>
-
-            <!-- Cerrar sesión -->
             <div class="col-md-4">
-                <a href="{% url 'account_logout' %}" 
-                   class="action-card btn-logout">
-                    🚪 Cerrar sesión
+                <a href="{% url 'account_logout' %}" class="art-card art-card-danger">
+                    <i class="bi bi-box-arrow-right art-card-icon"></i>
+                    <p class="art-card-label">Cerrar sesión</p>
+                    <p class="art-card-desc">Hasta pronto</p>
+                    <span class="art-card-bg-num">03</span>
                 </a>
             </div>
-
         </div>
+
     </div>
 </div>
 
