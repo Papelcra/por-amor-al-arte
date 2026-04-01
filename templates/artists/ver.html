@@ -7,7 +7,7 @@
 
     .perfil-hero {
         min-height: 100vh;
-        background: #fff;
+        background: #eef6fb;
         position: relative;
         padding: 100px 20px 80px;
         overflow: hidden;
@@ -18,8 +18,9 @@
         position: absolute;
         inset: 0;
         background:
-            radial-gradient(ellipse at 10% 50%, rgba(32,171,199,0.07) 0%, transparent 60%),
-            radial-gradient(ellipse at 90% 20%, rgba(32,171,199,0.05) 0%, transparent 50%);
+            radial-gradient(ellipse at 10% 50%, rgba(60,170,220,0.10) 0%, transparent 60%),
+            radial-gradient(ellipse at 90% 20%, rgba(60,170,220,0.07) 0%, transparent 50%),
+            radial-gradient(ellipse at 50% 100%, rgba(100,200,255,0.08) 0%, transparent 50%);
         z-index: 0;
     }
 
@@ -36,15 +37,16 @@
         font-size: 0.85rem;
         letter-spacing: 5px;
         text-transform: uppercase;
-        color: #20abc7;
+        color: #1a8fc4;
         margin-bottom: 6px;
         text-align: center;
+        font-weight: 600;
     }
 
     .perfil-name {
         font-family: 'Great Vibes', cursive;
         font-size: clamp(2.8rem, 7vw, 5rem);
-        color: #212529;
+        color: #0d2d45;
         text-align: center;
         line-height: 1.05;
         margin-bottom: 10px;
@@ -62,11 +64,11 @@
         display: block;
         height: 1px;
         width: 90px;
-        background: linear-gradient(to right, transparent, #20abc7);
+        background: linear-gradient(to right, transparent, #3ab4e0);
     }
 
     .dash-divider i {
-        color: #20abc7;
+        color: #3ab4e0;
         font-size: 1rem;
     }
 
@@ -91,21 +93,21 @@
         height: 460px;
         object-fit: cover;
         border-radius: 8px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        box-shadow: 0 10px 30px rgba(0,80,160,0.10);
     }
 
     .carousel-control-prev,
     .carousel-control-next {
         width: 45px;
         height: 45px;
-        background: rgba(32,171,199,0.9);
+        background: rgba(26,143,196,0.90);
         border-radius: 50%;
         top: 50%;
         transform: translateY(-50%);
     }
 
     .carousel-indicators button {
-        background-color: #20abc7;
+        background-color: #3ab4e0;
         width: 8px;
         height: 8px;
         border-radius: 50%;
@@ -114,19 +116,20 @@
     /* Placeholder sin imágenes */
     .gallery-empty {
         height: 460px;
-        border: 2px dashed #dee2e6;
+        border: 2px dashed #c2dff0;
         border-radius: 8px;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        color: #adb5bd;
+        color: #5a7a90;
+        background: #fff;
     }
 
     .gallery-empty i {
         font-size: 3rem;
         margin-bottom: 15px;
-        color: #dee2e6;
+        color: #c2dff0;
     }
 
     /* Info lateral */
@@ -135,7 +138,7 @@
         height: 100px;
         border-radius: 50%;
         object-fit: cover;
-        border: 4px solid #20abc7;
+        border: 4px solid #3ab4e0;
         margin: 0 auto 20px;
         display: block;
     }
@@ -144,13 +147,13 @@
         width: 100px;
         height: 100px;
         border-radius: 50%;
-        background: #f0fbfd;
-        border: 4px solid #20abc7;
+        background: #e8f6fc;
+        border: 4px solid #3ab4e0;
         display: flex;
         align-items: center;
         justify-content: center;
         margin: 0 auto 20px;
-        color: #20abc7;
+        color: #1a8fc4;
         font-size: 2.8rem;
     }
 
@@ -159,14 +162,15 @@
         font-size: 0.8rem;
         letter-spacing: 4px;
         text-transform: uppercase;
-        color: #20abc7;
+        color: #1a8fc4;
         margin-bottom: 12px;
+        font-weight: 700;
     }
 
     .perfil-description {
         font-family: 'Cormorant Garamond', serif;
         font-size: 1.2rem;
-        color: #555;
+        color: #2e5570;
         line-height: 1.85;
         font-style: italic;
         margin-bottom: 40px;
@@ -174,8 +178,8 @@
 
     .genre-badge {
         display: inline-block;
-        border: 1px solid #20abc7;
-        color: #20abc7;
+        border: 1px solid #3ab4e0;
+        color: #1a8fc4;
         font-size: 0.75rem;
         letter-spacing: 2px;
         text-transform: uppercase;
@@ -183,11 +187,12 @@
         border-radius: 4px;
         margin: 4px 6px 4px 0;
         font-weight: 600;
+        background: #fff;
     }
 
     /* Botones */
     .btn-teal {
-        background: #20abc7;
+        background: #1a8fc4;
         color: #fff;
         font-weight: 700;
         letter-spacing: 2px;
@@ -198,20 +203,23 @@
         text-decoration: none;
         display: inline-block;
         transition: all 0.3s;
+        box-shadow: 0 4px 14px rgba(26,143,196,0.25);
     }
 
     .btn-teal:hover {
-        background: #1799b3;
+        background: #1578a8;
         transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(26,143,196,0.35);
+        color: #fff;
     }
 
     .btn-outline-teal {
         background: transparent;
-        color: #20abc7;
+        color: #1a8fc4;
         font-weight: 700;
         letter-spacing: 2px;
         text-transform: uppercase;
-        border: 2px solid #20abc7;
+        border: 2px solid #3ab4e0;
         border-radius: 6px;
         padding: 14px 32px;
         text-decoration: none;
@@ -221,8 +229,11 @@
     }
 
     .btn-outline-teal:hover {
-        background: #20abc7;
+        background: #3ab4e0;
         color: #fff;
+        border-color: #3ab4e0;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(58,180,224,0.25);
     }
 </style>
 
@@ -269,7 +280,8 @@
                     </div>
                 {% elif artista.profile_image %}
                     <img src="{{ artista.profile_image.url }}" 
-                         style="width:100%; height:460px; object-fit:cover; border-radius:8px;" alt="{{ artista.stage_name }}">
+                         style="width:100%; height:460px; object-fit:cover; border-radius:8px; box-shadow: 0 10px 30px rgba(0,80,160,0.10);" 
+                         alt="{{ artista.stage_name }}">
                 {% else %}
                     <div class="gallery-empty">
                         <i class="bi bi-images"></i>
@@ -300,7 +312,7 @@
                     {% for genero in artista.genres.all %}
                         <span class="genre-badge">{{ genero.nombre }}</span>
                     {% empty %}
-                        <span style="color:#adb5bd;">Sin géneros registrados</span>
+                        <span style="color:#5a7a90;">Sin géneros registrados</span>
                     {% endfor %}
                 </div>
 

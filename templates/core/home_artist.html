@@ -7,7 +7,7 @@
 
     .dashboard-hero {
         min-height: 100vh;
-        background: #f8fafd;
+        background: #eef6fb;
         position: relative;
         padding: 100px 20px 80px;
         overflow: hidden;
@@ -18,8 +18,9 @@
         position: absolute;
         inset: 0;
         background:
-            radial-gradient(ellipse at 10% 50%, rgba(32,171,199,0.06) 0%, transparent 60%),
-            radial-gradient(ellipse at 90% 20%, rgba(32,171,199,0.04) 0%, transparent 50%);
+            radial-gradient(ellipse at 10% 50%, rgba(60,170,220,0.10) 0%, transparent 60%),
+            radial-gradient(ellipse at 90% 20%, rgba(60,170,220,0.07) 0%, transparent 50%),
+            radial-gradient(ellipse at 50% 100%, rgba(100,200,255,0.08) 0%, transparent 50%);
         z-index: 0;
     }
 
@@ -37,14 +38,15 @@
         font-size: 0.85rem;
         letter-spacing: 5px;
         text-transform: uppercase;
-        color: #20abc7;
+        color: #1a8fc4;
         margin-bottom: 8px;
+        font-weight: 600;
     }
 
     .dash-script {
         font-family: 'Great Vibes', cursive;
         font-size: clamp(2.8rem, 7vw, 4.8rem);
-        color: #212529;
+        color: #0d2d45;
         margin-bottom: 6px;
         line-height: 1.05;
     }
@@ -52,10 +54,11 @@
     .dash-title {
         font-family: 'Cormorant Garamond', serif;
         font-size: clamp(1.1rem, 3vw, 1.4rem);
-        color: rgba(0,0,0,0.45);
+        color: rgba(0,40,80,0.55);
         letter-spacing: 4px;
         text-transform: uppercase;
         margin-bottom: 50px;
+        font-weight: 700;
     }
 
     .dash-divider {
@@ -70,11 +73,11 @@
         display: block;
         height: 1px;
         width: 90px;
-        background: linear-gradient(to right, transparent, #20abc7);
+        background: linear-gradient(to right, transparent, #3ab4e0);
     }
 
     .dash-divider i {
-        color: #20abc7;
+        color: #3ab4e0;
         font-size: 1.1rem;
     }
 
@@ -87,26 +90,26 @@
         justify-content: center;
         text-decoration: none;
         padding: 48px 30px;
-        border: 1px solid #dee2e6;
-        border-top: 4px solid #20abc7;
+        border: 1px solid #c2dff0;
+        border-top: 4px solid #3ab4e0;
         background: #ffffff;
         border-radius: 8px;
-        color: #212529;
+        color: #0d2d45;
         transition: all 0.4s ease;
         min-height: 210px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+        box-shadow: 0 4px 20px rgba(0,80,160,0.08);
     }
 
     .art-card:hover {
-        border-color: #20abc7;
-        background: #f0fbfd;
+        border-color: #3ab4e0;
+        background: #e8f6fc;
         transform: translateY(-8px);
-        box-shadow: 0 20px 45px rgba(32,171,199,0.18);
+        box-shadow: 0 20px 45px rgba(30,140,210,0.20);
     }
 
     .art-card-icon {
         font-size: 2.8rem;
-        color: #20abc7;
+        color: #1a8fc4;
         margin-bottom: 20px;
         transition: transform 0.4s ease;
     }
@@ -121,16 +124,18 @@
         font-weight: 700;
         letter-spacing: 1px;
         margin-bottom: 8px;
+        color: #0d2d45;
     }
 
     .art-card-desc {
         font-size: 0.85rem;
-        color: #6c757d;
+        color: #5a7a90;
         letter-spacing: 1px;
         text-transform: uppercase;
+        font-weight: 500;
     }
 
-    /* Variantes de color */
+    /* Variante dorada */
     .art-card-gold {
         border-top-color: #c9a84c;
     }
@@ -138,8 +143,10 @@
     .art-card-gold:hover {
         border-color: #c9a84c;
         background: #fdf9f0;
+        box-shadow: 0 20px 45px rgba(200,165,50,0.15);
     }
 
+    /* Variante danger */
     .art-card-danger {
         border-top-color: #dc3545;
     }
@@ -147,6 +154,7 @@
     .art-card-danger:hover {
         border-color: #dc3545;
         background: #fff5f5;
+        box-shadow: 0 20px 45px rgba(220,53,69,0.12);
     }
 </style>
 

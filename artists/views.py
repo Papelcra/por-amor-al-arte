@@ -72,7 +72,7 @@ def lista_artistas(request):
     if genero_id:
         artistas = artistas.filter(genres__id=genero_id)
     if linea_id:
-        artistas = artistas.filter(group__id=linea_id)
+        artistas = artistas.filter(linea_artistica__id=linea_id)  # ← fix aquí
     generos = Genre.objects.all()
     lineas = LineaArtistica.objects.all()
     return render(request, 'artists/lista.html', {

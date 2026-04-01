@@ -6,42 +6,42 @@
     @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400;1,700&family=DM+Sans:wght@300;400;500;600&display=swap');
 
     :root {
-        --blue: #1a6bff;
-        --blue-dark: #0040cc;
-        --teal: #0ec4d8;
-        --teal-dark: #0a9aaa;
+        --blue: #7dd8ff;
+        --blue-dark: #0b2a4a;
+        --teal: #a8e8ff;
         --white: #ffffff;
-        --black: #0a0a0a;
+        --black: #0a1a2e;
+        --accent: #4fc8f0;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
         font-family: 'DM Sans', sans-serif;
-        background: #001840;
+        background: #0f3a5c;
         min-height: 100vh;
         overflow-x: hidden;
         position: relative;
     }
 
-    /* === FONDO ANIMADO (burbujas) === */
+    /* === FONDO ANIMADO === */
     body::before {
         content: '';
         position: fixed;
         inset: 0;
         background:
-            radial-gradient(ellipse 70% 55% at 15% 15%, rgba(14,196,216,0.18) 0%, transparent 60%),
-            radial-gradient(ellipse 60% 70% at 85% 80%, rgba(0,64,204,0.35) 0%, transparent 60%),
-            radial-gradient(ellipse 50% 50% at 50% 50%, rgba(26,107,255,0.10) 0%, transparent 70%),
-            linear-gradient(150deg, #001840 0%, #002a6e 35%, #003580 55%, #001d55 100%);
+            radial-gradient(ellipse 70% 55% at 15% 15%, rgba(100,200,255,0.25) 0%, transparent 60%),
+            radial-gradient(ellipse 60% 70% at 85% 80%, rgba(30,120,220,0.35) 0%, transparent 60%),
+            radial-gradient(ellipse 50% 50% at 50% 50%, rgba(80,180,255,0.15) 0%, transparent 70%),
+            linear-gradient(150deg, #63d4f5 0%, #1264b8 30%, #2a8fd4 55%, #6ec6ef 100%);
         z-index: 0;
         animation: bgShift 14s ease-in-out infinite alternate;
     }
 
     @keyframes bgShift {
         0%   { filter: hue-rotate(0deg) brightness(1); }
-        50%  { filter: hue-rotate(12deg) brightness(1.06); }
-        100% { filter: hue-rotate(-8deg) brightness(0.96); }
+        50%  { filter: hue-rotate(10deg) brightness(1.08); }
+        100% { filter: hue-rotate(-6deg) brightness(0.97); }
     }
 
     /* === BURBUJAS === */
@@ -60,14 +60,14 @@
         animation: floatUp linear infinite;
     }
 
-    .bubble:nth-child(1)  { width: 35px;  height: 35px;  left: 7%;   animation-duration: 15s; animation-delay: 0s;  background: rgba(14,196,216,0.08); }
-    .bubble:nth-child(2)  { width: 60px;  height: 60px;  left: 19%;  animation-duration: 19s; animation-delay: 3s;  background: rgba(255,255,255,0.04); }
-    .bubble:nth-child(3)  { width: 22px;  height: 22px;  left: 33%;  animation-duration: 11s; animation-delay: 1s;  background: rgba(14,196,216,0.06); }
-    .bubble:nth-child(4)  { width: 80px;  height: 80px;  left: 49%;  animation-duration: 22s; animation-delay: 5s;  background: rgba(26,107,255,0.10); }
-    .bubble:nth-child(5)  { width: 30px;  height: 30px;  left: 63%;  animation-duration: 13s; animation-delay: 2s;  background: rgba(14,196,216,0.07); }
-    .bubble:nth-child(6)  { width: 50px;  height: 50px;  left: 75%;  animation-duration: 17s; animation-delay: 7s;  background: rgba(255,255,255,0.03); }
-    .bubble:nth-child(7)  { width: 18px;  height: 18px;  left: 86%;  animation-duration: 10s; animation-delay: 4s;  background: rgba(14,196,216,0.09); }
-    .bubble:nth-child(8)  { width: 55px;  height: 55px;  left: 93%;  animation-duration: 20s; animation-delay: 0s;  background: rgba(26,107,255,0.08); }
+    .bubble:nth-child(1)  { width: 35px;  height: 35px;  left: 7%;   animation-duration: 15s; animation-delay: 0s;  background: rgba(100,210,255,0.12); }
+    .bubble:nth-child(2)  { width: 60px;  height: 60px;  left: 19%;  animation-duration: 19s; animation-delay: 3s;  background: rgba(255,255,255,0.07); }
+    .bubble:nth-child(3)  { width: 22px;  height: 22px;  left: 33%;  animation-duration: 11s; animation-delay: 1s;  background: rgba(100,210,255,0.10); }
+    .bubble:nth-child(4)  { width: 80px;  height: 80px;  left: 49%;  animation-duration: 22s; animation-delay: 5s;  background: rgba(50,160,255,0.12); }
+    .bubble:nth-child(5)  { width: 30px;  height: 30px;  left: 63%;  animation-duration: 13s; animation-delay: 2s;  background: rgba(100,210,255,0.09); }
+    .bubble:nth-child(6)  { width: 50px;  height: 50px;  left: 75%;  animation-duration: 17s; animation-delay: 7s;  background: rgba(255,255,255,0.05); }
+    .bubble:nth-child(7)  { width: 18px;  height: 18px;  left: 86%;  animation-duration: 10s; animation-delay: 4s;  background: rgba(100,210,255,0.11); }
+    .bubble:nth-child(8)  { width: 55px;  height: 55px;  left: 93%;  animation-duration: 20s; animation-delay: 0s;  background: rgba(50,160,255,0.10); }
 
     @keyframes floatUp {
         0%   { transform: translateY(0) scale(1);   opacity: 0; }
@@ -93,13 +93,14 @@
 
     .header-eyebrow {
         font-family: 'DM Sans', sans-serif;
-        font-weight: 500;
+        font-weight: 600;
         font-size: 0.7rem;
         letter-spacing: 5px;
         text-transform: uppercase;
-        color: var(--teal);
+        color: #a8e8ff;
         margin-bottom: 18px;
-        opacity: 0.9;
+        opacity: 1;
+        text-shadow: 0 0 12px rgba(100,210,255,0.4);
     }
 
     .header-title {
@@ -111,13 +112,13 @@
         line-height: 1;
         letter-spacing: -2px;
         margin-bottom: 20px;
-        text-shadow: 0 0 60px rgba(14,196,216,0.25);
+        text-shadow: 0 2px 8px rgba(0,0,0,0.3), 0 0 60px rgba(100,210,255,0.3);
         animation: titleGlow 4s ease-in-out infinite alternate;
     }
 
     @keyframes titleGlow {
-        0%   { text-shadow: 0 0 40px rgba(14,196,216,0.2); }
-        100% { text-shadow: 0 0 80px rgba(14,196,216,0.45), 0 0 120px rgba(26,107,255,0.2); }
+        0%   { text-shadow: 0 2px 8px rgba(0,0,0,0.3), 0 0 40px rgba(100,210,255,0.25); }
+        100% { text-shadow: 0 2px 8px rgba(0,0,0,0.3), 0 0 80px rgba(100,210,255,0.55), 0 0 120px rgba(50,160,255,0.25); }
     }
 
     .header-divider {
@@ -132,21 +133,21 @@
         display: block;
         height: 1px;
         width: 70px;
-        background: linear-gradient(90deg, transparent, var(--teal), transparent);
+        background: linear-gradient(90deg, transparent, #a8e8ff, transparent);
     }
 
     .header-divider i {
         display: block;
-        width: 5px;
-        height: 5px;
+        width: 6px;
+        height: 6px;
         border-radius: 50%;
-        background: var(--teal);
-        box-shadow: 0 0 8px var(--teal);
+        background: #a8e8ff;
+        box-shadow: 0 0 10px #a8e8ff;
     }
 
     .header-sub {
         font-size: 0.95rem;
-        color: rgba(255,255,255,0.45);
+        color: rgba(255,255,255,0.65);
         font-weight: 300;
         letter-spacing: 0.5px;
     }
@@ -160,9 +161,9 @@
 
     /* === CARD === */
     .dash-card {
-        background: rgba(255,255,255,0.06);
-        border: 1px solid rgba(14,196,216,0.18);
-        border-top: 2px solid var(--teal);
+        background: rgba(255,255,255,0.10);
+        border: 1px solid rgba(100,210,255,0.25);
+        border-top: 2px solid #7dd8ff;
         border-radius: 4px;
         padding: 40px 32px 32px;
         display: flex;
@@ -183,15 +184,15 @@
         width: 90px;
         height: 90px;
         border-radius: 90px 0 0 0;
-        background: rgba(14,196,216,0.07);
+        background: rgba(100,210,255,0.10);
         transition: transform 0.4s;
     }
 
     .dash-card:hover {
         transform: translateY(-8px);
-        background: rgba(255,255,255,0.10);
-        border-color: rgba(14,196,216,0.5);
-        box-shadow: 0 20px 50px rgba(0,0,40,0.4), 0 0 30px rgba(14,196,216,0.08);
+        background: rgba(255,255,255,0.15);
+        border-color: rgba(100,210,255,0.6);
+        box-shadow: 0 20px 50px rgba(0,20,60,0.4), 0 0 30px rgba(100,210,255,0.15);
     }
 
     .dash-card:hover::after {
@@ -207,22 +208,24 @@
     .dash-card:nth-child(2) { animation-delay: 0.2s; }
     .dash-card:nth-child(3) { animation-delay: 0.3s; }
 
-    /* Número decorativo */
+    /* Número decorativo — ahora bien visible */
     .card-number {
         font-family: 'Playfair Display', serif;
         font-style: italic;
         font-size: 4.5rem;
         font-weight: 700;
-        color: rgba(14,196,216,0.18);
+        color: rgba(168,232,255,0.55);
         line-height: 1;
         margin-bottom: 10px;
         letter-spacing: -2px;
         user-select: none;
         transition: color 0.3s;
+        text-shadow: 0 0 20px rgba(100,210,255,0.4);
     }
 
     .dash-card:hover .card-number {
-        color: rgba(14,196,216,0.30);
+        color: rgba(168,232,255,0.80);
+        text-shadow: 0 0 30px rgba(100,210,255,0.6);
     }
 
     .card-title {
@@ -233,11 +236,12 @@
         margin-bottom: 12px;
         letter-spacing: -0.3px;
         line-height: 1.2;
+        text-shadow: 0 1px 4px rgba(0,0,0,0.25);
     }
 
     .card-desc {
         font-size: 13.5px;
-        color: rgba(255,255,255,0.45);
+        color: rgba(255,255,255,0.65);
         line-height: 1.65;
         font-weight: 300;
         margin-bottom: 30px;
@@ -263,15 +267,15 @@
 
     .btn-primary {
         background: transparent;
-        color: var(--teal);
-        border: 1.5px solid rgba(14,196,216,0.5);
+        color: #a8e8ff;
+        border: 1.5px solid rgba(100,210,255,0.6);
     }
 
     .btn-primary:hover {
-        background: var(--teal);
-        color: var(--black);
-        border-color: var(--teal);
-        box-shadow: 0 6px 20px rgba(14,196,216,0.3);
+        background: #7dd8ff;
+        color: #0b2a4a;
+        border-color: #7dd8ff;
+        box-shadow: 0 6px 20px rgba(100,210,255,0.35);
     }
 
     .btn-solid {
@@ -281,10 +285,10 @@
     }
 
     .btn-solid:hover {
-        background: var(--teal);
-        border-color: var(--teal);
-        color: var(--black);
-        box-shadow: 0 6px 20px rgba(14,196,216,0.3);
+        background: #a8e8ff;
+        border-color: #a8e8ff;
+        color: #0b2a4a;
+        box-shadow: 0 6px 20px rgba(100,210,255,0.35);
     }
 
     .arrow {
