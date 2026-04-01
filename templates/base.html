@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -8,154 +9,176 @@
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Google Fonts (Playfair Display + DM Sans) -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --teal: #0ec4d8;
-            --teal-dark: #0a9aaa;
-        }
-
-        * {
-            box-sizing: border-box;
+            --blue: #2f80ed;
+            --dark: #22272e;
         }
 
         body {
             font-family: 'DM Sans', sans-serif;
             background: #001840;
-            min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
             margin: 0;
-            padding: 0;
         }
 
-        /* Fondo animado base (visible cuando no hay burbujas o en páginas simples) */
-        body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background:
-                radial-gradient(ellipse 70% 55% at 15% 15%, rgba(14,196,216,0.12) 0%, transparent 60%),
-                radial-gradient(ellipse 60% 70% at 85% 80%, rgba(0,64,204,0.25) 0%, transparent 60%),
-                linear-gradient(150deg, #001840 0%, #002a6e 40%, #003580 65%, #001d55 100%);
-            z-index: -1;
-            animation: bgShift 16s ease-in-out infinite alternate;
+        /* 🔝 TOPBAR */
+        .topbar {
+            background: #1c1f24;
+            text-align: center;
+            padding: 6px 0;
         }
 
-        @keyframes bgShift {
-            0%   { filter: hue-rotate(0deg) brightness(1); }
-            50%  { filter: hue-rotate(10deg) brightness(1.05); }
-            100% { filter: hue-rotate(-6deg) brightness(0.97); }
+        .topbar a {
+            color: rgba(255,255,255,0.6);
+            margin: 0 12px;
+            font-size: 1.1rem;
+            transition: 0.3s;
         }
 
-        /* Navbar estilo premium oscuro */
-        .navbar {
-            background: rgba(10, 20, 50, 0.95) !important;
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(14, 196, 216, 0.2);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        .topbar a:hover {
+            color: #fff;
+        }
+
+        /* 🔥 NAVBAR */
+        .main-navbar {
+            background: var(--dark) !important;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
 
         .navbar-brand {
             font-family: 'Playfair Display', serif;
-            font-size: 1.65rem;
-            font-weight: 700;
-            letter-spacing: -1px;
-            color: var(--teal) !important;
+            font-size: 1.5rem;
+            color: white !important;
         }
 
         .nav-link {
+            color: rgba(255,255,255,0.7) !important;
             font-weight: 500;
-            transition: color 0.3s ease;
         }
 
         .nav-link:hover {
-            color: var(--teal) !important;
+            color: #fff !important;
         }
 
-        /* Botón de login */
-        .btn-outline-light {
-            border-color: var(--teal);
-            color: var(--teal);
+        /* Botón login */
+        .btn-login {
+            background: var(--blue);
+            color: white;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: 0.3s;
         }
 
-        .btn-outline-light:hover {
-            background: var(--teal);
-            color: #000;
-            border-color: var(--teal);
+        .btn-login:hover {
+            background: #1c6fe0;
+            color: white;
         }
 
-        /* Ajustes para que las páginas con .page-wrapper o .bubbles funcionen bien */
-        html, body {
-            height: 100%;
+        /* Espacio navbar */
+        .navbar-space {
+            height: 110px;
         }
     </style>
 </head>
 
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark shadow-sm fixed-top">
-    <div class="container">
-        <a class="navbar-brand" href="/">🎨 Por Amor al Arte</a>
+<!-- 🔝 TOPBAR -->
+<div class="topbar">
+    <a href="#"><i class="bi bi-instagram"></i></a>
+    <a href="#"><i class="bi bi-youtube"></i></a>
+    <a href="#"><i class="bi bi-whatsapp"></i></a>
+    <a href="#"><i class="bi bi-spotify"></i></a>
+</div>
 
+<!-- 🔥 NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top main-navbar">
+    <div class="container">
+
+        <!-- Logo -->
+        <a class="navbar-brand" href="{% url 'core:home' %}">
+            🎨 Por Amor al Arte
+        </a>
+
+        <!-- Toggle -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
 
+        <!-- Contenido -->
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav me-auto">
+
+            <!-- Centro -->
+            <ul class="navbar-nav mx-auto gap-3">
                 <li class="nav-item">
-                    <a class="nav-link" href="/">Inicio</a>
+                    <a class="nav-link" href="{% url 'core:home' %}">Inicio</a>
                 </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                        Nosotros
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark">
+                        <li><a class="dropdown-item" href="#">Nuestro Propósito</a></li>
+                        <li><a class="dropdown-item" href="#">Experiencia</a></li>
+                    </ul>
+                </li>
+
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'artists:lista' %}">Artistas</a>
+                    <a class="nav-link" href="#">Contáctanos</a>
                 </li>
-                {% if user.is_authenticated and user.role == 'group_admin' %}
+
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'groups:mis_grupos' %}">👥 Mis grupos</a>
+                    <a class="nav-link" href="{% url 'artists:lista' %}">
+                        Nuestros Artistas
+                    </a>
                 </li>
-                {% endif %}
             </ul>
 
-            <ul class="navbar-nav">
+            <!-- Derecha -->
+            <ul class="navbar-nav align-items-center">
                 {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <span class="nav-link text-light">👤 {{ user.username }}</span>
+                        <span class="nav-link">👤 {{ user.username }}</span>
                     </li>
 
                     {% if user.role == 'artist' %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'artists:perfil' %}">✏️ Editar perfil</a>
+                            <a class="nav-link" href="{% url 'artists:perfil' %}">Editar perfil</a>
                         </li>
-                        {% if request.user.artist_id %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'artists:ver' request.user.artist.id %}">👁️ Ver mi perfil</a>
-                        </li>
-                        {% endif %}
                     {% endif %}
 
                     <li class="nav-item">
-                        <a class="nav-link text-danger" href="/accounts/logout/">Cerrar sesión</a>
+                        <a class="nav-link text-danger" href="{% url 'account_logout' %}">
+                            Cerrar sesión
+                        </a>
                     </li>
                 {% else %}
                     <li class="nav-item">
-                        <a class="nav-link btn btn-outline-light px-4" href="/accounts/login/">Login</a>
+                        <a class="btn btn-login px-4" href="{% url 'account_login' %}">
+                            Iniciar Sesión
+                        </a>
                     </li>
                 {% endif %}
             </ul>
+
         </div>
     </div>
 </nav>
 
-    <!-- Espacio para la navbar fixed -->
-    <div style="height: 70px;"></div>
+<!-- Espacio para navbar fija -->
+<div class="navbar-space"></div>
 
-    <!-- Aquí va el contenido de cada página -->
-    {% block content %}{% endblock %}
+<!-- CONTENIDO -->
+{% block content %}{% endblock %}
 
-<!-- Bootstrap JS -->
+<!-- Bootstrap -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
