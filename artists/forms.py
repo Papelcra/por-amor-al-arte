@@ -1,5 +1,5 @@
 from django import forms
-from .models import Artist
+from .models import Artist, ArtistImage
 from catalog.models import Genre
 
 class ArtistForm(forms.ModelForm):
@@ -9,3 +9,9 @@ class ArtistForm(forms.ModelForm):
         widgets = {
             'genres': forms.CheckboxSelectMultiple
         }
+
+# ── NUEVO ──
+class ArtistImageForm(forms.ModelForm):
+    class Meta:
+        model = ArtistImage
+        fields = ['image']
