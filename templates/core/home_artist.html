@@ -3,170 +3,275 @@
 {% block content %}
 
 <style>
-    /* 🌊 FONDO AZUL CLARO SUAVE - Igual que en las otras páginas */
-    .page-background {
+    @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap');
+
+    :root {
+        --blue: #1a6bff;
+        --blue-dark: #0040cc;
+        --blue-mid: #2979ff;
+        --blue-light: #6fa8ff;
+        --white: #ffffff;
+        --black: #0a0a0a;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+        font-family: 'DM Sans', sans-serif;
+        background: var(--blue-dark);
         min-height: 100vh;
-        padding: 100px 20px 80px;
-        background: linear-gradient(135deg, 
-            #7be3ff 0%, 
-            #5fd9ff 25%, 
-            #40ceff 50%, 
-            #1ec4ff 75%, 
-            #00b8ff 100%);
-        
-        background-image: 
-            radial-gradient(circle at 30% 25%, rgba(255,255,255,0.35) 0%, transparent 60%),
-            url("data:image/svg+xml,%3Csvg viewBox='0 0 500 500' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.06'/%3E%3C/svg%3E");
-        
-        background-size: cover;
-        background-attachment: fixed;
+        overflow-x: hidden;
         position: relative;
     }
 
-    .page-background::before {
+    /* === FONDO ANIMADO === */
+    body::before {
         content: '';
-        position: absolute;
+        position: fixed;
         inset: 0;
-        background: rgba(0, 120, 160, 0.08);
+        background:
+            radial-gradient(ellipse 80% 60% at 20% 10%, #1a6bff55 0%, transparent 60%),
+            radial-gradient(ellipse 60% 80% at 80% 80%, #0040cc88 0%, transparent 60%),
+            radial-gradient(ellipse 50% 50% at 50% 50%, #2979ff22 0%, transparent 70%),
+            linear-gradient(135deg, #001a66 0%, #0040cc 40%, #1a6bff 70%, #003399 100%);
+        z-index: 0;
+        animation: bgShift 12s ease-in-out infinite alternate;
+    }
+
+    @keyframes bgShift {
+        0%   { filter: hue-rotate(0deg) brightness(1); }
+        50%  { filter: hue-rotate(15deg) brightness(1.08); }
+        100% { filter: hue-rotate(-10deg) brightness(0.95); }
+    }
+
+    /* Burbujas flotantes */
+    .bubbles {
+        position: fixed;
+        inset: 0;
         pointer-events: none;
+        z-index: 0;
+        overflow: hidden;
     }
 
-    .content-wrapper {
+    .bubble {
+        position: absolute;
+        bottom: -120px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.06);
+        animation: floatUp linear infinite;
+    }
+
+    .bubble:nth-child(1)  { width: 40px;  height: 40px;  left: 8%;   animation-duration: 14s; animation-delay: 0s; }
+    .bubble:nth-child(2)  { width: 70px;  height: 70px;  left: 18%;  animation-duration: 18s; animation-delay: 3s; background: rgba(255,255,255,0.04); }
+    .bubble:nth-child(3)  { width: 25px;  height: 25px;  left: 32%;  animation-duration: 11s; animation-delay: 1s; }
+    .bubble:nth-child(4)  { width: 90px;  height: 90px;  left: 48%;  animation-duration: 22s; animation-delay: 5s; background: rgba(26,107,255,0.15); }
+    .bubble:nth-child(5)  { width: 35px;  height: 35px;  left: 62%;  animation-duration: 13s; animation-delay: 2s; }
+    .bubble:nth-child(6)  { width: 55px;  height: 55px;  left: 74%;  animation-duration: 17s; animation-delay: 7s; background: rgba(255,255,255,0.03); }
+    .bubble:nth-child(7)  { width: 20px;  height: 20px;  left: 85%;  animation-duration: 10s; animation-delay: 4s; }
+    .bubble:nth-child(8)  { width: 60px;  height: 60px;  left: 92%;  animation-duration: 20s; animation-delay: 0s; background: rgba(26,107,255,0.1); }
+
+    @keyframes floatUp {
+        0%   { transform: translateY(0) scale(1); opacity: 0; }
+        10%  { opacity: 1; }
+        90%  { opacity: 0.6; }
+        100% { transform: translateY(-110vh) scale(1.2); opacity: 0; }
+    }
+
+    /* === CONTENIDO === */
+    .page-wrapper {
         position: relative;
-        z-index: 2;
-        max-width: 900px;
-        margin: 0 auto;
-    }
-
-    /* 🖋️ TÍTULO PRINCIPAL */
-    .welcome-title {
-        font-weight: 900;
-        font-size: 3.2rem;
-        color: #ffffff;
-        text-transform: uppercase;
-        letter-spacing: 3px;
-        text-shadow: 4px 4px 0 #0077aa,
-                     -3px -3px 0 #0077aa;
-        margin-bottom: 8px;
-    }
-
-    .welcome-subtitle {
-        font-size: 1.35rem;
-        color: rgba(255, 255, 255, 0.95);
-        font-weight: 500;
-        text-shadow: 1px 1px 3px rgba(0, 119, 170, 0.6);
-    }
-
-    /* 🪐 TARJETAS / BOTONES */
-    .action-card {
-        border-radius: 28px;
-        border: 4px solid #ffffff;
-        background: rgba(240, 252, 255, 0.94);
-        box-shadow: 0 25px 70px rgba(0, 110, 150, 0.35);
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        height: 100%;
+        z-index: 1;
+        min-height: 100vh;
         display: flex;
         align-items: center;
         justify-content: center;
-        text-decoration: none;
-        color: inherit;
-        padding: 28px 20px;
-        font-size: 1.35rem;
-        font-weight: 800;
-        letter-spacing: 1px;
+        padding: 60px 30px;
+    }
+
+    .content-wrapper {
+        width: 100%;
+        max-width: 860px;
         text-align: center;
     }
 
+    /* === TÍTULO === */
+    .welcome-title {
+        font-family: 'Syne', sans-serif;
+        font-weight: 800;
+        font-size: clamp(2.2rem, 6vw, 4rem);
+        color: var(--white);
+        letter-spacing: -1px;
+        line-height: 1.1;
+        text-shadow: 0 0 40px rgba(100,160,255,0.6);
+        animation: titleGlow 3s ease-in-out infinite alternate;
+        margin-bottom: 12px;
+    }
+
+    @keyframes titleGlow {
+        0%   { text-shadow: 0 0 30px rgba(100,160,255,0.5); }
+        100% { text-shadow: 0 0 60px rgba(100,160,255,0.9), 0 0 100px rgba(26,107,255,0.4); }
+    }
+
+    .welcome-subtitle {
+        font-size: 1.05rem;
+        color: rgba(255,255,255,0.6);
+        font-weight: 500;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 55px;
+    }
+
+    /* === GRID DE CARDS === */
+    .cards-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 22px;
+    }
+
+    /* === CARD BASE === */
+    .action-card {
+        position: relative;
+        border-radius: 20px;
+        padding: 38px 24px 32px;
+        text-decoration: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        font-family: 'Syne', sans-serif;
+        font-weight: 700;
+        font-size: 1.1rem;
+        letter-spacing: 0.3px;
+        text-align: center;
+        transition: transform 0.3s, box-shadow 0.3s;
+        overflow: hidden;
+        cursor: pointer;
+        border: 2px solid rgba(255,255,255,0.15);
+        backdrop-filter: blur(10px);
+        animation: cardIn 0.5s ease both;
+    }
+
+    /* Brillo interno al hacer hover */
+    .action-card::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: rgba(255,255,255,0);
+        transition: background 0.3s;
+        border-radius: inherit;
+    }
+
+    .action-card:hover::before {
+        background: rgba(255,255,255,0.07);
+    }
+
     .action-card:hover {
-        transform: translateY(-12px);
-        box-shadow: 0 40px 95px rgba(0, 110, 150, 0.45);
+        transform: translateY(-10px) scale(1.03);
     }
 
-    /* Colores específicos por botón */
+    @keyframes cardIn {
+        from { opacity: 0; transform: translateY(24px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .action-card:nth-child(1) { animation-delay: 0.1s; }
+    .action-card:nth-child(2) { animation-delay: 0.2s; }
+    .action-card:nth-child(3) { animation-delay: 0.3s; }
+
+    /* Emoji / ícono */
+    .card-icon {
+        font-size: 2.6rem;
+        line-height: 1;
+        filter: drop-shadow(0 4px 8px rgba(0,0,0,0.25));
+    }
+
+    .card-label {
+        color: var(--white);
+        font-size: 1.05rem;
+        line-height: 1.2;
+    }
+
+    /* === VARIANTES DE COLOR === */
     .btn-artistas {
-        background: linear-gradient(135deg, #0077aa, #0099cc);
-        color: white;
-        border: none;
+        background: linear-gradient(145deg, #0040cc, #1a6bff);
+        box-shadow: 0 10px 35px rgba(0,64,204,0.55);
     }
-
     .btn-artistas:hover {
-        background: linear-gradient(135deg, #00b8ff, #0077aa);
-        color: white;
+        box-shadow: 0 18px 50px rgba(26,107,255,0.65);
     }
 
     .btn-mi-perfil {
-        background: linear-gradient(135deg, #00a36c, #00c48a);
-        color: white;
-        border: none;
+        background: linear-gradient(145deg, #005f40, #00a36c);
+        box-shadow: 0 10px 35px rgba(0,95,64,0.55);
     }
-
     .btn-mi-perfil:hover {
-        background: linear-gradient(135deg, #00d4a3, #00a36c);
-        color: white;
+        box-shadow: 0 18px 50px rgba(0,163,108,0.65);
     }
 
     .btn-crear-perfil {
-        background: linear-gradient(135deg, #f59e0b, #fbbf24);
-        color: #1e3a4f;
-        border: none;
-        font-weight: 900;
+        background: linear-gradient(145deg, #b06000, #f59e0b);
+        box-shadow: 0 10px 35px rgba(176,96,0,0.55);
     }
-
     .btn-crear-perfil:hover {
-        background: linear-gradient(135deg, #fbbf24, #f59e0b);
-        color: #1e3a4f;
+        box-shadow: 0 18px 50px rgba(245,158,11,0.65);
     }
 
     .btn-logout {
-        background: linear-gradient(135deg, #dc2626, #ef4444);
-        color: white;
-        border: none;
+        background: linear-gradient(145deg, #991b1b, #dc2626);
+        box-shadow: 0 10px 35px rgba(153,27,27,0.55);
     }
-
     .btn-logout:hover {
-        background: linear-gradient(135deg, #ef4444, #b91c1c);
-        color: white;
+        box-shadow: 0 18px 50px rgba(220,38,38,0.65);
     }
 </style>
 
-<div class="page-background">
-    <div class="content-wrapper">
-        <div class="text-center mb-5">
-            <h1 class="welcome-title">🎨 Bienvenido artista</h1>
-            <p class="welcome-subtitle">Gestiona tu perfil y explora talento</p>
-        </div>
+<!-- Burbujas de fondo -->
+<div class="bubbles">
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+</div>
 
-        <div class="row g-4">
+<div class="page-wrapper">
+    <div class="content-wrapper">
+
+        <!-- Título -->
+        <h1 class="welcome-title">🎨 Bienvenido artista</h1>
+        <p class="welcome-subtitle">Gestiona tu perfil y explora talento</p>
+
+        <!-- Cards -->
+        <div class="cards-grid">
 
             <!-- Ver artistas -->
-            <div class="col-md-4">
-                <a href="{% url 'artists:lista' %}" class="action-card btn-artistas">
-                    🎭 Ver artistas
-                </a>
-            </div>
+            <a href="{% url 'artists:lista' %}" class="action-card btn-artistas">
+                <span class="card-icon">🎭</span>
+                <span class="card-label">Ver artistas</span>
+            </a>
 
             <!-- Mi perfil o Crear perfil -->
-            <div class="col-md-4">
-                {% if request.user.artist %}
-                    <a href="{% url 'artists:ver' request.user.artist.id %}" 
-                       class="action-card btn-mi-perfil">
-                        👤 Mi perfil
-                    </a>
-                {% else %}
-                    <a href="{% url 'artists:perfil' %}" 
-                       class="action-card btn-crear-perfil">
-                        ✏️ Crear mi perfil
-                    </a>
-                {% endif %}
-            </div>
+            {% if request.user.artist %}
+                <a href="{% url 'artists:ver' request.user.artist.id %}" class="action-card btn-mi-perfil">
+                    <span class="card-icon">👤</span>
+                    <span class="card-label">Mi perfil</span>
+                </a>
+            {% else %}
+                <a href="{% url 'artists:perfil' %}" class="action-card btn-crear-perfil">
+                    <span class="card-icon">✏️</span>
+                    <span class="card-label">Crear mi perfil</span>
+                </a>
+            {% endif %}
 
             <!-- Cerrar sesión -->
-            <div class="col-md-4">
-                <a href="{% url 'account_logout' %}" 
-                   class="action-card btn-logout">
-                    🚪 Cerrar sesión
-                </a>
-            </div>
+            <a href="{% url 'account_logout' %}" class="action-card btn-logout">
+                <span class="card-icon">🚪</span>
+                <span class="card-label">Cerrar sesión</span>
+            </a>
 
         </div>
     </div>

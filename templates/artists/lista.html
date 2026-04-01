@@ -2,90 +2,339 @@
 
 {% block content %}
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Lista de Artistas</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap');
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            padding: 20px;
-        }
+    :root {
+        --blue: #1a6bff;
+        --blue-dark: #0040cc;
+        --blue-mid: #2979ff;
+        --blue-light: #6fa8ff;
+        --white: #ffffff;
+        --black: #0a0a0a;
+        --text: #1a1a2e;
+    }
 
-        .filtros {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        select, button {
-            padding: 8px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-        }
+    body {
+        font-family: 'DM Sans', sans-serif;
+        background: var(--blue-dark);
+        min-height: 100vh;
+        overflow-x: hidden;
+        position: relative;
+    }
 
-        button {
-            background-color: #222;
-            color: white;
-            cursor: pointer;
-        }
+    /* === FONDO ANIMADO === */
+    body::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        background:
+            radial-gradient(ellipse 80% 60% at 20% 10%, #1a6bff55 0%, transparent 60%),
+            radial-gradient(ellipse 60% 80% at 80% 80%, #0040cc88 0%, transparent 60%),
+            radial-gradient(ellipse 50% 50% at 50% 50%, #2979ff22 0%, transparent 70%),
+            linear-gradient(135deg, #001a66 0%, #0040cc 40%, #1a6bff 70%, #003399 100%);
+        z-index: 0;
+        animation: bgShift 12s ease-in-out infinite alternate;
+    }
 
-        .contenedor {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-        }
+    @keyframes bgShift {
+        0%   { filter: hue-rotate(0deg) brightness(1); }
+        50%  { filter: hue-rotate(15deg) brightness(1.08); }
+        100% { filter: hue-rotate(-10deg) brightness(0.95); }
+    }
 
-        .card {
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
+    /* Burbujas flotantes */
+    .bubbles {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+        overflow: hidden;
+    }
 
-        .card img {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-        }
+    .bubble {
+        position: absolute;
+        bottom: -120px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.06);
+        animation: floatUp linear infinite;
+    }
 
-        .card-body {
-            padding: 15px;
-        }
+    .bubble:nth-child(1)  { width: 40px;  height: 40px;  left: 8%;   animation-duration: 14s; animation-delay: 0s; }
+    .bubble:nth-child(2)  { width: 70px;  height: 70px;  left: 18%;  animation-duration: 18s; animation-delay: 3s; background: rgba(255,255,255,0.04); }
+    .bubble:nth-child(3)  { width: 25px;  height: 25px;  left: 32%;  animation-duration: 11s; animation-delay: 1s; }
+    .bubble:nth-child(4)  { width: 90px;  height: 90px;  left: 48%;  animation-duration: 22s; animation-delay: 5s; background: rgba(26,107,255,0.15); }
+    .bubble:nth-child(5)  { width: 35px;  height: 35px;  left: 62%;  animation-duration: 13s; animation-delay: 2s; }
+    .bubble:nth-child(6)  { width: 55px;  height: 55px;  left: 74%;  animation-duration: 17s; animation-delay: 7s; background: rgba(255,255,255,0.03); }
+    .bubble:nth-child(7)  { width: 20px;  height: 20px;  left: 85%;  animation-duration: 10s; animation-delay: 4s; }
+    .bubble:nth-child(8)  { width: 60px;  height: 60px;  left: 92%;  animation-duration: 20s; animation-delay: 0s; background: rgba(26,107,255,0.1); }
 
-        .genero {
-            display: inline-block;
-            background: #444;
-            color: white;
-            padding: 3px 8px;
-            border-radius: 5px;
-            margin: 2px;
-            font-size: 12px;
-        }
+    @keyframes floatUp {
+        0%   { transform: translateY(0) scale(1); opacity: 0; }
+        10%  { opacity: 1; }
+        90%  { opacity: 0.6; }
+        100% { transform: translateY(-110vh) scale(1.2); opacity: 0; }
+    }
 
-        .btn {
-            display: block;
-            margin-top: 10px;
-            text-align: center;
-            background: #222;
-            color: white;
-            padding: 8px;
-            border-radius: 6px;
-            text-decoration: none;
-        }
-    </style>
-</head>
-<body>
+    /* === CONTENIDO === */
+    .page-wrapper {
+        position: relative;
+        z-index: 1;
+        padding: 50px 30px 60px;
+        max-width: 1300px;
+        margin: 0 auto;
+    }
 
-    <h2>🎨 Artistas</h2>
+    /* === TÍTULO === */
+    .titulo-bloque {
+        text-align: center;
+        margin-bottom: 40px;
+    }
 
-    <!-- 🔍 FILTROS -->
+    .titulo-bloque h2 {
+        font-family: 'Syne', sans-serif;
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        font-weight: 800;
+        color: var(--white);
+        letter-spacing: -1px;
+        line-height: 1;
+        text-shadow: 0 0 40px rgba(100,160,255,0.6);
+        animation: titleGlow 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes titleGlow {
+        0%   { text-shadow: 0 0 30px rgba(100,160,255,0.5); }
+        100% { text-shadow: 0 0 60px rgba(100,160,255,0.9), 0 0 100px rgba(26,107,255,0.4); }
+    }
+
+    .titulo-bloque p {
+        color: rgba(255,255,255,0.6);
+        font-size: 1rem;
+        margin-top: 8px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        font-weight: 500;
+    }
+
+    /* === FILTROS === */
+    .filtros {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 40px;
+        justify-content: center;
+        background: rgba(255,255,255,0.07);
+        padding: 18px 22px;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.12);
+        backdrop-filter: blur(20px);
+    }
+
+    select {
+        padding: 11px 16px;
+        border-radius: 10px;
+        border: 1.5px solid rgba(255,255,255,0.2);
+        outline: none;
+        background: rgba(0,0,0,0.4);
+        color: var(--white);
+        font-family: 'DM Sans', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: border-color 0.2s;
+        min-width: 180px;
+    }
+
+    select:focus {
+        border-color: var(--blue-light);
+    }
+
+    select option {
+        background: #001a66;
+        color: white;
+    }
+
+    .filtros button {
+        background: var(--blue);
+        color: var(--white);
+        border: none;
+        padding: 11px 26px;
+        border-radius: 10px;
+        font-family: 'DM Sans', sans-serif;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        transition: 0.25s;
+        letter-spacing: 0.5px;
+    }
+
+    .filtros button:hover {
+        background: var(--blue-light);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(26,107,255,0.5);
+    }
+
+    /* === GRID === */
+    .contenedor {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+        gap: 28px;
+    }
+
+    /* === CARD === */
+    .card {
+        background: rgba(255,255,255,0.97);
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 8px 30px rgba(0,0,50,0.35);
+        transition: transform 0.3s, box-shadow 0.3s;
+        border: 2px solid transparent;
+        animation: cardIn 0.5s ease both;
+    }
+
+    @keyframes cardIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .card:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 20px 50px rgba(0,40,180,0.5);
+        border-color: var(--blue);
+    }
+
+    /* === IMAGEN / AVATAR === */
+    .card-img-wrapper {
+        width: 100%;
+        height: 190px;
+        overflow: hidden;
+        position: relative;
+        background: linear-gradient(135deg, #0040cc, #1a6bff, #003399);
+    }
+
+    .card-img-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    /* Avatar por defecto SVG inline */
+    .default-avatar {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(145deg, #0030aa, #1a6bff 60%, #002a99);
+    }
+
+    .default-avatar svg {
+        width: 90px;
+        height: 90px;
+        opacity: 0.85;
+        filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3));
+    }
+
+    /* === CARD BODY === */
+    .card-body {
+        padding: 18px;
+    }
+
+    .card h3 {
+        color: var(--black);
+        font-family: 'Syne', sans-serif;
+        font-weight: 700;
+        font-size: 1.15rem;
+        margin-bottom: 6px;
+    }
+
+    .card p {
+        color: #444;
+        font-size: 13.5px;
+        line-height: 1.5;
+        margin-bottom: 10px;
+    }
+
+    .card p strong {
+        color: var(--black);
+        font-weight: 600;
+    }
+
+    /* === GÉNEROS === */
+    .genero {
+        display: inline-block;
+        background: var(--blue);
+        color: var(--white);
+        padding: 4px 11px;
+        border-radius: 20px;
+        margin: 2px 2px 2px 0;
+        font-size: 11.5px;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+    }
+
+    /* === BOTÓN VER PERFIL === */
+    .btn-ver {
+        display: block;
+        margin-top: 14px;
+        text-align: center;
+        background: var(--black);
+        color: var(--white);
+        padding: 11px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 14px;
+        letter-spacing: 0.4px;
+        transition: 0.25s;
+    }
+
+    .btn-ver:hover {
+        background: var(--blue);
+        transform: scale(1.03);
+        box-shadow: 0 4px 16px rgba(26,107,255,0.45);
+    }
+
+    /* Staggered card animation */
+    .card:nth-child(1)  { animation-delay: 0.05s; }
+    .card:nth-child(2)  { animation-delay: 0.10s; }
+    .card:nth-child(3)  { animation-delay: 0.15s; }
+    .card:nth-child(4)  { animation-delay: 0.20s; }
+    .card:nth-child(5)  { animation-delay: 0.25s; }
+    .card:nth-child(6)  { animation-delay: 0.30s; }
+    .card:nth-child(7)  { animation-delay: 0.35s; }
+    .card:nth-child(8)  { animation-delay: 0.40s; }
+    .card:nth-child(9)  { animation-delay: 0.45s; }
+    .card:nth-child(10) { animation-delay: 0.50s; }
+    .card:nth-child(11) { animation-delay: 0.55s; }
+    .card:nth-child(12) { animation-delay: 0.60s; }
+</style>
+
+<!-- Burbujas de fondo -->
+<div class="bubbles">
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+</div>
+
+<div class="page-wrapper">
+
+    <!-- Título -->
+    <div class="titulo-bloque">
+        <h2>🎨 Artistas</h2>
+        <p>Descubre el talento de nuestra comunidad</p>
+    </div>
+
+    <!-- Filtros -->
     <form method="GET" class="filtros">
-
-        <!-- Géneros -->
         <select name="genre">
             <option value="">Todos los géneros</option>
             {% for genero in generos %}
@@ -96,7 +345,6 @@
             {% endfor %}
         </select>
 
-        <!-- Líneas artísticas -->
         <select name="line">
             <option value="">Todas las líneas</option>
             {% for linea in lineas %}
@@ -110,49 +358,54 @@
         <button type="submit">Filtrar</button>
     </form>
 
-    <!-- 🧱 LISTA -->
+    <!-- Grid de artistas -->
     <div class="contenedor">
-
         {% for artista in artistas %}
         <div class="card">
 
-            <!-- Imagen -->
-            {% if artista.profile_image %}
-                <img src="{{ artista.profile_image.url }}">
-            {% else %}
-                <img src="https://via.placeholder.com/300x180">
-            {% endif %}
+            <div class="card-img-wrapper">
+                {% if artista.profile_image %}
+                    <img src="{{ artista.profile_image.url }}" alt="{{ artista.user.username }}">
+                {% else %}
+                    <!-- Avatar por defecto elegante -->
+                    <div class="default-avatar">
+                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" fill="none">
+                            <!-- Círculo fondo suave -->
+                            <circle cx="50" cy="50" r="48" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+                            <!-- Cabeza -->
+                            <circle cx="50" cy="36" r="18" fill="rgba(255,255,255,0.85)"/>
+                            <!-- Cuerpo / silueta hombros -->
+                            <path d="M14 88 C14 65 86 65 86 88" fill="rgba(255,255,255,0.85)"/>
+                        </svg>
+                    </div>
+                {% endif %}
+            </div>
 
             <div class="card-body">
                 <h3>{{ artista.user.username }}</h3>
-
                 <p>{{ artista.description }}</p>
 
-                <!-- 🎭 GÉNEROS -->
                 <p><strong>Géneros:</strong><br>
                     {% for genero in artista.genres.all %}
                         <span class="genero">{{ genero.nombre }}</span>
                     {% empty %}
-                        <span>No tiene géneros</span>
+                        <span style="color:#888; font-size:13px;">Sin géneros</span>
                     {% endfor %}
                 </p>
 
-                <!-- 🎼 LÍNEA ARTÍSTICA -->
                 <p><strong>Línea:</strong>
                     {{ artista.linea_artistica.name|default:"Sin línea" }}
                 </p>
 
-                <!-- BOTÓN -->
-                <a href="{% url 'artists:ver' artista.id %}" class="btn">
+                <a href="{% url 'artists:ver' artista.id %}" class="btn-ver">
                     Ver perfil
                 </a>
             </div>
 
         </div>
         {% endfor %}
-
     </div>
 
-</body>
-</html>
+</div>
+
 {% endblock %}

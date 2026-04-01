@@ -2,57 +2,406 @@
 
 {% block content %}
 
-<div class="container py-5">
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap');
 
-    <div class="card artist-card mx-auto overflow-hidden fade-in">
+    :root {
+        --blue: #1a6bff;
+        --blue-dark: #0040cc;
+        --blue-mid: #2979ff;
+        --blue-light: #6fa8ff;
+        --white: #ffffff;
+        --black: #0a0a0a;
+    }
 
-        <!-- 🎨 HERO -->
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+        font-family: 'DM Sans', sans-serif;
+        background: var(--blue-dark);
+        min-height: 100vh;
+        overflow-x: hidden;
+        position: relative;
+    }
+
+    /* === FONDO ANIMADO === */
+    body::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        background:
+            radial-gradient(ellipse 80% 60% at 20% 10%, #1a6bff55 0%, transparent 60%),
+            radial-gradient(ellipse 60% 80% at 80% 80%, #0040cc88 0%, transparent 60%),
+            radial-gradient(ellipse 50% 50% at 50% 50%, #2979ff22 0%, transparent 70%),
+            linear-gradient(135deg, #001a66 0%, #0040cc 40%, #1a6bff 70%, #003399 100%);
+        z-index: 0;
+        animation: bgShift 12s ease-in-out infinite alternate;
+    }
+
+    @keyframes bgShift {
+        0%   { filter: hue-rotate(0deg) brightness(1); }
+        50%  { filter: hue-rotate(15deg) brightness(1.08); }
+        100% { filter: hue-rotate(-10deg) brightness(0.95); }
+    }
+
+    /* === BURBUJAS === */
+    .bubbles {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+        overflow: hidden;
+    }
+
+    .bubble {
+        position: absolute;
+        bottom: -120px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.06);
+        animation: floatUp linear infinite;
+    }
+
+    .bubble:nth-child(1)  { width: 40px;  height: 40px;  left: 8%;   animation-duration: 14s; animation-delay: 0s; }
+    .bubble:nth-child(2)  { width: 70px;  height: 70px;  left: 18%;  animation-duration: 18s; animation-delay: 3s; background: rgba(255,255,255,0.04); }
+    .bubble:nth-child(3)  { width: 25px;  height: 25px;  left: 32%;  animation-duration: 11s; animation-delay: 1s; }
+    .bubble:nth-child(4)  { width: 90px;  height: 90px;  left: 48%;  animation-duration: 22s; animation-delay: 5s; background: rgba(26,107,255,0.15); }
+    .bubble:nth-child(5)  { width: 35px;  height: 35px;  left: 62%;  animation-duration: 13s; animation-delay: 2s; }
+    .bubble:nth-child(6)  { width: 55px;  height: 55px;  left: 74%;  animation-duration: 17s; animation-delay: 7s; background: rgba(255,255,255,0.03); }
+    .bubble:nth-child(7)  { width: 20px;  height: 20px;  left: 85%;  animation-duration: 10s; animation-delay: 4s; }
+    .bubble:nth-child(8)  { width: 60px;  height: 60px;  left: 92%;  animation-duration: 20s; animation-delay: 0s; background: rgba(26,107,255,0.1); }
+
+    @keyframes floatUp {
+        0%   { transform: translateY(0) scale(1); opacity: 0; }
+        10%  { opacity: 1; }
+        90%  { opacity: 0.6; }
+        100% { transform: translateY(-110vh) scale(1.2); opacity: 0; }
+    }
+
+    /* === WRAPPER === */
+    .page-wrapper {
+        position: relative;
+        z-index: 1;
+        padding: 60px 20px 80px;
+    }
+
+    /* === CARD === */
+    .artist-card {
+        max-width: 660px;
+        margin: 0 auto;
+        background: rgba(255,255,255,0.97);
+        border-radius: 22px;
+        overflow: hidden;
+        box-shadow: 0 20px 60px rgba(0,0,60,0.45);
+        border: 2px solid rgba(255,255,255,0.15);
+        animation: cardIn 0.6s ease both;
+    }
+
+    @keyframes cardIn {
+        from { opacity: 0; transform: translateY(28px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* === HERO === */
+    .image-top {
+        height: 220px;
+        background: url('https://images.unsplash.com/photo-1511379938547-c1f69419868d') center/cover;
+        position: relative;
+        animation: zoomHero 10s ease-in-out infinite alternate;
+    }
+
+    @keyframes zoomHero {
+        from { background-size: 100%; }
+        to   { background-size: 110%; }
+    }
+
+    .overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, rgba(0,40,180,0.5), rgba(0,20,120,0.75));
+        color: var(--white);
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 24px;
+    }
+
+    .overlay h2 {
+        font-family: 'Syne', sans-serif;
+        font-weight: 800;
+        font-size: 1.7rem;
+        text-shadow: 0 2px 12px rgba(0,0,0,0.4);
+        margin-bottom: 4px;
+    }
+
+    .overlay p {
+        font-size: 0.95rem;
+        opacity: 0.85;
+        letter-spacing: 0.5px;
+    }
+
+    /* === FORM BODY === */
+    .card-body {
+        padding: 40px 44px;
+    }
+
+    .form-title {
+        font-family: 'Syne', sans-serif;
+        font-weight: 800;
+        font-size: 1.6rem;
+        color: var(--black);
+        text-align: center;
+        margin-bottom: 6px;
+    }
+
+    .form-subtitle {
+        text-align: center;
+        color: #666;
+        font-size: 13.5px;
+        margin-bottom: 32px;
+    }
+
+    /* === LABELS === */
+    label {
+        display: block;
+        font-weight: 600;
+        color: var(--black);
+        font-size: 14px;
+        margin-bottom: 6px;
+    }
+
+    .mb-field {
+        margin-bottom: 20px;
+    }
+
+    /* === INPUTS === */
+    input[type="text"],
+    input[type="email"],
+    textarea,
+    select {
+        width: 100%;
+        border-radius: 10px !important;
+        padding: 11px 14px !important;
+        border: 1.5px solid #c7d9ff !important;
+        background: #f4f8ff !important;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 14px;
+        color: var(--black);
+        outline: none;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input[type="text"]:focus,
+    textarea:focus,
+    select:focus {
+        border-color: var(--blue) !important;
+        box-shadow: 0 0 0 3px rgba(26,107,255,0.15) !important;
+        background: #fff !important;
+    }
+
+    textarea {
+        resize: vertical;
+        min-height: 90px;
+    }
+
+    /* === PREVIEW IMAGEN === */
+    .image-preview-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 8px;
+    }
+
+    .image-preview img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid var(--blue);
+        box-shadow: 0 4px 16px rgba(26,107,255,0.3);
+    }
+
+    input[type="file"] {
+        background: #f4f8ff !important;
+        border: 1.5px dashed #93b8ff !important;
+        padding: 10px !important;
+        border-radius: 10px !important;
+        cursor: pointer;
+        width: 100%;
+        font-size: 13px;
+        color: #444;
+    }
+
+    /* === GÉNEROS === */
+    .genres-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 4px;
+    }
+
+    .genres-container input {
+        display: none;
+    }
+
+    .genres-container label {
+        background: #dce9ff;
+        color: var(--blue-dark);
+        padding: 7px 15px;
+        border-radius: 20px;
+        margin: 0;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        transition: background 0.2s, color 0.2s, transform 0.15s;
+        border: 1.5px solid transparent;
+    }
+
+    .genres-container label:hover {
+        background: #b8d0ff;
+        transform: scale(1.04);
+    }
+
+    .genres-container input:checked + label {
+        background: var(--blue);
+        color: var(--white);
+        border-color: var(--blue-dark);
+        box-shadow: 0 3px 10px rgba(26,107,255,0.35);
+    }
+
+    #genre-warning {
+        font-size: 12.5px;
+        color: #dc2626;
+        margin-top: 6px;
+        display: none;
+    }
+
+    /* === PREVIEW CARD === */
+    .preview-card {
+        background: #f0f6ff;
+        border: 1.5px solid #c7d9ff;
+        border-radius: 14px;
+        padding: 16px 18px;
+        margin-top: 24px;
+    }
+
+    .preview-card h6 {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #888;
+        font-weight: 600;
+        margin-bottom: 12px;
+    }
+
+    .preview-inner {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .preview-inner img {
+        width: 54px;
+        height: 54px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid var(--blue);
+    }
+
+    .preview-inner strong {
+        color: var(--black);
+        font-size: 15px;
+        display: block;
+        margin-bottom: 3px;
+    }
+
+    .preview-inner span {
+        color: #666;
+        font-size: 13px;
+    }
+
+    /* === BOTÓN SUBMIT === */
+    .btn-main {
+        display: block;
+        width: 100%;
+        margin-top: 28px;
+        background: var(--black);
+        color: var(--white);
+        border: none;
+        border-radius: 12px;
+        padding: 14px;
+        font-family: 'Syne', sans-serif;
+        font-size: 1rem;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        transition: background 0.25s, transform 0.2s, box-shadow 0.25s;
+    }
+
+    .btn-main:hover {
+        background: var(--blue);
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 0 10px 28px rgba(26,107,255,0.45);
+    }
+</style>
+
+<!-- Burbujas de fondo -->
+<div class="bubbles">
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+</div>
+
+<div class="page-wrapper">
+    <div class="artist-card">
+
+        <!-- Hero -->
         <div class="image-top">
             <div class="overlay">
                 <h2>Haz que tu talento brille ✨</h2>
                 <p>Tu arte merece ser descubierto</p>
             </div>
         </div>
-        
-        <!-- 🧾 FORM -->
-        <div class="card-body p-5">
 
-            <h3 class="text-center title-gradient mb-2">
-                🎭 Crea tu perfil artístico
-            </h3>
+        <!-- Form -->
+        <div class="card-body">
 
-            <p class="text-center text-muted small mb-4">
-                🎧 Más de 500 artistas ya están compartiendo su talento
-            </p>
+            <h3 class="form-title">🎭 Crea tu perfil artístico</h3>
+            <p class="form-subtitle">🎧 Más de 500 artistas ya están compartiendo su talento</p>
 
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
 
                 <!-- Nombre -->
-                <div class="mb-3">
+                <div class="mb-field">
                     <label>Nombre artístico</label>
                     {{ form.stage_name }}
                 </div>
 
                 <!-- Descripción -->
-                <div class="mb-3">
+                <div class="mb-field">
                     <label>Descripción</label>
                     {{ form.description }}
                 </div>
 
                 <!-- Imagen -->
-                <div class="mb-3 text-center">
-                    <label class="d-block mb-2">Imagen</label>
-
-                    <div class="image-preview mb-2">
-                        <img id="preview" src="https://via.placeholder.com/100">
+                <div class="mb-field">
+                    <label>Imagen de perfil</label>
+                    <div class="image-preview-wrap">
+                        <div class="image-preview">
+                            <img id="preview" src="https://via.placeholder.com/100">
+                        </div>
                     </div>
-
                     {{ form.profile_image }}
                 </div>
 
                 <!-- Géneros -->
-                <div class="mb-3">
+                <div class="mb-field">
                     <label>Géneros (máx 3)</label>
                     <div class="genres-container">
                         {% for checkbox in form.genres %}
@@ -60,155 +409,30 @@
                             <label for="{{ checkbox.id_for_label }}">{{ checkbox.choice_label }}</label>
                         {% endfor %}
                     </div>
-                    <small id="genre-warning" class="text-danger d-none">
-                        ⚠️ Solo puedes seleccionar hasta 3 géneros
-                    </small>
+                    <small id="genre-warning">⚠️ Solo puedes seleccionar hasta 3 géneros</small>
                 </div>
 
-                <!-- Preview perfil -->
-                <div class="preview-card mt-4 p-3">
-                    <h6 class="text-muted">Vista previa</h6>
-                    <div class="d-flex align-items-center gap-3">
+                <!-- Vista previa -->
+                <div class="preview-card">
+                    <h6>Vista previa</h6>
+                    <div class="preview-inner">
                         <img id="preview-card-img" src="https://via.placeholder.com/60">
                         <div>
                             <strong id="preview-name">Tu nombre artístico</strong>
-                            <p id="preview-desc" class="mb-0 small text-muted">
-                                Tu descripción aparecerá aquí...
-                            </p>
+                            <span id="preview-desc">Tu descripción aparecerá aquí...</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Botón -->
-                <button type="submit" class="btn btn-main w-100 mt-4">
+                <button type="submit" class="btn-main">
                     🚀 Publicar mi talento
                 </button>
 
             </form>
-
         </div>
     </div>
-
 </div>
-
-<style>
-/* 🌤 FONDO */
-body {
-    background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
-}
-
-/* 💎 CARD */
-.artist-card {
-    max-width: 650px;
-    border-radius: 20px;
-    background: white;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.08);
-}
-
-/* 🎞 ANIMACION ENTRADA */
-.fade-in {
-    animation: fadeIn 0.8s ease;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px);}
-    to { opacity: 1; transform: translateY(0);}
-}
-
-/* 🎨 HERO */
-.image-top {
-    height: 220px;
-    background: url('https://images.unsplash.com/photo-1511379938547-c1f69419868d') center/cover;
-    animation: zoomHero 10s ease-in-out infinite alternate;
-}
-
-@keyframes zoomHero {
-    from { background-size: 100%; }
-    to { background-size: 110%; }
-}
-
-/* OVERLAY */
-.overlay {
-    height: 100%;
-    background: linear-gradient(180deg, rgba(59,130,246,0.6), rgba(96,165,250,0.6));
-    color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    padding: 20px;
-}
-
-/* TITULO */
-.title-gradient {
-    background: linear-gradient(90deg, #3b82f6, #60a5fa);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-/* INPUTS */
-input, textarea, select {
-    width: 100%;
-    border-radius: 10px !important;
-    padding: 10px !important;
-    border: 1px solid #bae6fd !important;
-    background: #f0f9ff !important;
-}
-
-input:focus, textarea:focus {
-    border-color: #3b82f6 !important;
-    box-shadow: 0 0 8px rgba(59,130,246,0.3);
-}
-
-/* PREVIEW IMG */
-.image-preview img {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    border: 3px solid #93c5fd;
-}
-
-/* GENEROS */
-.genres-container label {
-    background: #d8b4fe; /* morado pastel */
-    padding: 6px 12px;
-    border-radius: 15px;
-    margin: 4px;
-    display: inline-block;
-    cursor: pointer;
-}
-
-.genres-container input {
-    display: none;
-}
-
-.genres-container input:checked + label {
-    background: #7c3aed; /* morado intenso */
-    color: white;
-}
-
-/* PREVIEW CARD */
-.preview-card {
-    background: #f0f9ff;
-    border-radius: 12px;
-}
-
-/* BOTON */
-.btn-main {
-    background: linear-gradient(135deg, #3b82f6, #60a5fa);
-    color: white;
-    border-radius: 10px;
-    padding: 12px;
-    font-weight: bold;
-    border: none;
-    transition: 0.3s;
-}
-
-.btn-main:hover {
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 10px 25px rgba(59,130,246,0.35);
-}
-</style>
 
 <script>
 // 📸 PREVIEW IMAGEN
@@ -216,10 +440,10 @@ const input = document.querySelector('input[type="file"]');
 const preview = document.getElementById('preview');
 const previewCardImg = document.getElementById('preview-card-img');
 
-if(input){
+if (input) {
     input.addEventListener('change', e => {
         const file = e.target.files[0];
-        if(file){
+        if (file) {
             const url = URL.createObjectURL(file);
             preview.src = url;
             previewCardImg.src = url;
@@ -239,19 +463,18 @@ descInput?.addEventListener('input', e => {
     document.getElementById('preview-desc').innerText = e.target.value || "Tu descripción aparecerá aquí...";
 });
 
-// 🎵 LIMITE GENEROS
+// 🎵 LÍMITE GÉNEROS
 const checkboxes = document.querySelectorAll('.genres-container input');
 const warning = document.getElementById('genre-warning');
 
 checkboxes.forEach(cb => {
     cb.addEventListener('change', () => {
         const checked = document.querySelectorAll('.genres-container input:checked');
-        
-        if(checked.length > 3){
+        if (checked.length > 3) {
             cb.checked = false;
-            warning.classList.remove('d-none');
+            warning.style.display = 'block';
         } else {
-            warning.classList.add('d-none');
+            warning.style.display = 'none';
         }
     });
 });
