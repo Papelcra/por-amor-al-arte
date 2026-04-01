@@ -3,176 +3,286 @@
 {% block content %}
 
 <style>
-    /* 🌊 FONDO AZUL CLARO SUAVE Y VIBRANTE */
-    .page-background {
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400;1,700&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+    :root {
+        --teal: #0ec4d8;
+        --teal-dark: #0a9aaa;
+        --white: #ffffff;
+        --black: #0a0a0a;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+        font-family: 'DM Sans', sans-serif;
+        background: #001840;
         min-height: 100vh;
-        padding: 80px 20px 60px;
-        background: linear-gradient(135deg, 
-            #7be3ff 0%, 
-            #5fd9ff 25%, 
-            #40ceff 50%, 
-            #1ec4ff 75%, 
-            #00b8ff 100%);
-        
-        background-image: 
-            radial-gradient(circle at 30% 25%, rgba(255,255,255,0.35) 0%, transparent 60%),
-            url("data:image/svg+xml,%3Csvg viewBox='0 0 500 500' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.06'/%3E%3C/svg%3E");
-        
-        background-size: cover;
-        background-attachment: fixed;
+        overflow-x: hidden;
         position: relative;
     }
 
-    .page-background::before {
+    body::before {
         content: '';
-        position: absolute;
+        position: fixed;
         inset: 0;
-        background: rgba(0, 120, 160, 0.08);
-        pointer-events: none;
+        background:
+            radial-gradient(ellipse 70% 55% at 15% 15%, rgba(14,196,216,0.18) 0%, transparent 60%),
+            radial-gradient(ellipse 60% 70% at 85% 80%, rgba(0,64,204,0.35) 0%, transparent 60%),
+            radial-gradient(ellipse 50% 50% at 50% 50%, rgba(26,107,255,0.10) 0%, transparent 70%),
+            linear-gradient(150deg, #001840 0%, #002a6e 35%, #003580 55%, #001d55 100%);
+        z-index: 0;
+        animation: bgShift 14s ease-in-out infinite alternate;
     }
 
-    .content-wrapper {
+    @keyframes bgShift {
+        0%   { filter: hue-rotate(0deg) brightness(1); }
+        50%  { filter: hue-rotate(12deg) brightness(1.06); }
+        100% { filter: hue-rotate(-8deg) brightness(0.96); }
+    }
+
+    /* === BURBUJAS FLOTANTES === */
+    .bubbles {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+        overflow: hidden;
+    }
+
+    .bubble {
+        position: absolute;
+        bottom: -120px;
+        border-radius: 50%;
+        animation: floatUp linear infinite;
+    }
+
+    .bubble:nth-child(1)  { width: 35px; height: 35px; left: 7%;  animation-duration: 15s; animation-delay: 0s;  background: rgba(14,196,216,0.08); }
+    .bubble:nth-child(2)  { width: 60px; height: 60px; left: 19%; animation-duration: 19s; animation-delay: 3s;  background: rgba(255,255,255,0.04); }
+    .bubble:nth-child(3)  { width: 22px; height: 22px; left: 33%; animation-duration: 11s; animation-delay: 1s;  background: rgba(14,196,216,0.06); }
+    .bubble:nth-child(4)  { width: 80px; height: 80px; left: 49%; animation-duration: 22s; animation-delay: 5s;  background: rgba(26,107,255,0.10); }
+    .bubble:nth-child(5)  { width: 30px; height: 30px; left: 63%; animation-duration: 13s; animation-delay: 2s;  background: rgba(14,196,216,0.07); }
+    .bubble:nth-child(6)  { width: 50px; height: 50px; left: 75%; animation-duration: 17s; animation-delay: 7s;  background: rgba(255,255,255,0.03); }
+    .bubble:nth-child(7)  { width: 18px; height: 18px; left: 86%; animation-duration: 10s; animation-delay: 4s;  background: rgba(14,196,216,0.09); }
+    .bubble:nth-child(8)  { width: 55px; height: 55px; left: 93%; animation-duration: 20s; animation-delay: 0s;  background: rgba(26,107,255,0.08); }
+
+    @keyframes floatUp {
+        0%   { transform: translateY(0) scale(1);        opacity: 0; }
+        10%  { opacity: 1; }
+        90%  { opacity: 0.5; }
+        100% { transform: translateY(-110vh) scale(1.15); opacity: 0; }
+    }
+
+    /* === WRAPPER === */
+    .page-wrapper {
         position: relative;
-        z-index: 2;
+        z-index: 1;
+        padding: 80px 30px 100px;
         max-width: 1100px;
         margin: 0 auto;
     }
 
-    /* 🪐 TARJETA - Azul cielo suave */
-    .card-custom {
-        border-radius: 32px;
-        border: 4px solid #ffffff;
-        background: rgba(240, 252, 255, 0.94);
-        box-shadow: 0 30px 85px rgba(0, 110, 150, 0.32);
-        transition: all 0.4s ease;
-        backdrop-filter: blur(12px);
+    /* === HEADER === */
+    .header-block {
+        text-align: center;
+        margin-bottom: 60px;
     }
 
-    .card-custom:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 40px 100px rgba(0, 110, 150, 0.42);
-    }
-
-    /* 🖋️ TÍTULO */
-    .title-edit {
-        font-weight: 900;
-        font-size: 3rem;
-        color: #ffffff;
-        text-transform: uppercase;
-        letter-spacing: 4px;
-        text-shadow: 4px 4px 0 #0077aa,
-                     -3px -3px 0 #0077aa;
-        position: relative;
-    }
-
-    .title-edit::after {
-        content: '';
-        position: absolute;
-        bottom: -18px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 110px;
-        height: 6px;
-        background: linear-gradient(to right, #ffffff, #00d4ff);
-        border-radius: 3px;
-    }
-
-    /* 🏷️ LABELS */
-    .form-label {
-        font-weight: 800;
-        background: #0077aa;
-        color: #fff;
-        padding: 8px 20px;
-        border-radius: 50px;
-        font-size: 0.95rem;
-        letter-spacing: 0.6px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    }
-
-    /* ✏️ INPUTS Y TEXTAREA - OVALADOS CON CONTORNO */
-    .form-control {
-        border: 3px solid #0077aa;
-        border-radius: 25px;           /* Mucho más ovalado */
-        padding: 15px 20px;
-        background: rgba(255, 255, 255, 0.98);
+    .header-eyebrow {
         font-weight: 500;
+        font-size: 0.75rem;
+        letter-spacing: 5px;
+        text-transform: uppercase;
+        color: var(--teal);
+        margin-bottom: 12px;
+    }
+
+    .header-title {
+        font-family: 'Playfair Display', serif;
+        font-style: italic;
+        font-weight: 700;
+        font-size: clamp(2.8rem, 6vw, 4.8rem);
+        color: var(--white);
+        line-height: 1;
+        letter-spacing: -2px;
+        margin-bottom: 20px;
+        animation: titleGlow 4s ease-in-out infinite alternate;
+    }
+
+    @keyframes titleGlow {
+        0%   { text-shadow: 0 0 40px rgba(14,196,216,0.2); }
+        100% { text-shadow: 0 0 80px rgba(14,196,216,0.45), 0 0 130px rgba(26,107,255,0.25); }
+    }
+
+    .header-divider {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        margin-bottom: 16px;
+    }
+
+    .header-divider span {
+        display: block;
+        height: 1px;
+        width: 80px;
+        background: linear-gradient(90deg, transparent, var(--teal), transparent);
+    }
+
+    .header-divider i {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--teal);
+        box-shadow: 0 0 10px var(--teal);
+    }
+
+    /* === FORM CARD === */
+    .form-card {
+        background: rgba(255,255,255,0.07);
+        border: 1px solid rgba(14,196,216,0.25);
+        border-top: 4px solid var(--teal);
+        border-radius: 24px;
+        padding: 45px 40px;
+        backdrop-filter: blur(18px);
+        box-shadow: 0 25px 70px rgba(0, 0, 40, 0.5);
+        transition: all 0.4s ease;
+    }
+
+    .form-card:hover {
+        box-shadow: 0 30px 85px rgba(0, 0, 40, 0.6);
+    }
+
+    /* Labels */
+    .form-label {
+        font-weight: 600;
+        color: var(--teal);
+        font-size: 0.95rem;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    /* Inputs y Textarea */
+    .form-control {
+        background: rgba(255,255,255,0.08);
+        border: 2px solid rgba(14,196,216,0.3);
+        border-radius: 16px;
+        padding: 16px 20px;
+        color: white;
+        font-size: 1.02rem;
         transition: all 0.3s ease;
     }
 
     .form-control:focus {
-        border-color: #00d4ff;
-        box-shadow: 0 0 0 5px rgba(0, 212, 255, 0.35);
-        background: white;
+        border-color: var(--teal);
+        box-shadow: 0 0 0 4px rgba(14,196,216,0.25);
+        background: rgba(255,255,255,0.12);
+        outline: none;
     }
 
-    /* 👥 MIEMBROS - Ovalado */
+    .form-control::placeholder {
+        color: rgba(255,255,255,0.4);
+    }
+
+    /* Miembros Scroll */
     .members-scroll {
-        border: 3px solid #0077aa;
-        border-radius: 25px;
+        background: rgba(255,255,255,0.06);
+        border: 2px solid rgba(14,196,216,0.25);
+        border-radius: 16px;
         padding: 18px;
-        max-height: 200px;
+        max-height: 210px;
         overflow-y: auto;
-        background: rgba(255, 255, 255, 0.95);
+        color: white;
     }
 
-    /* 🖼️ PREVIEW */
+    .members-scroll::-webkit-scrollbar {
+        width: 8px;
+    }
+    .members-scroll::-webkit-scrollbar-thumb {
+        background: var(--teal);
+        border-radius: 20px;
+    }
+
+    /* Preview Box */
     .preview-box {
-        border: 4px solid #ffffff;
-        border-radius: 28px;
-        padding: 18px;
-        background: rgba(255, 255, 255, 0.92);
-        box-shadow: 0 12px 35px rgba(0, 110, 150, 0.3);
+        background: rgba(255,255,255,0.08);
+        border: 2px solid rgba(14,196,216,0.3);
+        border-radius: 20px;
+        padding: 20px;
+        text-align: center;
     }
 
     .preview-img {
-        border-radius: 20px;
-        border: 3px solid #0077aa;
+        border-radius: 16px;
+        border: 3px solid var(--teal);
+        max-width: 100%;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.4);
     }
 
-    /* 🚀 BOTÓN */
-    .btn-custom {
-        background: linear-gradient(135deg, #0077aa, #0099cc);
-        color: white;
+    /* Botón Guardar */
+    .btn-save {
+        background: linear-gradient(135deg, var(--teal), #00e0ff);
+        color: #000;
         border: none;
         border-radius: 50px;
-        padding: 18px;
-        font-weight: 900;
-        letter-spacing: 2px;
-        text-transform: uppercase;
+        padding: 18px 40px;
+        font-weight: 700;
         font-size: 1.1rem;
-        box-shadow: 0 12px 30px rgba(0, 119, 170, 0.45);
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        box-shadow: 0 10px 30px rgba(14,196,216,0.4);
+        transition: all 0.4s ease;
+        width: 100%;
     }
 
-    .btn-custom:hover {
-        background: linear-gradient(135deg, #00b8ff, #0077aa);
-        transform: translateY(-4px) scale(1.04);
-        box-shadow: 0 18px 40px rgba(0, 212, 255, 0.4);
+    .btn-save:hover {
+        background: linear-gradient(135deg, #00e0ff, var(--teal));
+        transform: translateY(-4px);
+        box-shadow: 0 15px 40px rgba(14,196,216,0.6);
     }
 
-    /* Scrollbar */
-    .members-scroll::-webkit-scrollbar {
-        width: 9px;
-    }
-    .members-scroll::-webkit-scrollbar-thumb {
-        background: #00a2dd;
-        border-radius: 20px;
+    /* Scrollbar bonito para miembros */
+    .members-scroll::-webkit-scrollbar-thumb:hover {
+        background: #00e0ff;
     }
 </style>
 
-<div class="page-background">
-    <div class="content-wrapper">
-        <div class="text-center mb-5">
-            <h2 class="title-edit position-relative">🎨 Configuración de Grupo</h2>
-        </div>
+<!-- Burbujas flotantes -->
+<div class="bubbles">
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+</div>
 
-        <form method="POST" enctype="multipart/form-data" class="card card-custom p-5">
+<div class="page-wrapper">
+
+    <!-- Header -->
+    <div class="header-block">
+        <p class="header-eyebrow">Configuración</p>
+        <h1 class="header-title">Grupo</h1>
+        <div class="header-divider">
+            <span></span><i></i><span></span>
+        </div>
+        <p class="header-sub">Personaliza tu agrupación artística</p>
+    </div>
+
+    <!-- Formulario -->
+    <div class="form-card">
+        <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
 
             <div class="row g-4">
                 <div class="col-lg-7">
 
                     <div class="mb-4">
-                        <label class="form-label">Nombre</label>
+                        <label class="form-label">Nombre del grupo</label>
                         {{ form.name }}
                     </div>
 
@@ -195,6 +305,7 @@
 
                 </div>
 
+                <!-- Vista Previa -->
                 <div class="col-lg-5 text-center">
                     <label class="form-label mb-3">Vista previa</label>
                     
@@ -203,10 +314,10 @@
                             <img id="preview" src="{{ grupo.profile_image.url }}" class="preview-img img-fluid">
                         {% else %}
                             <img id="preview" class="preview-img img-fluid d-none">
-                            <div id="no-image" style="height: 260px; display:flex; align-items:center; justify-content:center; color:#0077aa;">
+                            <div id="no-image" style="height: 260px; display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,0.6);">
                                 <div class="text-center">
-                                    <p class="fw-bold fs-5">Sin imagen aún</p>
-                                    <span style="font-size: 4.5rem;">🖼️</span>
+                                    <p style="font-size: 1.1rem; margin-bottom: 15px;">Sin imagen aún</p>
+                                    <span style="font-size: 4.8rem;">🖼️</span>
                                 </div>
                             </div>
                         {% endif %}
@@ -214,16 +325,18 @@
                 </div>
             </div>
 
-            <div class="mt-5">
-                <button type="submit" class="btn btn-custom w-100">
+            <div class="mt-5 pt-3">
+                <button type="submit" class="btn-save">
                     💾 Guardar cambios
                 </button>
             </div>
         </form>
     </div>
+
 </div>
 
 <script>
+    // Preview de imagen
     const fileInput = document.querySelector('input[type="file"]');
     const previewImg = document.getElementById('preview');
     const noImageDiv = document.getElementById('no-image');

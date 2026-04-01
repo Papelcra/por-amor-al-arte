@@ -2,31 +2,279 @@
 
 {% block content %}
 
-<div class="card mx-auto" style="max-width: 700px;">
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400;1,700&family=DM+Sans:wght@300;400;500;600&display=swap');
 
-    {% if grupo.profile_image %}
-        <img src="{{ grupo.profile_image.url }}" class="card-img-top">
-    {% endif %}
+    :root {
+        --teal: #0ec4d8;
+        --teal-dark: #0a9aaa;
+        --white: #ffffff;
+        --black: #0a0a0a;
+    }
 
-    <div class="card-body text-center">
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        <h2>{{ grupo.name }}</h2>
-        <p>{{ grupo.description }}</p>
+    body {
+        font-family: 'DM Sans', sans-serif;
+        background: #001840;
+        min-height: 100vh;
+        overflow-x: hidden;
+        position: relative;
+    }
 
-        <hr>
-        
-        <h4>Miembros</h4>
+    body::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        background:
+            radial-gradient(ellipse 70% 55% at 15% 15%, rgba(14,196,216,0.18) 0%, transparent 60%),
+            radial-gradient(ellipse 60% 70% at 85% 80%, rgba(0,64,204,0.35) 0%, transparent 60%),
+            radial-gradient(ellipse 50% 50% at 50% 50%, rgba(26,107,255,0.10) 0%, transparent 70%),
+            linear-gradient(150deg, #001840 0%, #002a6e 35%, #003580 55%, #001d55 100%);
+        z-index: 0;
+        animation: bgShift 14s ease-in-out infinite alternate;
+    }
 
-        {% for miembro in grupo.members.all %}
-            <div class="mb-2">
-                <span class="badge bg-primary">
-                    {{ miembro.stage_name }}
-                </span>
+    @keyframes bgShift {
+        0%   { filter: hue-rotate(0deg) brightness(1); }
+        50%  { filter: hue-rotate(12deg) brightness(1.06); }
+        100% { filter: hue-rotate(-8deg) brightness(0.96); }
+    }
+
+    /* === BURBUJAS FLOTANTES === */
+    .bubbles {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+        overflow: hidden;
+    }
+
+    .bubble {
+        position: absolute;
+        bottom: -120px;
+        border-radius: 50%;
+        animation: floatUp linear infinite;
+    }
+
+    .bubble:nth-child(1)  { width: 35px; height: 35px; left: 7%;  animation-duration: 15s; animation-delay: 0s;  background: rgba(14,196,216,0.08); }
+    .bubble:nth-child(2)  { width: 60px; height: 60px; left: 19%; animation-duration: 19s; animation-delay: 3s;  background: rgba(255,255,255,0.04); }
+    .bubble:nth-child(3)  { width: 22px; height: 22px; left: 33%; animation-duration: 11s; animation-delay: 1s;  background: rgba(14,196,216,0.06); }
+    .bubble:nth-child(4)  { width: 80px; height: 80px; left: 49%; animation-duration: 22s; animation-delay: 5s;  background: rgba(26,107,255,0.10); }
+    .bubble:nth-child(5)  { width: 30px; height: 30px; left: 63%; animation-duration: 13s; animation-delay: 2s;  background: rgba(14,196,216,0.07); }
+    .bubble:nth-child(6)  { width: 50px; height: 50px; left: 75%; animation-duration: 17s; animation-delay: 7s;  background: rgba(255,255,255,0.03); }
+    .bubble:nth-child(7)  { width: 18px; height: 18px; left: 86%; animation-duration: 10s; animation-delay: 4s;  background: rgba(14,196,216,0.09); }
+    .bubble:nth-child(8)  { width: 55px; height: 55px; left: 93%; animation-duration: 20s; animation-delay: 0s;  background: rgba(26,107,255,0.08); }
+
+    @keyframes floatUp {
+        0%   { transform: translateY(0) scale(1);        opacity: 0; }
+        10%  { opacity: 1; }
+        90%  { opacity: 0.5; }
+        100% { transform: translateY(-110vh) scale(1.15); opacity: 0; }
+    }
+
+    /* === WRAPPER === */
+    .page-wrapper {
+        position: relative;
+        z-index: 1;
+        padding: 90px 30px 100px;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    /* === HEADER === */
+    .header-block {
+        text-align: center;
+        margin-bottom: 60px;
+    }
+
+    .header-eyebrow {
+        font-weight: 500;
+        font-size: 0.75rem;
+        letter-spacing: 5px;
+        text-transform: uppercase;
+        color: var(--teal);
+        margin-bottom: 12px;
+    }
+
+    .header-title {
+        font-family: 'Playfair Display', serif;
+        font-style: italic;
+        font-weight: 700;
+        font-size: clamp(2.6rem, 6vw, 4.5rem);
+        color: var(--white);
+        line-height: 1.05;
+        letter-spacing: -2px;
+        animation: titleGlow 4s ease-in-out infinite alternate;
+    }
+
+    @keyframes titleGlow {
+        0%   { text-shadow: 0 0 40px rgba(14,196,216,0.2); }
+        100% { text-shadow: 0 0 85px rgba(14,196,216,0.45), 0 0 130px rgba(26,107,255,0.25); }
+    }
+
+    .header-divider {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        margin-bottom: 16px;
+    }
+
+    .header-divider span {
+        display: block;
+        height: 1px;
+        width: 80px;
+        background: linear-gradient(90deg, transparent, var(--teal), transparent);
+    }
+
+    .header-divider i {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--teal);
+        box-shadow: 0 0 10px var(--teal);
+    }
+
+    /* === CARD PRINCIPAL === */
+    .grupo-detail-card {
+        background: rgba(255,255,255,0.07);
+        border: 1px solid rgba(14,196,216,0.25);
+        border-top: 5px solid var(--teal);
+        border-radius: 24px;
+        overflow: hidden;
+        backdrop-filter: blur(18px);
+        box-shadow: 0 25px 70px rgba(0, 0, 40, 0.55);
+    }
+
+    /* Imagen superior */
+    .card-img-top {
+        width: 100%;
+        height: 320px;
+        object-fit: cover;
+        border-bottom: 4px solid var(--teal);
+    }
+
+    /* Placeholder si no hay imagen */
+    .default-image {
+        width: 100%;
+        height: 320px;
+        background: linear-gradient(145deg, #002a6e, #0ec4d833);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 6rem;
+        color: rgba(255,255,255,0.25);
+    }
+
+    /* Contenido */
+    .card-body {
+        padding: 40px 45px;
+        color: white;
+    }
+
+    .grupo-name {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        font-size: 2.4rem;
+        color: var(--white);
+        margin-bottom: 16px;
+        line-height: 1.1;
+    }
+
+    .grupo-description {
+        font-size: 1.05rem;
+        line-height: 1.7;
+        color: rgba(255,255,255,0.75);
+        margin-bottom: 40px;
+    }
+
+    .section-title {
+        font-size: 1.1rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--teal);
+        margin-bottom: 18px;
+        font-weight: 600;
+    }
+
+    /* Miembros */
+    .miembros-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .badge-miembro {
+        background: rgba(14,196,216,0.15);
+        color: var(--teal);
+        border: 1px solid rgba(14,196,216,0.4);
+        padding: 10px 22px;
+        border-radius: 50px;
+        font-size: 1rem;
+        font-weight: 500;
+    }
+
+    .no-miembros {
+        color: rgba(255,255,255,0.4);
+        font-style: italic;
+        font-size: 1.05rem;
+    }
+</style>
+
+<!-- Burbujas flotantes -->
+<div class="bubbles">
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+</div>
+
+<div class="page-wrapper">
+
+    <!-- Header -->
+    <div class="header-block">
+        <p class="header-eyebrow">Agrupación artística</p>
+        <h1 class="header-title">{{ grupo.name }}</h1>
+        <div class="header-divider">
+            <span></span><i></i><span></span>
+        </div>
+    </div>
+
+    <!-- Card Principal -->
+    <div class="grupo-detail-card">
+
+        {% if grupo.profile_image %}
+            <img src="{{ grupo.profile_image.url }}" class="card-img-top" alt="{{ grupo.name }}">
+        {% else %}
+            <div class="default-image">
+                🎨
             </div>
-        {% empty %}
-            <p>No hay miembros aún.</p>
-        {% endfor %}
+        {% endif %}
 
+        <div class="card-body">
+
+            <h2 class="grupo-name">{{ grupo.name }}</h2>
+            
+            <p class="grupo-description">
+                {{ grupo.description|default:"Sin descripción disponible." }}
+            </p>
+
+            <div class="section-title">Miembros</div>
+            
+            <div class="miembros-container">
+                {% for miembro in grupo.members.all %}
+                    <span class="badge-miembro">{{ miembro.stage_name }}</span>
+                {% empty %}
+                    <p class="no-miembros">Este grupo aún no tiene miembros.</p>
+                {% endfor %}
+            </div>
+
+        </div>
     </div>
 
 </div>

@@ -3,207 +3,428 @@
 {% block content %}
 
 <style>
-    /* 🌊 FONDO AZUL CLARO - Igual que en las otras páginas */
-    .page-background {
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400;1,700&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+    :root {
+        --teal: #0ec4d8;
+        --teal-dark: #0a9aaa;
+        --white: #ffffff;
+        --black: #0a0a0a;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+        font-family: 'DM Sans', sans-serif;
+        background: #001840;
         min-height: 100vh;
-        padding: 80px 20px 60px;
-        background: linear-gradient(135deg, 
-            #7be3ff 0%, 
-            #5fd9ff 25%, 
-            #40ceff 50%, 
-            #1ec4ff 75%, 
-            #00b8ff 100%);
-        
-        background-image: 
-            radial-gradient(circle at 30% 25%, rgba(255,255,255,0.35) 0%, transparent 60%),
-            url("data:image/svg+xml,%3Csvg viewBox='0 0 500 500' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.06'/%3E%3C/svg%3E");
-        
-        background-size: cover;
-        background-attachment: fixed;
+        overflow-x: hidden;
         position: relative;
     }
 
-    .page-background::before {
+    body::before {
         content: '';
-        position: absolute;
+        position: fixed;
         inset: 0;
-        background: rgba(0, 120, 160, 0.08);
-        pointer-events: none;
+        background:
+            radial-gradient(ellipse 70% 55% at 15% 15%, rgba(14,196,216,0.18) 0%, transparent 60%),
+            radial-gradient(ellipse 60% 70% at 85% 80%, rgba(0,64,204,0.35) 0%, transparent 60%),
+            radial-gradient(ellipse 50% 50% at 50% 50%, rgba(26,107,255,0.10) 0%, transparent 70%),
+            linear-gradient(150deg, #001840 0%, #002a6e 35%, #003580 55%, #001d55 100%);
+        z-index: 0;
+        animation: bgShift 14s ease-in-out infinite alternate;
     }
 
-    .content-wrapper {
+    @keyframes bgShift {
+        0%   { filter: hue-rotate(0deg) brightness(1); }
+        50%  { filter: hue-rotate(12deg) brightness(1.06); }
+        100% { filter: hue-rotate(-8deg) brightness(0.96); }
+    }
+
+    /* === BURBUJAS === */
+    .bubbles {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+        overflow: hidden;
+    }
+
+    .bubble {
+        position: absolute;
+        bottom: -120px;
+        border-radius: 50%;
+        animation: floatUp linear infinite;
+    }
+
+    .bubble:nth-child(1)  { width: 35px; height: 35px; left: 7%;  animation-duration: 15s; animation-delay: 0s;  background: rgba(14,196,216,0.08); }
+    .bubble:nth-child(2)  { width: 60px; height: 60px; left: 19%; animation-duration: 19s; animation-delay: 3s;  background: rgba(255,255,255,0.04); }
+    .bubble:nth-child(3)  { width: 22px; height: 22px; left: 33%; animation-duration: 11s; animation-delay: 1s;  background: rgba(14,196,216,0.06); }
+    .bubble:nth-child(4)  { width: 80px; height: 80px; left: 49%; animation-duration: 22s; animation-delay: 5s;  background: rgba(26,107,255,0.10); }
+    .bubble:nth-child(5)  { width: 30px; height: 30px; left: 63%; animation-duration: 13s; animation-delay: 2s;  background: rgba(14,196,216,0.07); }
+    .bubble:nth-child(6)  { width: 50px; height: 50px; left: 75%; animation-duration: 17s; animation-delay: 7s;  background: rgba(255,255,255,0.03); }
+    .bubble:nth-child(7)  { width: 18px; height: 18px; left: 86%; animation-duration: 10s; animation-delay: 4s;  background: rgba(14,196,216,0.09); }
+    .bubble:nth-child(8)  { width: 55px; height: 55px; left: 93%; animation-duration: 20s; animation-delay: 0s;  background: rgba(26,107,255,0.08); }
+
+    @keyframes floatUp {
+        0%   { transform: translateY(0) scale(1);        opacity: 0; }
+        10%  { opacity: 1; }
+        90%  { opacity: 0.5; }
+        100% { transform: translateY(-110vh) scale(1.15); opacity: 0; }
+    }
+
+    /* === WRAPPER === */
+    .page-wrapper {
         position: relative;
-        z-index: 2;
+        z-index: 1;
+        padding: 70px 30px 90px;
         max-width: 1200px;
         margin: 0 auto;
     }
 
-    /* 🖋️ TÍTULO */
-    .title-agrupaciones {
-        font-weight: 900;
-        font-size: 3rem;
-        color: #ffffff;
+    /* === HEADER === */
+    .header-block {
+        text-align: center;
+        margin-bottom: 64px;
+    }
+
+    .header-eyebrow {
+        font-weight: 500;
+        font-size: 0.7rem;
+        letter-spacing: 5px;
         text-transform: uppercase;
-        letter-spacing: 4px;
-        text-shadow: 4px 4px 0 #0077aa,
-                     -3px -3px 0 #0077aa;
-        position: relative;
-        display: inline-block;
+        color: var(--teal);
+        margin-bottom: 14px;
+        opacity: 0.9;
     }
 
-    .title-agrupaciones::after {
-        content: '';
-        position: absolute;
-        bottom: -15px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 100px;
-        height: 6px;
-        background: linear-gradient(to right, #ffffff, #00d4ff);
-        border-radius: 3px;
+    .header-title {
+        font-family: 'Playfair Display', serif;
+        font-style: italic;
+        font-weight: 700;
+        font-size: clamp(2.8rem, 6vw, 5rem);
+        color: var(--white);
+        line-height: 1;
+        letter-spacing: -2px;
+        margin-bottom: 20px;
+        animation: titleGlow 4s ease-in-out infinite alternate;
     }
 
-    /* 🪐 TARJETAS - Estilo consistente */
+    @keyframes titleGlow {
+        0%   { text-shadow: 0 0 40px rgba(14,196,216,0.2); }
+        100% { text-shadow: 0 0 80px rgba(14,196,216,0.45), 0 0 120px rgba(26,107,255,0.2); }
+    }
+
+    .header-divider {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        margin-bottom: 16px;
+    }
+
+    .header-divider span {
+        display: block;
+        height: 1px;
+        width: 70px;
+        background: linear-gradient(90deg, transparent, var(--teal), transparent);
+    }
+
+    .header-divider i {
+        display: block;
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--teal);
+        box-shadow: 0 0 8px var(--teal);
+    }
+
+    .header-sub {
+        font-size: 0.9rem;
+        color: rgba(255,255,255,0.4);
+        font-weight: 300;
+        letter-spacing: 0.5px;
+    }
+
+    /* === GRID === */
+    .grupos-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 26px;
+    }
+
+    /* === CARD === */
     .grupo-card {
-        border-radius: 28px;
-        border: 4px solid #ffffff;
-        background: rgba(240, 252, 255, 0.94);
-        box-shadow: 0 25px 70px rgba(0, 110, 150, 0.35);
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        background: rgba(255,255,255,0.06);
+        border: 1px solid rgba(14,196,216,0.15);
+        border-top: 2px solid var(--teal);
+        border-radius: 4px;
         overflow: hidden;
-        height: 100%;
         text-decoration: none;
         color: inherit;
-        display: block;
+        display: flex;
+        flex-direction: column;
+        backdrop-filter: blur(16px);
+        transition: transform 0.3s, box-shadow 0.3s, background 0.3s, border-color 0.3s;
+        animation: cardIn 0.5s ease both;
     }
 
     .grupo-card:hover {
-        transform: translateY(-12px);
-        box-shadow: 0 40px 95px rgba(0, 110, 150, 0.45);
+        transform: translateY(-8px);
+        background: rgba(255,255,255,0.10);
+        border-color: rgba(14,196,216,0.45);
+        box-shadow: 0 20px 50px rgba(0,0,40,0.4), 0 0 30px rgba(14,196,216,0.08);
     }
 
-    .grupo-card img {
-        height: 220px;
+    @keyframes cardIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .grupo-card:nth-child(1)  { animation-delay: 0.05s; }
+    .grupo-card:nth-child(2)  { animation-delay: 0.10s; }
+    .grupo-card:nth-child(3)  { animation-delay: 0.15s; }
+    .grupo-card:nth-child(4)  { animation-delay: 0.20s; }
+    .grupo-card:nth-child(5)  { animation-delay: 0.25s; }
+    .grupo-card:nth-child(6)  { animation-delay: 0.30s; }
+    .grupo-card:nth-child(7)  { animation-delay: 0.35s; }
+    .grupo-card:nth-child(8)  { animation-delay: 0.40s; }
+    .grupo-card:nth-child(9)  { animation-delay: 0.45s; }
+
+    /* === IMAGEN === */
+    .card-img-wrap {
+        width: 100%;
+        height: 200px;
+        overflow: hidden;
+        position: relative;
+        flex-shrink: 0;
+    }
+
+    .card-img-wrap img {
+        width: 100%;
+        height: 100%;
         object-fit: cover;
-        border-bottom: 4px solid #ffffff;
+        display: block;
         transition: transform 0.5s ease;
     }
 
-    .grupo-card:hover img {
-        transform: scale(1.07);
+    .grupo-card:hover .card-img-wrap img {
+        transform: scale(1.06);
     }
 
-    .grupo-card .card-body {
-        padding: 24px 22px;
+    /* Avatar por defecto */
+    .default-avatar {
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(145deg, #002a6e, #0ec4d822 60%, #001840);
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
-    .grupo-card .card-title {
-        font-weight: 800;
-        color: #0077aa;
-        font-size: 1.4rem;
-        margin-bottom: 12px;
+    .default-avatar svg {
+        width: 72px;
+        height: 72px;
+        opacity: 0.7;
     }
 
-    .grupo-card .card-text {
-        color: #334155;
-        font-size: 0.98rem;
-        line-height: 1.55;
+    /* Degradado inferior sobre imagen */
+    .card-img-wrap::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        background: linear-gradient(to top, rgba(0,24,64,0.7), transparent);
+        pointer-events: none;
+    }
+
+    /* === CARD BODY === */
+    .card-body {
+        padding: 22px 24px 26px;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+    }
+
+    .card-index {
+        font-size: 0.65rem;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: var(--teal);
+        font-weight: 500;
+        margin-bottom: 8px;
+        opacity: 0.8;
+    }
+
+    .card-title {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        font-size: 1.25rem;
+        color: var(--white);
+        margin-bottom: 10px;
+        line-height: 1.2;
+        letter-spacing: -0.3px;
+    }
+
+    .card-desc {
+        font-size: 13px;
+        color: rgba(255,255,255,0.45);
+        line-height: 1.6;
+        font-weight: 300;
         margin-bottom: 18px;
+        flex: 1;
     }
 
-    /* Miembros */
-    .miembros-container {
+    /* === DIVISOR === */
+    .card-sep {
+        height: 1px;
+        background: linear-gradient(90deg, rgba(14,196,216,0.2), transparent);
+        margin-bottom: 14px;
+    }
+
+    /* === MIEMBROS === */
+    .miembros-label {
+        font-size: 0.62rem;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+        color: var(--teal);
+        font-weight: 600;
+        margin-bottom: 10px;
+        opacity: 0.8;
+    }
+
+    .miembros-wrap {
         display: flex;
         flex-wrap: wrap;
         gap: 6px;
     }
 
     .badge-miembro {
-        background: #0077aa;
-        color: white;
-        padding: 6px 14px;
-        border-radius: 50px;
-        font-size: 0.85rem;
-        font-weight: 600;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        background: rgba(14,196,216,0.12);
+        color: var(--teal);
+        border: 1px solid rgba(14,196,216,0.25);
+        padding: 4px 12px;
+        border-radius: 2px;
+        font-size: 11.5px;
+        font-weight: 500;
+        letter-spacing: 0.3px;
+        transition: background 0.2s;
     }
 
-    /* Mensaje vacío */
-    .empty-message {
-        background: rgba(255,255,255,0.9);
-        border-radius: 28px;
-        padding: 70px 40px;
+    .grupo-card:hover .badge-miembro {
+        background: rgba(14,196,216,0.2);
+    }
+
+    .no-miembros {
+        font-size: 12px;
+        color: rgba(255,255,255,0.25);
+        font-style: italic;
+    }
+
+    /* === EMPTY STATE === */
+    .empty-state {
+        grid-column: 1 / -1;
         text-align: center;
-        font-size: 1.35rem;
-        color: #0077aa;
-        box-shadow: 0 20px 55px rgba(0, 110, 150, 0.25);
+        padding: 80px 40px;
+        background: rgba(255,255,255,0.04);
+        border: 1px solid rgba(14,196,216,0.12);
+        border-top: 2px solid var(--teal);
+        border-radius: 4px;
+        backdrop-filter: blur(16px);
+    }
+
+    .empty-state p {
+        color: rgba(255,255,255,0.35);
+        font-size: 1rem;
+        font-weight: 300;
+        letter-spacing: 0.5px;
+        margin-top: 16px;
+    }
+
+    .empty-icon {
+        font-family: 'Playfair Display', serif;
+        font-style: italic;
+        font-size: 3rem;
+        color: rgba(14,196,216,0.3);
     }
 </style>
 
-<div class="page-background">
-    <div class="content-wrapper">
-        <div class="text-center mb-5">
-            <h2 class="title-agrupaciones">👥 Agrupaciones</h2>
+<!-- Burbujas -->
+<div class="bubbles">
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+</div>
+
+<div class="page-wrapper">
+
+    <!-- Header -->
+    <div class="header-block">
+        <p class="header-eyebrow">Comunidad artística</p>
+        <h1 class="header-title">Agrupaciones</h1>
+        <div class="header-divider">
+            <span></span><i></i><span></span>
         </div>
+        <p class="header-sub">Descubre los grupos que hacen parte de la comunidad</p>
+    </div>
 
-        <div class="row g-4">
+    <!-- Grid -->
+    <div class="grupos-grid">
 
-            {% for grupo in grupos %}
+        {% for grupo in grupos %}
+        <a href="/groups/{{ grupo.id }}/" class="grupo-card">
 
-                <div class="col-md-4 col-lg-4 mb-4">
-
-                    <a href="/groups/{{ grupo.id }}/" style="text-decoration: none; color: inherit;">
-
-                        <div class="grupo-card card h-100">
-
-                            {% if grupo.profile_image %}
-                                <img src="{{ grupo.profile_image.url }}" 
-                                     class="card-img-top" 
-                                     alt="{{ grupo.name }}">
-                            {% else %}
-                                <div style="height: 220px; background: linear-gradient(135deg, #bae6fd, #7dd3fc); 
-                                            display: flex; align-items: center; justify-content: center; font-size: 4.5rem; color: #ffffff;">
-                                    🎨
-                                </div>
-                            {% endif %}
-
-                            <div class="card-body">
-                                <h5 class="card-title">{{ grupo.name }}</h5>
-                                <p class="card-text">
-                                    {{ grupo.description|truncatewords:20|default:"Sin descripción disponible" }}
-                                </p>
-
-                                <h6 style="color: #0077aa; font-weight: 700; margin-bottom: 10px;">Miembros:</h6>
-                                
-                                <div class="miembros-container">
-                                    {% for miembro in grupo.members.all %}
-                                        <span class="badge-miembro">
-                                            {{ miembro.stage_name }}
-                                        </span>
-                                    {% empty %}
-                                        <p class="text-muted mb-0">Sin miembros aún</p>
-                                    {% endfor %}
-                                </div>
-                            </div>
-
-                        </div>
-
-                    </a>
-
-                </div>
-
-            {% empty %}
-
-                <div class="col-12">
-                    <div class="empty-message">
-                        <p style="font-size: 3.5rem; margin-bottom: 20px;">😕</p>
-                        <p>No hay agrupaciones disponibles en este momento.</p>
+            <div class="card-img-wrap">
+                {% if grupo.profile_image %}
+                    <img src="{{ grupo.profile_image.url }}" alt="{{ grupo.name }}">
+                {% else %}
+                    <div class="default-avatar">
+                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" fill="none">
+                            <circle cx="50" cy="50" r="48" fill="rgba(14,196,216,0.06)" stroke="rgba(14,196,216,0.25)" stroke-width="1.5"/>
+                            <!-- Personas: tres figuras superpuestas -->
+                            <circle cx="35" cy="36" r="12" fill="rgba(14,196,216,0.5)"/>
+                            <path d="M12 72 C12 55 58 55 58 72" fill="rgba(14,196,216,0.5)"/>
+                            <circle cx="65" cy="33" r="10" fill="rgba(14,196,216,0.7)"/>
+                            <path d="M42 70 C42 55 88 55 88 70" fill="rgba(14,196,216,0.7)"/>
+                        </svg>
                     </div>
+                {% endif %}
+            </div>
+
+            <div class="card-body">
+                <span class="card-index">Agrupación</span>
+                <h5 class="card-title">{{ grupo.name }}</h5>
+                <p class="card-desc">
+                    {{ grupo.description|truncatewords:20|default:"Sin descripción disponible" }}
+                </p>
+
+                <div class="card-sep"></div>
+
+                <p class="miembros-label">Miembros</p>
+                <div class="miembros-wrap">
+                    {% for miembro in grupo.members.all %}
+                        <span class="badge-miembro">{{ miembro.stage_name }}</span>
+                    {% empty %}
+                        <span class="no-miembros">Sin miembros aún</span>
+                    {% endfor %}
                 </div>
+            </div>
 
-            {% endfor %}
-
+        </a>
+        {% empty %}
+        <div class="empty-state">
+            <div class="empty-icon">∅</div>
+            <p>No hay agrupaciones disponibles en este momento.</p>
         </div>
+        {% endfor %}
+
     </div>
 </div>
 

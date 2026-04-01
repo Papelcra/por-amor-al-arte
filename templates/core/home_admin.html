@@ -3,149 +3,355 @@
 {% block content %}
 
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400;1,700&family=DM+Sans:wght@300;400;500;600&display=swap');
 
-/* 🌈 Fondo */
-.bg-dashboard {
-    background: radial-gradient(circle at top right, #e3f2fd, #f9fcff);
-    min-height: 80vh;
-    padding: 40px 20px;
-}
+    :root {
+        --blue: #1a6bff;
+        --blue-dark: #0040cc;
+        --teal: #0ec4d8;
+        --teal-dark: #0a9aaa;
+        --white: #ffffff;
+        --black: #0a0a0a;
+    }
 
-/* 💎 Card glass */
-.dashboard-card {
-    background: rgba(255, 255, 255, 0.75);
-    backdrop-filter: blur(14px);
-    border-radius: 22px;
-    padding: 30px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.1);
-    border: 1px solid rgba(255,255,255,0.6);
-    transition: all 0.3s ease;
-}
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-.dashboard-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 25px 60px rgba(0,0,0,0.15);
-}
+    body {
+        font-family: 'DM Sans', sans-serif;
+        background: #001840;
+        min-height: 100vh;
+        overflow-x: hidden;
+        position: relative;
+    }
 
-/* 🎯 Botones */
-.btn-dashboard {
-    border-radius: 14px;
-    padding: 15px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-}
+    /* === FONDO ANIMADO (burbujas) === */
+    body::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        background:
+            radial-gradient(ellipse 70% 55% at 15% 15%, rgba(14,196,216,0.18) 0%, transparent 60%),
+            radial-gradient(ellipse 60% 70% at 85% 80%, rgba(0,64,204,0.35) 0%, transparent 60%),
+            radial-gradient(ellipse 50% 50% at 50% 50%, rgba(26,107,255,0.10) 0%, transparent 70%),
+            linear-gradient(150deg, #001840 0%, #002a6e 35%, #003580 55%, #001d55 100%);
+        z-index: 0;
+        animation: bgShift 14s ease-in-out infinite alternate;
+    }
 
-.btn-primary-custom {
-    background: linear-gradient(135deg, #0288d1, #4fc3f7);
-    color: white;
-    border: none;
-}
+    @keyframes bgShift {
+        0%   { filter: hue-rotate(0deg) brightness(1); }
+        50%  { filter: hue-rotate(12deg) brightness(1.06); }
+        100% { filter: hue-rotate(-8deg) brightness(0.96); }
+    }
 
-.btn-primary-custom:hover {
-    box-shadow: 0 12px 30px rgba(3,169,244,0.4);
-    transform: translateY(-2px);
-}
+    /* === BURBUJAS === */
+    .bubbles {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+        overflow: hidden;
+    }
 
-.btn-success-custom {
-    background: linear-gradient(135deg, #2e7d32, #66bb6a);
-    color: white;
-    border: none;
-}
+    .bubble {
+        position: absolute;
+        bottom: -120px;
+        border-radius: 50%;
+        animation: floatUp linear infinite;
+    }
 
-.btn-success-custom:hover {
-    box-shadow: 0 12px 30px rgba(76,175,80,0.4);
-    transform: translateY(-2px);
-}
+    .bubble:nth-child(1)  { width: 35px;  height: 35px;  left: 7%;   animation-duration: 15s; animation-delay: 0s;  background: rgba(14,196,216,0.08); }
+    .bubble:nth-child(2)  { width: 60px;  height: 60px;  left: 19%;  animation-duration: 19s; animation-delay: 3s;  background: rgba(255,255,255,0.04); }
+    .bubble:nth-child(3)  { width: 22px;  height: 22px;  left: 33%;  animation-duration: 11s; animation-delay: 1s;  background: rgba(14,196,216,0.06); }
+    .bubble:nth-child(4)  { width: 80px;  height: 80px;  left: 49%;  animation-duration: 22s; animation-delay: 5s;  background: rgba(26,107,255,0.10); }
+    .bubble:nth-child(5)  { width: 30px;  height: 30px;  left: 63%;  animation-duration: 13s; animation-delay: 2s;  background: rgba(14,196,216,0.07); }
+    .bubble:nth-child(6)  { width: 50px;  height: 50px;  left: 75%;  animation-duration: 17s; animation-delay: 7s;  background: rgba(255,255,255,0.03); }
+    .bubble:nth-child(7)  { width: 18px;  height: 18px;  left: 86%;  animation-duration: 10s; animation-delay: 4s;  background: rgba(14,196,216,0.09); }
+    .bubble:nth-child(8)  { width: 55px;  height: 55px;  left: 93%;  animation-duration: 20s; animation-delay: 0s;  background: rgba(26,107,255,0.08); }
 
-/* 👥 Icono grande */
-.icon-big {
-    font-size: 40px;
-    margin-bottom: 10px;
-}
+    @keyframes floatUp {
+        0%   { transform: translateY(0) scale(1);   opacity: 0; }
+        10%  { opacity: 1; }
+        90%  { opacity: 0.5; }
+        100% { transform: translateY(-110vh) scale(1.15); opacity: 0; }
+    }
 
-/* Texto */
-.title-main {
-    font-weight: 700;
-    color: #0288d1;
-}
+    /* === WRAPPER === */
+    .page-wrapper {
+        position: relative;
+        z-index: 1;
+        padding: 70px 30px 90px;
+        max-width: 1100px;
+        margin: 0 auto;
+    }
 
-.subtitle {
-    color: #6b7280;
-}
+    /* === HEADER === */
+    .header-block {
+        text-align: center;
+        margin-bottom: 70px;
+    }
 
+    .header-eyebrow {
+        font-family: 'DM Sans', sans-serif;
+        font-weight: 500;
+        font-size: 0.7rem;
+        letter-spacing: 5px;
+        text-transform: uppercase;
+        color: var(--teal);
+        margin-bottom: 18px;
+        opacity: 0.9;
+    }
+
+    .header-title {
+        font-family: 'Playfair Display', serif;
+        font-style: italic;
+        font-weight: 700;
+        font-size: clamp(3rem, 7vw, 5.5rem);
+        color: var(--white);
+        line-height: 1;
+        letter-spacing: -2px;
+        margin-bottom: 20px;
+        text-shadow: 0 0 60px rgba(14,196,216,0.25);
+        animation: titleGlow 4s ease-in-out infinite alternate;
+    }
+
+    @keyframes titleGlow {
+        0%   { text-shadow: 0 0 40px rgba(14,196,216,0.2); }
+        100% { text-shadow: 0 0 80px rgba(14,196,216,0.45), 0 0 120px rgba(26,107,255,0.2); }
+    }
+
+    .header-divider {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        margin-bottom: 18px;
+    }
+
+    .header-divider span {
+        display: block;
+        height: 1px;
+        width: 70px;
+        background: linear-gradient(90deg, transparent, var(--teal), transparent);
+    }
+
+    .header-divider i {
+        display: block;
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--teal);
+        box-shadow: 0 0 8px var(--teal);
+    }
+
+    .header-sub {
+        font-size: 0.95rem;
+        color: rgba(255,255,255,0.45);
+        font-weight: 300;
+        letter-spacing: 0.5px;
+    }
+
+    /* === GRID === */
+    .cards-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 24px;
+    }
+
+    /* === CARD === */
+    .dash-card {
+        background: rgba(255,255,255,0.06);
+        border: 1px solid rgba(14,196,216,0.18);
+        border-top: 2px solid var(--teal);
+        border-radius: 4px;
+        padding: 40px 32px 32px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        backdrop-filter: blur(16px);
+        transition: transform 0.3s, box-shadow 0.3s, background 0.3s, border-color 0.3s;
+        animation: cardIn 0.5s ease both;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .dash-card::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 90px;
+        height: 90px;
+        border-radius: 90px 0 0 0;
+        background: rgba(14,196,216,0.07);
+        transition: transform 0.4s;
+    }
+
+    .dash-card:hover {
+        transform: translateY(-8px);
+        background: rgba(255,255,255,0.10);
+        border-color: rgba(14,196,216,0.5);
+        box-shadow: 0 20px 50px rgba(0,0,40,0.4), 0 0 30px rgba(14,196,216,0.08);
+    }
+
+    .dash-card:hover::after {
+        transform: scale(1.6);
+    }
+
+    @keyframes cardIn {
+        from { opacity: 0; transform: translateY(22px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .dash-card:nth-child(1) { animation-delay: 0.1s; }
+    .dash-card:nth-child(2) { animation-delay: 0.2s; }
+    .dash-card:nth-child(3) { animation-delay: 0.3s; }
+
+    /* Número decorativo */
+    .card-number {
+        font-family: 'Playfair Display', serif;
+        font-style: italic;
+        font-size: 4.5rem;
+        font-weight: 700;
+        color: rgba(14,196,216,0.18);
+        line-height: 1;
+        margin-bottom: 10px;
+        letter-spacing: -2px;
+        user-select: none;
+        transition: color 0.3s;
+    }
+
+    .dash-card:hover .card-number {
+        color: rgba(14,196,216,0.30);
+    }
+
+    .card-title {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        font-size: 1.3rem;
+        color: var(--white);
+        margin-bottom: 12px;
+        letter-spacing: -0.3px;
+        line-height: 1.2;
+    }
+
+    .card-desc {
+        font-size: 13.5px;
+        color: rgba(255,255,255,0.45);
+        line-height: 1.65;
+        font-weight: 300;
+        margin-bottom: 30px;
+        flex: 1;
+    }
+
+    /* === BOTONES === */
+    .btn-card {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 11px 22px;
+        text-decoration: none;
+        font-family: 'DM Sans', sans-serif;
+        font-weight: 600;
+        font-size: 11px;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+        transition: 0.25s;
+        position: relative;
+        z-index: 1;
+    }
+
+    .btn-primary {
+        background: transparent;
+        color: var(--teal);
+        border: 1.5px solid rgba(14,196,216,0.5);
+    }
+
+    .btn-primary:hover {
+        background: var(--teal);
+        color: var(--black);
+        border-color: var(--teal);
+        box-shadow: 0 6px 20px rgba(14,196,216,0.3);
+    }
+
+    .btn-solid {
+        background: var(--white);
+        color: var(--black);
+        border: 1.5px solid var(--white);
+    }
+
+    .btn-solid:hover {
+        background: var(--teal);
+        border-color: var(--teal);
+        color: var(--black);
+        box-shadow: 0 6px 20px rgba(14,196,216,0.3);
+    }
+
+    .arrow {
+        display: inline-block;
+        transition: transform 0.2s;
+    }
+
+    .btn-card:hover .arrow {
+        transform: translateX(4px);
+    }
 </style>
 
-<div class="bg-dashboard">
+<!-- Burbujas -->
+<div class="bubbles">
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+</div>
 
-    <div class="container">
+<div class="page-wrapper">
 
-        <!-- 🧠 HEADER -->
-        <div class="text-center mb-5">
-            <h1 class="title-main">👥 Panel de Agrupaciones</h1>
-            <p class="subtitle">Administra tus grupos artísticos de forma sencilla</p>
+    <!-- Header -->
+    <div class="header-block">
+        <p class="header-eyebrow">Panel de gestión</p>
+        <h1 class="header-title">Agrupaciones</h1>
+        <div class="header-divider">
+            <span></span><i></i><span></span>
+        </div>
+        <p class="header-sub">Administra tus grupos artísticos de forma sencilla</p>
+    </div>
+
+    <!-- Cards -->
+    <div class="cards-grid">
+
+        <div class="dash-card">
+            <div class="card-number">01</div>
+            <h4 class="card-title">Todas las agrupaciones</h4>
+            <p class="card-desc">Explora todas las agrupaciones registradas en el sistema.</p>
+            <a href="{% url 'groups:lista_grupos' %}" class="btn-card btn-primary">
+                Ver todas <span class="arrow">→</span>
+            </a>
         </div>
 
-        <!-- 🔥 ACCIONES -->
-        <div class="row g-4">
+        <div class="dash-card">
+            <div class="card-number">02</div>
+            <h4 class="card-title">Mis agrupaciones</h4>
+            <p class="card-desc">Administra y edita los grupos que has creado.</p>
+            <a href="{% url 'groups:mis_grupos' %}" class="btn-card btn-primary">
+                Ver mis grupos <span class="arrow">→</span>
+            </a>
+        </div>
 
-            <!-- 📋 VER TODOS LOS GRUPOS -->
-            <div class="col-md-4">
-                <div class="dashboard-card text-center">
-
-                    <div class="icon-big">📋</div>
-
-                    <h4>Todas las agrupaciones</h4>
-                    <p class="text-muted mb-4">
-                        Explora todas las agrupaciones registradas en el sistema
-                    </p>
-
-                    <a href="{% url 'groups:lista_grupos' %}" class="btn btn-dashboard btn-primary-custom w-100">
-                        Ver todas
-                    </a>
-
-                </div>
-            </div>
-
-            <!-- 👥 MIS GRUPOS -->
-            <div class="col-md-4">
-                <div class="dashboard-card text-center">
-
-                    <div class="icon-big">👥</div>
-
-                    <h4>Mis agrupaciones</h4>
-                    <p class="text-muted mb-4">
-                        Administra y edita los grupos que has creado
-                    </p>
-
-                    <a href="{% url 'groups:mis_grupos' %}" class="btn btn-dashboard btn-primary-custom w-100">
-                        Ver mis grupos
-                    </a>
-
-                </div>
-            </div>
-
-            <!-- ➕ CREAR GRUPO -->
-            <div class="col-md-4">
-                <div class="dashboard-card text-center">
-
-                    <div class="icon-big">➕</div>
-
-                    <h4>Crear agrupación</h4>
-                    <p class="text-muted mb-4">
-                        Registra un nuevo grupo artístico y gestiona sus integrantes
-                    </p>
-
-                    <a href="{% url 'groups:crear_grupo' %}" class="btn btn-dashboard btn-success-custom w-100">
-                        Crear ahora
-                    </a>
-
-                </div>
-            </div>
-
+        <div class="dash-card">
+            <div class="card-number">03</div>
+            <h4 class="card-title">Crear agrupación</h4>
+            <p class="card-desc">Registra un nuevo grupo artístico y gestiona sus integrantes.</p>
+            <a href="{% url 'groups:crear_grupo' %}" class="btn-card btn-solid">
+                Crear ahora <span class="arrow">→</span>
+            </a>
         </div>
 
     </div>
-
 </div>
 
 {% endblock %}
