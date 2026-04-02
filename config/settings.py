@@ -3,6 +3,7 @@ Django settings for config project.
 """
 
 import os
+import dj_database_url
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -101,7 +102,6 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 # ====================== 🗄️ BASE DE DATOS ======================
 
-import dj_database_url
 
 DATABASES = {
     'default': dj_database_url.config(
