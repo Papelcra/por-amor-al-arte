@@ -2,6 +2,7 @@
 Django settings for config project.
 """
 
+import os
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -11,7 +12,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure--6q=w*7=7^(gh^a3s2lm53e289#hr^kbzuqr-3f$llhygkrz7h'
 DEBUG = True
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+
+# Esto permite que los formularios funcionen en el dominio de Render
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.onrender.com',
+    'https://por-amor-al-arte.onrender.com' # Cambia esto por tu URL real de Render
+]
 
 
 # ====================== 📦 APLICACIONES ======================
