@@ -3,20 +3,22 @@
 {% block content %}
 
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400;1,700&family=DM+Sans:wght@300;400;500;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,700;1,400&family=Great+Vibes&family=DM+Sans:wght@300;400;500;600&display=swap');
 
     :root {
-        --teal: #0ec4d8;
-        --teal-dark: #0a9aaa;
+        --blue: #1a8fc4;
+        --blue-mid: #3ab4e0;
+        --blue-bg: #eef6fb;
+        --dark: #0d2d45;
+        --text: #2e5570;
         --white: #ffffff;
-        --black: #0a0a0a;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
         font-family: 'DM Sans', sans-serif;
-        background: #001840;
+        background: var(--blue-bg);
         min-height: 100vh;
         overflow-x: hidden;
         position: relative;
@@ -27,53 +29,12 @@
         position: fixed;
         inset: 0;
         background:
-            radial-gradient(ellipse 70% 55% at 15% 15%, rgba(14,196,216,0.18) 0%, transparent 60%),
-            radial-gradient(ellipse 60% 70% at 85% 80%, rgba(0,64,204,0.35) 0%, transparent 60%),
-            radial-gradient(ellipse 50% 50% at 50% 50%, rgba(26,107,255,0.10) 0%, transparent 70%),
-            linear-gradient(150deg, #001840 0%, #002a6e 35%, #003580 55%, #001d55 100%);
+            radial-gradient(ellipse at 10% 50%, rgba(60,170,220,0.10) 0%, transparent 60%),
+            radial-gradient(ellipse at 90% 20%, rgba(60,170,220,0.07) 0%, transparent 50%),
+            radial-gradient(ellipse at 50% 100%, rgba(100,200,255,0.08) 0%, transparent 50%);
         z-index: 0;
-        animation: bgShift 14s ease-in-out infinite alternate;
     }
 
-    @keyframes bgShift {
-        0%   { filter: hue-rotate(0deg) brightness(1); }
-        50%  { filter: hue-rotate(12deg) brightness(1.06); }
-        100% { filter: hue-rotate(-8deg) brightness(0.96); }
-    }
-
-    /* === BURBUJAS FLOTANTES === */
-    .bubbles {
-        position: fixed;
-        inset: 0;
-        pointer-events: none;
-        z-index: 0;
-        overflow: hidden;
-    }
-
-    .bubble {
-        position: absolute;
-        bottom: -120px;
-        border-radius: 50%;
-        animation: floatUp linear infinite;
-    }
-
-    .bubble:nth-child(1)  { width: 35px; height: 35px; left: 7%;  animation-duration: 15s; background: rgba(14,196,216,0.08); }
-    .bubble:nth-child(2)  { width: 60px; height: 60px; left: 19%; animation-duration: 19s; animation-delay: 3s; background: rgba(255,255,255,0.04); }
-    .bubble:nth-child(3)  { width: 22px; height: 22px; left: 33%; animation-duration: 11s; animation-delay: 1s; background: rgba(14,196,216,0.06); }
-    .bubble:nth-child(4)  { width: 80px; height: 80px; left: 49%; animation-duration: 22s; animation-delay: 5s; background: rgba(26,107,255,0.10); }
-    .bubble:nth-child(5)  { width: 30px; height: 30px; left: 63%; animation-duration: 13s; animation-delay: 2s; background: rgba(14,196,216,0.07); }
-    .bubble:nth-child(6)  { width: 50px; height: 50px; left: 75%; animation-duration: 17s; animation-delay: 7s; background: rgba(255,255,255,0.03); }
-    .bubble:nth-child(7)  { width: 18px; height: 18px; left: 86%; animation-duration: 10s; animation-delay: 4s; background: rgba(14,196,216,0.09); }
-    .bubble:nth-child(8)  { width: 55px; height: 55px; left: 93%; animation-duration: 20s; background: rgba(26,107,255,0.08); }
-
-    @keyframes floatUp {
-        0%   { transform: translateY(0) scale(1); opacity: 0; }
-        10%  { opacity: 1; }
-        90%  { opacity: 0.5; }
-        100% { transform: translateY(-110vh) scale(1.15); opacity: 0; }
-    }
-
-    /* === WRAPPER === */
     .page-wrapper {
         position: relative;
         z-index: 1;
@@ -82,44 +43,34 @@
         margin: 0 auto;
     }
 
-    /* === HEADER === */
     .header-block {
         text-align: center;
         margin-bottom: 64px;
     }
 
     .header-eyebrow {
-        font-weight: 500;
-        font-size: 0.7rem;
+        font-family: 'Cormorant Garamond', serif;
+        font-weight: 600;
+        font-size: 0.85rem;
         letter-spacing: 5px;
         text-transform: uppercase;
-        color: var(--teal);
+        color: var(--blue);
         margin-bottom: 14px;
-        opacity: 0.9;
     }
 
     .header-title {
-        font-family: 'Playfair Display', serif;
-        font-style: italic;
-        font-weight: 700;
+        font-family: 'Great Vibes', cursive;
         font-size: clamp(2.8rem, 6vw, 5rem);
-        color: var(--white);
+        color: var(--dark);
         line-height: 1;
-        letter-spacing: -2px;
         margin-bottom: 20px;
-        animation: titleGlow 4s ease-in-out infinite alternate;
-    }
-
-    @keyframes titleGlow {
-        0%   { text-shadow: 0 0 40px rgba(14,196,216,0.2); }
-        100% { text-shadow: 0 0 80px rgba(14,196,216,0.45), 0 0 120px rgba(26,107,255,0.2); }
     }
 
     .header-divider {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 14px;
+        gap: 18px;
         margin-bottom: 16px;
     }
 
@@ -127,7 +78,7 @@
         display: block;
         height: 1px;
         width: 70px;
-        background: linear-gradient(90deg, transparent, var(--teal), transparent);
+        background: linear-gradient(to right, transparent, var(--blue-mid));
     }
 
     .header-divider i {
@@ -135,45 +86,41 @@
         width: 5px;
         height: 5px;
         border-radius: 50%;
-        background: var(--teal);
-        box-shadow: 0 0 8px var(--teal);
+        background: var(--blue-mid);
     }
 
     .header-sub {
         font-size: 0.9rem;
-        color: rgba(255,255,255,0.4);
+        color: var(--text);
         font-weight: 300;
         letter-spacing: 0.5px;
     }
 
-    /* === GRID === */
     .grupos-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
         gap: 30px;
     }
 
-    /* === CARD === */
     .grupo-card {
-        background: rgba(255,255,255,0.06);
-        border: 1px solid rgba(14,196,216,0.15);
-        border-top: 2px solid var(--teal);
-        border-radius: 4px;
+        background: #ffffff;
+        border: 2px solid #e0f0f8;
+        border-top: 4px solid var(--blue-mid);
+        border-radius: 12px;
         overflow: hidden;
         text-decoration: none;
         color: inherit;
         display: flex;
         flex-direction: column;
-        backdrop-filter: blur(16px);
-        transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.4s ease, background 0.3s ease;
+        box-shadow: 0 6px 25px rgba(0,80,160,0.08);
+        transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.4s ease, border-color 0.3s ease;
         animation: cardIn 0.6s ease both;
     }
 
     .grupo-card:hover {
         transform: translateY(-10px);
-        background: rgba(255,255,255,0.10);
-        border-color: rgba(14,196,216,0.5);
-        box-shadow: 0 25px 60px rgba(0,0,30,0.5), 0 0 40px rgba(14,196,216,0.1);
+        border-color: var(--blue-mid);
+        box-shadow: 0 22px 50px rgba(30,140,210,0.20);
     }
 
     @keyframes cardIn {
@@ -181,7 +128,6 @@
         to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* Retraso de animación para las primeras tarjetas */
     .grupo-card:nth-child(1) { animation-delay: 0.1s; }
     .grupo-card:nth-child(2) { animation-delay: 0.2s; }
     .grupo-card:nth-child(3) { animation-delay: 0.3s; }
@@ -191,6 +137,7 @@
         height: 220px;
         overflow: hidden;
         position: relative;
+        background: linear-gradient(135deg, #1a8fc4, #3ab4e0);
     }
 
     .card-img-wrap img {
@@ -207,10 +154,11 @@
     .default-avatar {
         width: 100%;
         height: 100%;
-        background: linear-gradient(145deg, #002a6e, #0ec4d822 60%, #001840);
         display: flex;
         align-items: center;
         justify-content: center;
+        font-size: 4rem;
+        color: rgba(255,255,255,0.7);
     }
 
     .card-body {
@@ -224,23 +172,23 @@
         font-size: 0.65rem;
         letter-spacing: 3px;
         text-transform: uppercase;
-        color: var(--teal);
+        color: var(--blue);
         font-weight: 600;
         margin-bottom: 10px;
     }
 
     .card-title {
-        font-family: 'Playfair Display', serif;
+        font-family: 'Cormorant Garamond', serif;
         font-weight: 700;
-        font-size: 1.4rem;
-        color: var(--white);
+        font-size: 1.5rem;
+        color: var(--dark);
         margin-bottom: 12px;
         letter-spacing: -0.5px;
     }
 
     .card-desc {
         font-size: 14px;
-        color: rgba(255,255,255,0.5);
+        color: var(--text);
         line-height: 1.6;
         margin-bottom: 20px;
         flex: 1;
@@ -248,7 +196,7 @@
 
     .card-sep {
         height: 1px;
-        background: linear-gradient(90deg, rgba(14,196,216,0.3), transparent);
+        background: linear-gradient(90deg, #c2dff0, transparent);
         margin-bottom: 18px;
     }
 
@@ -256,8 +204,9 @@
         font-size: 0.65rem;
         letter-spacing: 2px;
         text-transform: uppercase;
-        color: var(--teal);
+        color: var(--blue);
         margin-bottom: 12px;
+        font-weight: 600;
     }
 
     .miembros-wrap {
@@ -267,9 +216,9 @@
     }
 
     .badge-miembro {
-        background: rgba(14,196,216,0.12);
-        color: var(--teal);
-        border: 1px solid rgba(14,196,216,0.25);
+        background: #e8f6fc;
+        color: var(--blue);
+        border: 1px solid #c2dff0;
         padding: 5px 14px;
         border-radius: 3px;
         font-size: 12px;
@@ -278,7 +227,7 @@
 
     .no-miembros {
         font-size: 13px;
-        color: rgba(255,255,255,0.25);
+        color: #5a7a90;
         font-style: italic;
     }
 
@@ -286,16 +235,12 @@
         grid-column: 1 / -1;
         text-align: center;
         padding: 100px 40px;
-        background: rgba(255,255,255,0.03);
-        border-radius: 8px;
-        border: 1px dashed rgba(14,196,216,0.2);
+        background: rgba(255,255,255,0.7);
+        border-radius: 12px;
+        border: 2px dashed #c2dff0;
+        color: var(--text);
     }
 </style>
-
-<div class="bubbles">
-    <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
-    <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
-</div>
 
 <div class="page-wrapper">
     <div class="header-block">
@@ -313,10 +258,10 @@
                     <img src="{{ grupo.profile_image.url }}" alt="{{ grupo.name }}">
                 {% else %}
                     <div class="default-avatar">
-                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" fill="none" style="width:80px; opacity:0.4;">
-                            <circle cx="50" cy="50" r="48" stroke="var(--teal)" stroke-width="1"/>
-                            <path d="M30 70 Q50 30 70 70" stroke="var(--teal)" stroke-width="2"/>
-                            <circle cx="50" cy="40" r="10" stroke="var(--teal)" stroke-width="2"/>
+                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" fill="none" style="width:80px; opacity:0.5;">
+                            <circle cx="50" cy="50" r="48" stroke="white" stroke-width="1"/>
+                            <path d="M30 70 Q50 30 70 70" stroke="white" stroke-width="2"/>
+                            <circle cx="50" cy="40" r="10" stroke="white" stroke-width="2"/>
                         </svg>
                     </div>
                 {% endif %}
@@ -331,7 +276,6 @@
 
                 <p class="miembros-label">Miembros</p>
                 <div class="miembros-wrap">
-                    {# ✅ Corregido para usar la relación automática de tus modelos #}
                     {% for miembro in grupo.artists.all %}
                         <span class="badge-miembro">{{ miembro.stage_name }}</span>
                     {% empty %}

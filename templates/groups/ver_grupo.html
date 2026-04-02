@@ -3,20 +3,21 @@
 {% block content %}
 
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400;1,700&family=DM+Sans:wght@300;400;500;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,700;1,400&family=Great+Vibes&family=DM+Sans:wght@300;400;500;600&display=swap');
 
     :root {
-        --teal: #0ec4d8;
-        --teal-dark: #0a9aaa;
+        --blue: #1a8fc4;
+        --blue-mid: #3ab4e0;
         --white: #ffffff;
-        --black: #0a0a0a;
+        --dark: #0d2d45;
+        --text: #2e5570;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
         font-family: 'DM Sans', sans-serif;
-        background: #001840;
+        background: #eef6fb;
         min-height: 100vh;
         overflow-x: hidden;
         position: relative;
@@ -27,49 +28,10 @@
         position: fixed;
         inset: 0;
         background:
-            radial-gradient(ellipse 70% 55% at 15% 15%, rgba(14,196,216,0.18) 0%, transparent 60%),
-            radial-gradient(ellipse 60% 70% at 85% 80%, rgba(0,64,204,0.35) 0%, transparent 60%),
-            radial-gradient(ellipse 50% 50% at 50% 50%, rgba(26,107,255,0.10) 0%, transparent 70%),
-            linear-gradient(150deg, #001840 0%, #002a6e 35%, #003580 55%, #001d55 100%);
+            radial-gradient(ellipse at 10% 50%, rgba(60,170,220,0.10) 0%, transparent 60%),
+            radial-gradient(ellipse at 90% 20%, rgba(60,170,220,0.07) 0%, transparent 50%),
+            radial-gradient(ellipse at 50% 100%, rgba(100,200,255,0.08) 0%, transparent 50%);
         z-index: 0;
-        animation: bgShift 14s ease-in-out infinite alternate;
-    }
-
-    @keyframes bgShift {
-        0%   { filter: hue-rotate(0deg) brightness(1); }
-        50%  { filter: hue-rotate(12deg) brightness(1.06); }
-        100% { filter: hue-rotate(-8deg) brightness(0.96); }
-    }
-
-    .bubbles {
-        position: fixed;
-        inset: 0;
-        pointer-events: none;
-        z-index: 0;
-        overflow: hidden;
-    }
-
-    .bubble {
-        position: absolute;
-        bottom: -120px;
-        border-radius: 50%;
-        animation: floatUp linear infinite;
-    }
-
-    .bubble:nth-child(1)  { width: 35px; height: 35px; left: 7%;  animation-duration: 15s; background: rgba(14,196,216,0.08); }
-    .bubble:nth-child(2)  { width: 60px; height: 60px; left: 19%; animation-duration: 19s; background: rgba(255,255,255,0.04); }
-    .bubble:nth-child(3)  { width: 22px; height: 22px; left: 33%; animation-duration: 11s; background: rgba(14,196,216,0.06); }
-    .bubble:nth-child(4)  { width: 80px; height: 80px; left: 49%; animation-duration: 22s; background: rgba(26,107,255,0.10); }
-    .bubble:nth-child(5)  { width: 30px; height: 30px; left: 63%; animation-duration: 13s; background: rgba(14,196,216,0.07); }
-    .bubble:nth-child(6)  { width: 50px; height: 50px; left: 75%; animation-duration: 17s; background: rgba(255,255,255,0.03); }
-    .bubble:nth-child(7)  { width: 18px; height: 18px; left: 86%; animation-duration: 10s; background: rgba(14,196,216,0.09); }
-    .bubble:nth-child(8)  { width: 55px; height: 55px; left: 93%; animation-duration: 20s; background: rgba(26,107,255,0.08); }
-
-    @keyframes floatUp {
-        0%   { transform: translateY(0) scale(1); opacity: 0; }
-        10%  { opacity: 1; }
-        90%  { opacity: 0.5; }
-        100% { transform: translateY(-110vh) scale(1.15); opacity: 0; }
     }
 
     .page-wrapper {
@@ -86,35 +48,28 @@
     }
 
     .header-eyebrow {
-        font-weight: 500;
-        font-size: 0.75rem;
+        font-family: 'Cormorant Garamond', serif;
+        font-weight: 600;
+        font-size: 0.85rem;
         letter-spacing: 5px;
         text-transform: uppercase;
-        color: var(--teal);
+        color: var(--blue);
         margin-bottom: 12px;
     }
 
     .header-title {
-        font-family: 'Playfair Display', serif;
-        font-style: italic;
-        font-weight: 700;
+        font-family: 'Great Vibes', cursive;
         font-size: clamp(2.6rem, 6vw, 4.5rem);
-        color: var(--white);
+        color: var(--dark);
         line-height: 1.05;
-        letter-spacing: -2px;
-        animation: titleGlow 4s ease-in-out infinite alternate;
-    }
-
-    @keyframes titleGlow {
-        0%   { text-shadow: 0 0 40px rgba(14,196,216,0.2); }
-        100% { text-shadow: 0 0 85px rgba(14,196,216,0.45), 0 0 130px rgba(26,107,255,0.25); }
+        margin-bottom: 20px;
     }
 
     .header-divider {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 14px;
+        gap: 18px;
         margin-bottom: 16px;
     }
 
@@ -122,73 +77,72 @@
         display: block;
         height: 1px;
         width: 80px;
-        background: linear-gradient(90deg, transparent, var(--teal), transparent);
+        background: linear-gradient(to right, transparent, var(--blue-mid));
     }
 
     .header-divider i {
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: var(--teal);
-        box-shadow: 0 0 10px var(--teal);
+        color: var(--blue-mid);
+        font-size: 0.9rem;
     }
 
     .grupo-detail-card {
-        background: rgba(255,255,255,0.07);
-        border: 1px solid rgba(14,196,216,0.25);
-        border-top: 5px solid var(--teal);
-        border-radius: 24px;
+        background: #ffffff;
+        border: 1px solid #c2dff0;
+        border-top: 5px solid var(--blue-mid);
+        border-radius: 16px;
         overflow: hidden;
-        backdrop-filter: blur(18px);
-        box-shadow: 0 25px 70px rgba(0, 0, 40, 0.55);
+        box-shadow: 0 10px 40px rgba(0,80,160,0.10);
     }
 
     .card-img-top {
         width: 100%;
         height: 320px;
         object-fit: cover;
-        border-bottom: 4px solid var(--teal);
+        border-bottom: 4px solid var(--blue-mid);
     }
 
     .default-image {
         width: 100%;
         height: 320px;
-        background: linear-gradient(145deg, #002a6e, #0ec4d833);
+        background: linear-gradient(135deg, #1a8fc4, #3ab4e0);
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 6rem;
-        color: rgba(255,255,255,0.25);
+        color: rgba(255,255,255,0.5);
     }
 
     .card-body {
         padding: 40px 45px;
-        color: white;
+        color: var(--dark);
     }
 
     .grupo-name {
-        font-family: 'Playfair Display', serif;
+        font-family: 'Cormorant Garamond', serif;
         font-weight: 700;
         font-size: 2.4rem;
-        color: var(--white);
+        color: var(--dark);
         margin-bottom: 16px;
         line-height: 1.1;
     }
 
     .grupo-description {
-        font-size: 1.05rem;
-        line-height: 1.7;
-        color: rgba(255,255,255,0.75);
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1.15rem;
+        line-height: 1.75;
+        color: var(--text);
+        font-style: italic;
         margin-bottom: 40px;
     }
 
     .section-title {
-        font-size: 1.1rem;
-        letter-spacing: 2px;
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 0.85rem;
+        letter-spacing: 4px;
         text-transform: uppercase;
-        color: var(--teal);
+        color: var(--blue);
         margin-bottom: 18px;
-        font-weight: 600;
+        font-weight: 700;
     }
 
     .miembros-container {
@@ -198,9 +152,9 @@
     }
 
     .badge-miembro {
-        background: rgba(14,196,216,0.15);
-        color: var(--teal);
-        border: 1px solid rgba(14,196,216,0.4);
+        background: #e8f6fc;
+        color: var(--blue);
+        border: 1px solid var(--blue-mid);
         padding: 10px 22px;
         border-radius: 50px;
         font-size: 1rem;
@@ -210,27 +164,27 @@
     }
 
     .badge-miembro:hover {
-        background: rgba(14,196,216,0.3);
+        background: var(--blue-mid);
+        color: #fff;
         transform: translateY(-2px);
     }
 
     .no-miembros {
-        color: rgba(255,255,255,0.4);
+        color: #5a7a90;
         font-style: italic;
         font-size: 1.05rem;
     }
 </style>
 
-<div class="bubbles">
-    <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
-    <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
-</div>
-
 <div class="page-wrapper">
     <div class="header-block">
         <p class="header-eyebrow">Agrupación artística</p>
         <h1 class="header-title">{{ grupo.name }}</h1>
-        <div class="header-divider"><span></span><i></i><span></span></div>
+        <div class="header-divider">
+            <span></span>
+            <i class="bi bi-star-fill"></i>
+            <span></span>
+        </div>
     </div>
 
     <div class="grupo-detail-card">
@@ -246,7 +200,6 @@
 
             <div class="section-title">Integrantes Actuales</div>
             <div class="miembros-container">
-                {# ✅ Usamos la variable 'miembros' que viene de tu vista #}
                 {% for miembro in miembros %}
                     <a href="{% url 'artists:ver_artista' miembro.id %}" class="badge-miembro">
                         {{ miembro.stage_name }}

@@ -3,20 +3,21 @@
 {% block content %}
 
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400;1,700&family=DM+Sans:wght@300;400;500;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,700;1,400&family=Great+Vibes&family=DM+Sans:wght@300;400;500;600&display=swap');
 
     :root {
-        --teal: #0ec4d8;
-        --teal-dark: #0a9aaa;
+        --blue: #1a8fc4;
+        --blue-mid: #3ab4e0;
+        --dark: #0d2d45;
+        --text: #2e5570;
         --white: #ffffff;
-        --black: #0a0a0a;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
         font-family: 'DM Sans', sans-serif;
-        background: #001840;
+        background: #eef6fb;
         min-height: 100vh;
         overflow-x: hidden;
         position: relative;
@@ -27,46 +28,10 @@
         position: fixed;
         inset: 0;
         background:
-            radial-gradient(ellipse 70% 55% at 15% 15%, rgba(14,196,216,0.18) 0%, transparent 60%),
-            radial-gradient(ellipse 60% 70% at 85% 80%, rgba(0,64,204,0.35) 0%, transparent 60%),
-            radial-gradient(ellipse 50% 50% at 50% 50%, rgba(26,107,255,0.10) 0%, transparent 70%),
-            linear-gradient(150deg, #001840 0%, #002a6e 35%, #003580 55%, #001d55 100%);
+            radial-gradient(ellipse at 10% 50%, rgba(60,170,220,0.10) 0%, transparent 60%),
+            radial-gradient(ellipse at 90% 20%, rgba(60,170,220,0.07) 0%, transparent 50%),
+            radial-gradient(ellipse at 50% 100%, rgba(100,200,255,0.08) 0%, transparent 50%);
         z-index: 0;
-        animation: bgShift 14s ease-in-out infinite alternate;
-    }
-
-    @keyframes bgShift {
-        0%   { filter: hue-rotate(0deg) brightness(1); }
-        50%  { filter: hue-rotate(12deg) brightness(1.06); }
-        100% { filter: hue-rotate(-8deg) brightness(0.96); }
-    }
-
-    /* === BURBUJAS FLOTANTES === */
-    .bubbles {
-        position: fixed;
-        inset: 0;
-        pointer-events: none;
-        z-index: 0;
-        overflow: hidden;
-    }
-
-    .bubble {
-        position: absolute;
-        bottom: -120px;
-        border-radius: 50%;
-        animation: floatUp linear infinite;
-    }
-
-    .bubble:nth-child(1)  { width: 35px; height: 35px; left: 7%;  animation-duration: 15s; background: rgba(14,196,216,0.08); }
-    .bubble:nth-child(2)  { width: 60px; height: 60px; left: 19%; animation-duration: 19s; background: rgba(255,255,255,0.04); }
-    .bubble:nth-child(3)  { width: 22px; height: 22px; left: 33%; animation-duration: 11s; background: rgba(14,196,216,0.06); }
-    .bubble:nth-child(4)  { width: 80px; height: 80px; left: 49%; animation-duration: 22s; background: rgba(26,107,255,0.10); }
-
-    @keyframes floatUp {
-        0%   { transform: translateY(0) scale(1); opacity: 0; }
-        10%  { opacity: 1; }
-        90%  { opacity: 0.5; }
-        100% { transform: translateY(-110vh) scale(1.15); opacity: 0; }
     }
 
     .page-wrapper {
@@ -83,36 +48,28 @@
     }
 
     .header-eyebrow {
-        font-weight: 500;
-        font-size: 0.75rem;
+        font-family: 'Cormorant Garamond', serif;
+        font-weight: 600;
+        font-size: 0.85rem;
         letter-spacing: 5px;
         text-transform: uppercase;
-        color: var(--teal);
+        color: var(--blue);
         margin-bottom: 12px;
     }
 
     .header-title {
-        font-family: 'Playfair Display', serif;
-        font-style: italic;
-        font-weight: 700;
+        font-family: 'Great Vibes', cursive;
         font-size: clamp(2.8rem, 6vw, 4.8rem);
-        color: var(--white);
+        color: var(--dark);
         line-height: 1;
-        letter-spacing: -2px;
         margin-bottom: 20px;
-        animation: titleGlow 4s ease-in-out infinite alternate;
-    }
-
-    @keyframes titleGlow {
-        0%   { text-shadow: 0 0 40px rgba(14,196,216,0.2); }
-        100% { text-shadow: 0 0 80px rgba(14,196,216,0.45), 0 0 130px rgba(26,107,255,0.25); }
     }
 
     .header-divider {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 14px;
+        gap: 18px;
         margin-bottom: 16px;
     }
 
@@ -120,95 +77,100 @@
         display: block;
         height: 1px;
         width: 80px;
-        background: linear-gradient(90deg, transparent, var(--teal), transparent);
+        background: linear-gradient(to right, transparent, var(--blue-mid));
     }
 
     .header-divider i {
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: var(--teal);
-        box-shadow: 0 0 10px var(--teal);
+        color: var(--blue-mid);
+        font-size: 0.9rem;
     }
 
     .form-card {
-        background: rgba(255,255,255,0.07);
-        border: 1px solid rgba(14,196,216,0.25);
-        border-top: 4px solid var(--teal);
-        border-radius: 24px;
+        background: #ffffff;
+        border: 1px solid #c2dff0;
+        border-top: 4px solid var(--blue-mid);
+        border-radius: 16px;
         padding: 45px 40px;
-        backdrop-filter: blur(18px);
-        box-shadow: 0 25px 70px rgba(0, 0, 40, 0.5);
+        box-shadow: 0 10px 40px rgba(0,80,160,0.10);
     }
 
     .form-label {
-        font-weight: 600;
-        color: var(--teal);
-        font-size: 0.95rem;
-        letter-spacing: 1.2px;
+        font-family: 'Cormorant Garamond', serif;
+        font-weight: 700;
+        color: var(--blue);
+        font-size: 0.85rem;
+        letter-spacing: 3px;
         text-transform: uppercase;
         margin-bottom: 10px;
         display: block;
     }
 
     .form-control {
-        background: rgba(255,255,255,0.08);
-        border: 2px solid rgba(14,196,216,0.3);
-        border-radius: 16px;
-        padding: 16px 20px;
-        color: white;
-        font-size: 1.02rem;
+        background: #f4f8ff;
+        border: 1.5px solid #c2dff0;
+        border-radius: 10px;
+        padding: 14px 18px;
+        color: var(--dark);
+        font-size: 1rem;
         transition: all 0.3s ease;
         width: 100%;
         margin-bottom: 20px;
+        font-family: 'DM Sans', sans-serif;
+    }
+
+    .form-control:focus {
+        border-color: var(--blue-mid);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(58,180,224,0.15);
     }
 
     .preview-box {
-        background: rgba(255,255,255,0.08);
-        border: 2px solid rgba(14,196,216,0.3);
-        border-radius: 20px;
+        background: #f4f8ff;
+        border: 2px solid #c2dff0;
+        border-radius: 12px;
         padding: 20px;
         text-align: center;
     }
 
     .preview-img {
-        border-radius: 16px;
-        border: 3px solid var(--teal);
+        border-radius: 10px;
+        border: 3px solid var(--blue-mid);
         max-width: 100%;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        box-shadow: 0 6px 20px rgba(0,80,160,0.12);
     }
 
     .btn-save {
-        background: linear-gradient(135deg, var(--teal), #00e0ff);
-        color: #000;
+        background: var(--dark);
+        color: white;
         border: none;
         border-radius: 50px;
         padding: 18px 40px;
         font-weight: 700;
-        font-size: 1.1rem;
+        font-size: 1.05rem;
         letter-spacing: 1.5px;
         text-transform: uppercase;
-        box-shadow: 0 10px 30px rgba(14,196,216,0.4);
-        transition: all 0.4s ease;
+        box-shadow: 0 6px 20px rgba(0,80,160,0.15);
+        transition: all 0.3s ease;
         width: 100%;
         cursor: pointer;
     }
 
     .btn-save:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 15px 40px rgba(14,196,216,0.6);
+        background: var(--blue);
+        transform: translateY(-3px);
+        box-shadow: 0 12px 30px rgba(26,143,196,0.30);
     }
 </style>
-
-<div class="bubbles">
-    <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
-</div>
 
 <div class="page-wrapper">
     <div class="header-block">
         <p class="header-eyebrow">Configuración</p>
         <h1 class="header-title">Grupo</h1>
-        <div class="header-divider"><span></span><i></i><span></span></div>
+        <div class="header-divider">
+            <span></span>
+            <i class="bi bi-star-fill"></i>
+            <span></span>
+        </div>
     </div>
 
     <div class="form-card">
@@ -237,7 +199,7 @@
                             <img id="preview" src="{{ grupo.profile_image.url }}" class="preview-img img-fluid">
                         {% else %}
                             <img id="preview" class="preview-img img-fluid d-none">
-                            <div id="no-image" style="height: 260px; display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,0.6);">
+                            <div id="no-image" style="height: 260px; display:flex; align-items:center; justify-content:center; color:#5a7a90;">
                                 🖼️ Sin imagen aún
                             </div>
                         {% endif %}

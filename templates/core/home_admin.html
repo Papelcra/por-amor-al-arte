@@ -3,80 +3,29 @@
 {% block content %}
 
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400;1,700&family=DM+Sans:wght@300;400;500;600&display=swap');
-
-    :root {
-        --blue: #7dd8ff;
-        --blue-dark: #0b2a4a;
-        --teal: #a8e8ff;
-        --white: #ffffff;
-        --black: #0a1a2e;
-        --accent: #4fc8f0;
-    }
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,700;1,400&family=Great+Vibes&family=DM+Sans:wght@300;400;500;600&display=swap');
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
         font-family: 'DM Sans', sans-serif;
-        background: #0f3a5c;
+        background: #eef6fb;
         min-height: 100vh;
         overflow-x: hidden;
         position: relative;
     }
 
-    /* === FONDO ANIMADO === */
     body::before {
         content: '';
         position: fixed;
         inset: 0;
         background:
-            radial-gradient(ellipse 70% 55% at 15% 15%, rgba(100,200,255,0.25) 0%, transparent 60%),
-            radial-gradient(ellipse 60% 70% at 85% 80%, rgba(30,120,220,0.35) 0%, transparent 60%),
-            radial-gradient(ellipse 50% 50% at 50% 50%, rgba(80,180,255,0.15) 0%, transparent 70%),
-            linear-gradient(150deg, #63d4f5 0%, #1264b8 30%, #2a8fd4 55%, #6ec6ef 100%);
+            radial-gradient(ellipse at 10% 50%, rgba(60,170,220,0.10) 0%, transparent 60%),
+            radial-gradient(ellipse at 90% 20%, rgba(60,170,220,0.07) 0%, transparent 50%),
+            radial-gradient(ellipse at 50% 100%, rgba(100,200,255,0.08) 0%, transparent 50%);
         z-index: 0;
-        animation: bgShift 14s ease-in-out infinite alternate;
     }
 
-    @keyframes bgShift {
-        0%   { filter: hue-rotate(0deg) brightness(1); }
-        50%  { filter: hue-rotate(10deg) brightness(1.08); }
-        100% { filter: hue-rotate(-6deg) brightness(0.97); }
-    }
-
-    /* === BURBUJAS === */
-    .bubbles {
-        position: fixed;
-        inset: 0;
-        pointer-events: none;
-        z-index: 0;
-        overflow: hidden;
-    }
-
-    .bubble {
-        position: absolute;
-        bottom: -120px;
-        border-radius: 50%;
-        animation: floatUp linear infinite;
-    }
-
-    .bubble:nth-child(1)  { width: 35px;  height: 35px;  left: 7%;   animation-duration: 15s; animation-delay: 0s;  background: rgba(100,210,255,0.12); }
-    .bubble:nth-child(2)  { width: 60px;  height: 60px;  left: 19%;  animation-duration: 19s; animation-delay: 3s;  background: rgba(255,255,255,0.07); }
-    .bubble:nth-child(3)  { width: 22px;  height: 22px;  left: 33%;  animation-duration: 11s; animation-delay: 1s;  background: rgba(100,210,255,0.10); }
-    .bubble:nth-child(4)  { width: 80px;  height: 80px;  left: 49%;  animation-duration: 22s; animation-delay: 5s;  background: rgba(50,160,255,0.12); }
-    .bubble:nth-child(5)  { width: 30px;  height: 30px;  left: 63%;  animation-duration: 13s; animation-delay: 2s;  background: rgba(100,210,255,0.09); }
-    .bubble:nth-child(6)  { width: 50px;  height: 50px;  left: 75%;  animation-duration: 17s; animation-delay: 7s;  background: rgba(255,255,255,0.05); }
-    .bubble:nth-child(7)  { width: 18px;  height: 18px;  left: 86%;  animation-duration: 10s; animation-delay: 4s;  background: rgba(100,210,255,0.11); }
-    .bubble:nth-child(8)  { width: 55px;  height: 55px;  left: 93%;  animation-duration: 20s; animation-delay: 0s;  background: rgba(50,160,255,0.10); }
-
-    @keyframes floatUp {
-        0%   { transform: translateY(0) scale(1);   opacity: 0; }
-        10%  { opacity: 1; }
-        90%  { opacity: 0.5; }
-        100% { transform: translateY(-110vh) scale(1.15); opacity: 0; }
-    }
-
-    /* === WRAPPER === */
     .page-wrapper {
         position: relative;
         z-index: 1;
@@ -85,47 +34,34 @@
         margin: 0 auto;
     }
 
-    /* === HEADER === */
     .header-block {
         text-align: center;
         margin-bottom: 70px;
     }
 
     .header-eyebrow {
-        font-family: 'DM Sans', sans-serif;
+        font-family: 'Cormorant Garamond', serif;
         font-weight: 600;
-        font-size: 0.7rem;
+        font-size: 0.85rem;
         letter-spacing: 5px;
         text-transform: uppercase;
-        color: #a8e8ff;
+        color: #1a8fc4;
         margin-bottom: 18px;
-        opacity: 1;
-        text-shadow: 0 0 12px rgba(100,210,255,0.4);
     }
 
     .header-title {
-        font-family: 'Playfair Display', serif;
-        font-style: italic;
-        font-weight: 700;
+        font-family: 'Great Vibes', cursive;
         font-size: clamp(3rem, 7vw, 5.5rem);
-        color: var(--white);
+        color: #0d2d45;
         line-height: 1;
-        letter-spacing: -2px;
         margin-bottom: 20px;
-        text-shadow: 0 2px 8px rgba(0,0,0,0.3), 0 0 60px rgba(100,210,255,0.3);
-        animation: titleGlow 4s ease-in-out infinite alternate;
-    }
-
-    @keyframes titleGlow {
-        0%   { text-shadow: 0 2px 8px rgba(0,0,0,0.3), 0 0 40px rgba(100,210,255,0.25); }
-        100% { text-shadow: 0 2px 8px rgba(0,0,0,0.3), 0 0 80px rgba(100,210,255,0.55), 0 0 120px rgba(50,160,255,0.25); }
     }
 
     .header-divider {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 14px;
+        gap: 18px;
         margin-bottom: 18px;
     }
 
@@ -133,7 +69,7 @@
         display: block;
         height: 1px;
         width: 70px;
-        background: linear-gradient(90deg, transparent, #a8e8ff, transparent);
+        background: linear-gradient(90deg, transparent, #3ab4e0);
     }
 
     .header-divider i {
@@ -141,35 +77,32 @@
         width: 6px;
         height: 6px;
         border-radius: 50%;
-        background: #a8e8ff;
-        box-shadow: 0 0 10px #a8e8ff;
+        background: #3ab4e0;
     }
 
     .header-sub {
         font-size: 0.95rem;
-        color: rgba(255,255,255,0.65);
+        color: #5a7a90;
         font-weight: 300;
         letter-spacing: 0.5px;
     }
 
-    /* === GRID === */
     .cards-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
         gap: 24px;
     }
 
-    /* === CARD === */
     .dash-card {
-        background: rgba(255,255,255,0.10);
-        border: 1px solid rgba(100,210,255,0.25);
-        border-top: 2px solid #7dd8ff;
-        border-radius: 4px;
+        background: #ffffff;
+        border: 1px solid #c2dff0;
+        border-top: 4px solid #3ab4e0;
+        border-radius: 8px;
         padding: 40px 32px 32px;
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        backdrop-filter: blur(16px);
+        box-shadow: 0 4px 20px rgba(0,80,160,0.08);
         transition: transform 0.3s, box-shadow 0.3s, background 0.3s, border-color 0.3s;
         animation: cardIn 0.5s ease both;
         position: relative;
@@ -184,15 +117,15 @@
         width: 90px;
         height: 90px;
         border-radius: 90px 0 0 0;
-        background: rgba(100,210,255,0.10);
+        background: rgba(58,180,224,0.07);
         transition: transform 0.4s;
     }
 
     .dash-card:hover {
         transform: translateY(-8px);
-        background: rgba(255,255,255,0.15);
-        border-color: rgba(100,210,255,0.6);
-        box-shadow: 0 20px 50px rgba(0,20,60,0.4), 0 0 30px rgba(100,210,255,0.15);
+        background: #e8f6fc;
+        border-color: #3ab4e0;
+        box-shadow: 0 20px 45px rgba(30,140,210,0.18);
     }
 
     .dash-card:hover::after {
@@ -208,47 +141,42 @@
     .dash-card:nth-child(2) { animation-delay: 0.2s; }
     .dash-card:nth-child(3) { animation-delay: 0.3s; }
 
-    /* Número decorativo — ahora bien visible */
     .card-number {
-        font-family: 'Playfair Display', serif;
+        font-family: 'Cormorant Garamond', serif;
         font-style: italic;
         font-size: 4.5rem;
         font-weight: 700;
-        color: rgba(168,232,255,0.55);
+        color: rgba(58,180,224,0.30);
         line-height: 1;
         margin-bottom: 10px;
         letter-spacing: -2px;
         user-select: none;
         transition: color 0.3s;
-        text-shadow: 0 0 20px rgba(100,210,255,0.4);
     }
 
     .dash-card:hover .card-number {
-        color: rgba(168,232,255,0.80);
-        text-shadow: 0 0 30px rgba(100,210,255,0.6);
+        color: rgba(58,180,224,0.55);
     }
 
     .card-title {
-        font-family: 'Playfair Display', serif;
+        font-family: 'Cormorant Garamond', serif;
         font-weight: 700;
-        font-size: 1.3rem;
-        color: var(--white);
+        font-size: 1.35rem;
+        color: #0d2d45;
         margin-bottom: 12px;
         letter-spacing: -0.3px;
         line-height: 1.2;
-        text-shadow: 0 1px 4px rgba(0,0,0,0.25);
     }
 
     .card-desc {
         font-size: 13.5px;
-        color: rgba(255,255,255,0.65);
+        color: #5a7a90;
         line-height: 1.65;
         font-weight: 300;
         margin-bottom: 30px;
         flex: 1;
     }
 
-    /* === BOTONES === */
     .btn-card {
         display: inline-flex;
         align-items: center;
@@ -265,30 +193,30 @@
         z-index: 1;
     }
 
-    .btn-primary {
+    .btn-primary-light {
         background: transparent;
-        color: #a8e8ff;
-        border: 1.5px solid rgba(100,210,255,0.6);
+        color: #1a8fc4;
+        border: 1.5px solid #3ab4e0;
     }
 
-    .btn-primary:hover {
-        background: #7dd8ff;
-        color: #0b2a4a;
-        border-color: #7dd8ff;
-        box-shadow: 0 6px 20px rgba(100,210,255,0.35);
+    .btn-primary-light:hover {
+        background: #1a8fc4;
+        color: #fff;
+        border-color: #1a8fc4;
+        box-shadow: 0 6px 20px rgba(26,143,196,0.25);
     }
 
     .btn-solid {
-        background: var(--white);
-        color: var(--black);
-        border: 1.5px solid var(--white);
+        background: #0d2d45;
+        color: #ffffff;
+        border: 1.5px solid #0d2d45;
     }
 
     .btn-solid:hover {
-        background: #a8e8ff;
-        border-color: #a8e8ff;
-        color: #0b2a4a;
-        box-shadow: 0 6px 20px rgba(100,210,255,0.35);
+        background: #1a8fc4;
+        border-color: #1a8fc4;
+        color: #fff;
+        box-shadow: 0 6px 20px rgba(26,143,196,0.25);
     }
 
     .arrow {
@@ -301,21 +229,8 @@
     }
 </style>
 
-<!-- Burbujas -->
-<div class="bubbles">
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-</div>
-
 <div class="page-wrapper">
 
-    <!-- Header -->
     <div class="header-block">
         <p class="header-eyebrow">Panel de gestión</p>
         <h1 class="header-title">Agrupaciones</h1>
@@ -325,14 +240,13 @@
         <p class="header-sub">Administra tus grupos artísticos de forma sencilla</p>
     </div>
 
-    <!-- Cards -->
     <div class="cards-grid">
 
         <div class="dash-card">
             <div class="card-number">01</div>
             <h4 class="card-title">Todas las agrupaciones</h4>
             <p class="card-desc">Explora todas las agrupaciones registradas en el sistema.</p>
-            <a href="{% url 'groups:lista_grupos' %}" class="btn-card btn-primary">
+            <a href="{% url 'groups:lista_grupos' %}" class="btn-card btn-primary-light">
                 Ver todas <span class="arrow">→</span>
             </a>
         </div>
@@ -341,7 +255,7 @@
             <div class="card-number">02</div>
             <h4 class="card-title">Mis agrupaciones</h4>
             <p class="card-desc">Administra y edita los grupos que has creado.</p>
-            <a href="{% url 'groups:mis_grupos' %}" class="btn-card btn-primary">
+            <a href="{% url 'groups:mis_grupos' %}" class="btn-card btn-primary-light">
                 Ver mis grupos <span class="arrow">→</span>
             </a>
         </div>

@@ -3,78 +3,37 @@
 {% block content %}
 
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400;1,700&family=DM+Sans:wght@300;400;500;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,700;1,400&family=Great+Vibes&family=DM+Sans:wght@300;400;500;600&display=swap');
 
     :root {
-        --teal: #0ec4d8;
-        --teal-dark: #0a9aaa;
+        --blue: #1a8fc4;
+        --blue-mid: #3ab4e0;
+        --dark: #0d2d45;
+        --text: #2e5570;
         --white: #ffffff;
-        --black: #0a0a0a;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
         font-family: 'DM Sans', sans-serif;
-        background: #001840;
+        background: #eef6fb;
         min-height: 100vh;
         overflow-x: hidden;
         position: relative;
     }
 
-    /* === FONDO ANIMADO === */
     body::before {
         content: '';
         position: fixed;
         inset: 0;
         background:
-            radial-gradient(ellipse 70% 55% at 15% 15%, rgba(14,196,216,0.18) 0%, transparent 60%),
-            radial-gradient(ellipse 60% 70% at 85% 80%, rgba(0,64,204,0.35) 0%, transparent 60%),
-            radial-gradient(ellipse 50% 50% at 50% 50%, rgba(26,107,255,0.10) 0%, transparent 70%),
-            linear-gradient(150deg, #001840 0%, #002a6e 35%, #003580 55%, #001d55 100%);
+            radial-gradient(ellipse at 10% 50%, rgba(60,170,220,0.10) 0%, transparent 60%),
+            radial-gradient(ellipse at 90% 20%, rgba(60,170,220,0.07) 0%, transparent 50%),
+            radial-gradient(ellipse at 50% 100%, rgba(100,200,255,0.08) 0%, transparent 50%);
         z-index: 0;
-        animation: bgShift 14s ease-in-out infinite alternate;
     }
 
-    @keyframes bgShift {
-        0%   { filter: hue-rotate(0deg) brightness(1); }
-        50%  { filter: hue-rotate(12deg) brightness(1.06); }
-        100% { filter: hue-rotate(-8deg) brightness(0.96); }
-    }
-
-    /* === BURBUJAS === */
-    .bubbles {
-        position: fixed;
-        inset: 0;
-        pointer-events: none;
-        z-index: 0;
-        overflow: hidden;
-    }
-
-    .bubble {
-        position: absolute;
-        bottom: -120px;
-        border-radius: 50%;
-        animation: floatUp linear infinite;
-    }
-
-    .bubble:nth-child(1)  { width: 35px; height: 35px; left: 7%;  animation-duration: 15s; animation-delay: 0s;  background: rgba(14,196,216,0.08); }
-    .bubble:nth-child(2)  { width: 60px; height: 60px; left: 19%; animation-duration: 19s; animation-delay: 3s;  background: rgba(255,255,255,0.04); }
-    .bubble:nth-child(3)  { width: 22px; height: 22px; left: 33%; animation-duration: 11s; animation-delay: 1s;  background: rgba(14,196,216,0.06); }
-    .bubble:nth-child(4)  { width: 80px; height: 80px; left: 49%; animation-duration: 22s; animation-delay: 5s;  background: rgba(26,107,255,0.10); }
-    .bubble:nth-child(5)  { width: 30px; height: 30px; left: 63%; animation-duration: 13s; animation-delay: 2s;  background: rgba(14,196,216,0.07); }
-    .bubble:nth-child(6)  { width: 50px; height: 50px; left: 75%; animation-duration: 17s; animation-delay: 7s;  background: rgba(255,255,255,0.03); }
-    .bubble:nth-child(7)  { width: 18px; height: 18px; left: 86%; animation-duration: 10s; animation-delay: 4s;  background: rgba(14,196,216,0.09); }
-    .bubble:nth-child(8)  { width: 55px; height: 55px; left: 93%; animation-duration: 20s; animation-delay: 0s;  background: rgba(26,107,255,0.08); }
-
-    @keyframes floatUp {
-        0%   { transform: translateY(0) scale(1);       opacity: 0; }
-        10%  { opacity: 1; }
-        90%  { opacity: 0.5; }
-        100% { transform: translateY(-110vh) scale(1.15); opacity: 0; }
-    }
-
-    /* === WRAPPER === */
     .page-wrapper {
         position: relative;
         z-index: 1;
@@ -83,51 +42,41 @@
         margin: 0 auto;
     }
 
-    /* === HEADER === */
     .header-block {
         text-align: center;
         margin-bottom: 48px;
     }
 
     .header-eyebrow {
-        font-weight: 500;
-        font-size: 0.7rem;
+        font-family: 'Cormorant Garamond', serif;
+        font-weight: 600;
+        font-size: 0.85rem;
         letter-spacing: 5px;
         text-transform: uppercase;
-        color: var(--teal);
+        color: var(--blue);
         margin-bottom: 14px;
-        opacity: 0.9;
     }
 
     .header-title {
-        font-family: 'Playfair Display', serif;
-        font-style: italic;
-        font-weight: 700;
+        font-family: 'Great Vibes', cursive;
         font-size: clamp(2.6rem, 6vw, 4.2rem);
-        color: var(--white);
+        color: var(--dark);
         line-height: 1;
-        letter-spacing: -2px;
         margin-bottom: 18px;
-        animation: titleGlow 4s ease-in-out infinite alternate;
-    }
-
-    @keyframes titleGlow {
-        0%   { text-shadow: 0 0 40px rgba(14,196,216,0.2); }
-        100% { text-shadow: 0 0 80px rgba(14,196,216,0.45), 0 0 120px rgba(26,107,255,0.2); }
     }
 
     .header-divider {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 14px;
+        gap: 18px;
     }
 
     .header-divider span {
         display: block;
         height: 1px;
         width: 70px;
-        background: linear-gradient(90deg, transparent, var(--teal), transparent);
+        background: linear-gradient(to right, transparent, var(--blue-mid));
     }
 
     .header-divider i {
@@ -135,18 +84,16 @@
         width: 5px;
         height: 5px;
         border-radius: 50%;
-        background: var(--teal);
-        box-shadow: 0 0 8px var(--teal);
+        background: var(--blue-mid);
     }
 
-    /* === CARD FORMULARIO === */
     .form-card {
-        background: rgba(255,255,255,0.06);
-        border: 1px solid rgba(14,196,216,0.18);
-        border-top: 2px solid var(--teal);
-        border-radius: 4px;
+        background: #ffffff;
+        border: 1px solid #c2dff0;
+        border-top: 4px solid var(--blue-mid);
+        border-radius: 12px;
         padding: 44px 48px;
-        backdrop-filter: blur(18px);
+        box-shadow: 0 8px 30px rgba(0,80,160,0.10);
         animation: cardIn 0.6s ease both;
         animation-delay: 0.1s;
     }
@@ -156,22 +103,20 @@
         to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* === CAMPO === */
     .field-wrap {
         margin-bottom: 28px;
     }
 
-    /* === LABELS === */
     .field-label {
         display: inline-flex;
         align-items: center;
         gap: 8px;
-        font-family: 'DM Sans', sans-serif;
-        font-weight: 600;
-        font-size: 0.68rem;
+        font-family: 'Cormorant Garamond', serif;
+        font-weight: 700;
+        font-size: 0.82rem;
         letter-spacing: 3px;
         text-transform: uppercase;
-        color: var(--teal);
+        color: var(--blue);
         margin-bottom: 10px;
     }
 
@@ -180,39 +125,37 @@
         display: block;
         width: 16px;
         height: 1px;
-        background: var(--teal);
+        background: var(--blue-mid);
         opacity: 0.6;
     }
 
-    /* === INPUTS === */
     input[type="text"],
     input[type="email"],
     textarea,
     select {
         width: 100%;
-        background: rgba(255,255,255,0.07) !important;
-        border: 1px solid rgba(14,196,216,0.25) !important;
-        border-radius: 4px !important;
+        background: #f4f8ff !important;
+        border: 1.5px solid #c2dff0 !important;
+        border-radius: 8px !important;
         padding: 13px 16px !important;
-        color: var(--white) !important;
+        color: var(--dark) !important;
         font-family: 'DM Sans', sans-serif;
         font-size: 14px;
         font-weight: 400;
         outline: none;
-        transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+        transition: border-color 0.2s, box-shadow 0.2s;
     }
 
     input[type="text"]::placeholder,
     textarea::placeholder {
-        color: rgba(255,255,255,0.25) !important;
+        color: #5a7a90 !important;
     }
 
     input[type="text"]:focus,
     textarea:focus,
     select:focus {
-        border-color: var(--teal) !important;
-        background: rgba(255,255,255,0.10) !important;
-        box-shadow: 0 0 0 3px rgba(14,196,216,0.12) !important;
+        border-color: var(--blue-mid) !important;
+        box-shadow: 0 0 0 3px rgba(58,180,224,0.15) !important;
     }
 
     textarea {
@@ -222,20 +165,19 @@
 
     input[type="file"] {
         width: 100%;
-        background: rgba(255,255,255,0.05) !important;
-        border: 1px dashed rgba(14,196,216,0.35) !important;
-        border-radius: 4px !important;
+        background: #f4f8ff !important;
+        border: 1.5px dashed #3ab4e0 !important;
+        border-radius: 8px !important;
         padding: 14px 16px !important;
-        color: rgba(255,255,255,0.5) !important;
+        color: #5a7a90 !important;
         font-size: 13px;
         cursor: pointer;
     }
 
-    /* === MIEMBROS scroll === */
     .members-scroll {
-        background: rgba(255,255,255,0.05);
-        border: 1px solid rgba(14,196,216,0.25);
-        border-radius: 4px;
+        background: #f4f8ff;
+        border: 1.5px solid #c2dff0;
+        border-radius: 8px;
         padding: 14px 16px;
         max-height: 200px;
         overflow-y: auto;
@@ -246,10 +188,10 @@
         align-items: center;
         gap: 10px;
         padding: 7px 4px;
-        color: rgba(255,255,255,0.7);
+        color: var(--text);
         font-size: 14px;
         cursor: pointer;
-        border-bottom: 1px solid rgba(255,255,255,0.05);
+        border-bottom: 1px solid #e0f0f8;
         transition: color 0.2s;
     }
 
@@ -258,13 +200,13 @@
     }
 
     .members-scroll label:hover {
-        color: var(--white);
+        color: var(--dark);
     }
 
     .members-scroll input[type="checkbox"] {
         width: 15px !important;
         height: 15px !important;
-        accent-color: var(--teal);
+        accent-color: var(--blue);
         border: none !important;
         padding: 0 !important;
         background: transparent !important;
@@ -272,28 +214,25 @@
         flex-shrink: 0;
     }
 
-    /* Scrollbar */
     .members-scroll::-webkit-scrollbar { width: 4px; }
     .members-scroll::-webkit-scrollbar-track { background: transparent; }
-    .members-scroll::-webkit-scrollbar-thumb { background: rgba(14,196,216,0.4); border-radius: 4px; }
+    .members-scroll::-webkit-scrollbar-thumb { background: #c2dff0; border-radius: 4px; }
 
-    /* === DIVISOR interno === */
     .field-divider {
         height: 1px;
-        background: linear-gradient(90deg, transparent, rgba(14,196,216,0.15), transparent);
+        background: linear-gradient(90deg, #c2dff0, transparent);
         margin: 6px 0 28px;
     }
 
-    /* === BOTÓN === */
     .btn-submit {
         display: block;
         width: 100%;
         margin-top: 10px;
         padding: 15px;
-        background: transparent;
-        color: var(--teal);
-        border: 1.5px solid rgba(14,196,216,0.5);
-        border-radius: 4px;
+        background: var(--dark);
+        color: var(--white);
+        border: 1.5px solid var(--dark);
+        border-radius: 8px;
         font-family: 'DM Sans', sans-serif;
         font-weight: 600;
         font-size: 11px;
@@ -304,29 +243,16 @@
     }
 
     .btn-submit:hover {
-        background: var(--teal);
-        color: var(--black);
-        border-color: var(--teal);
-        box-shadow: 0 8px 25px rgba(14,196,216,0.3);
+        background: var(--blue);
+        color: var(--white);
+        border-color: var(--blue);
+        box-shadow: 0 8px 25px rgba(26,143,196,0.25);
         transform: translateY(-2px);
     }
 </style>
 
-<!-- Burbujas -->
-<div class="bubbles">
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-</div>
-
 <div class="page-wrapper">
 
-    <!-- Header -->
     <div class="header-block">
         <p class="header-eyebrow">Grupos artísticos</p>
         <h1 class="header-title">Crear agrupación</h1>
@@ -335,7 +261,6 @@
         </div>
     </div>
 
-    <!-- Formulario -->
     <div class="form-card">
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
