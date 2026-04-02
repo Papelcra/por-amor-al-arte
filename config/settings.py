@@ -58,18 +58,15 @@ SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # <--- WhiteNoise siempre aquí arriba
+    'django.contrib.sessions.middleware.SessionMiddleware', # <--- ESTA ES LA QUE FALTA
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'allauth.account.middleware.AccountMiddleware',
-
+    'django.contrib.auth.middleware.AuthenticationMiddleware', # <--- Sesiones debe ir ANTES que esta
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
-    # Middleware personalizado
-    'artists.middleware.CompleteProfileMiddleware',
+    # Si usas allauth para Google, asegúrate de tener esta también:
+    'allauth.account.middleware.AccountMiddleware', 
 ]
 
 
@@ -165,9 +162,8 @@ ACCOUNT_SIGNUP_FORM_CLASS = 'users.forms.CustomSignupForm'
 
 ACCOUNT_ADAPTER = 'users.adapter.MyAccountAdapter'
 SOCIALACCOUNT_ADAPTER = 'users.adapter.MySocialAccountAdapter'  # ← agrega esta línea
-ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_USERNAME_REQUIRED = True
+ACCOUNT_LOGIN_METHODS = {'email', 'username'}
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*', 'password1*', 'password2*']
 ACCOUNT_EMAIL_VERIFICATION = 'optional'
 
 
@@ -191,3 +187,5 @@ SOCIALACCOUNT_PROVIDERS = {
         'OAUTH_PKCE_ENABLED': True,
     }
 }
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
