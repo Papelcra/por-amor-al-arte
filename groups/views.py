@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .forms import GroupForm
 from .models import Group
-
+from artists.models import Artist
 
 # 👥 CREAR GRUPO
 @login_required
@@ -47,8 +47,13 @@ def lista_grupos(request):
 # 🔍 VER GRUPO
 def ver_grupo(request, group_id):
     grupo = get_object_or_404(Group, id=group_id)
+    
+    # 💡 Buscamos a los artistas que marcaron este grupo en su perfil
+    miembros = Artist.objects.filter(group=grupo)
+    
     return render(request, 'groups/ver_grupo.html', {
-        'grupo': grupo
+        'grupo': grupo,
+        'miembros': miembros
     })
 
 

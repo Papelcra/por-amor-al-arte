@@ -57,23 +57,18 @@
         animation: floatUp linear infinite;
     }
 
-    .bubble:nth-child(1)  { width: 35px; height: 35px; left: 7%;  animation-duration: 15s; animation-delay: 0s;  background: rgba(14,196,216,0.08); }
-    .bubble:nth-child(2)  { width: 60px; height: 60px; left: 19%; animation-duration: 19s; animation-delay: 3s;  background: rgba(255,255,255,0.04); }
-    .bubble:nth-child(3)  { width: 22px; height: 22px; left: 33%; animation-duration: 11s; animation-delay: 1s;  background: rgba(14,196,216,0.06); }
-    .bubble:nth-child(4)  { width: 80px; height: 80px; left: 49%; animation-duration: 22s; animation-delay: 5s;  background: rgba(26,107,255,0.10); }
-    .bubble:nth-child(5)  { width: 30px; height: 30px; left: 63%; animation-duration: 13s; animation-delay: 2s;  background: rgba(14,196,216,0.07); }
-    .bubble:nth-child(6)  { width: 50px; height: 50px; left: 75%; animation-duration: 17s; animation-delay: 7s;  background: rgba(255,255,255,0.03); }
-    .bubble:nth-child(7)  { width: 18px; height: 18px; left: 86%; animation-duration: 10s; animation-delay: 4s;  background: rgba(14,196,216,0.09); }
-    .bubble:nth-child(8)  { width: 55px; height: 55px; left: 93%; animation-duration: 20s; animation-delay: 0s;  background: rgba(26,107,255,0.08); }
+    .bubble:nth-child(1)  { width: 35px; height: 35px; left: 7%;  animation-duration: 15s; background: rgba(14,196,216,0.08); }
+    .bubble:nth-child(2)  { width: 60px; height: 60px; left: 19%; animation-duration: 19s; background: rgba(255,255,255,0.04); }
+    .bubble:nth-child(3)  { width: 22px; height: 22px; left: 33%; animation-duration: 11s; background: rgba(14,196,216,0.06); }
+    .bubble:nth-child(4)  { width: 80px; height: 80px; left: 49%; animation-duration: 22s; background: rgba(26,107,255,0.10); }
 
     @keyframes floatUp {
-        0%   { transform: translateY(0) scale(1);        opacity: 0; }
+        0%   { transform: translateY(0) scale(1); opacity: 0; }
         10%  { opacity: 1; }
         90%  { opacity: 0.5; }
         100% { transform: translateY(-110vh) scale(1.15); opacity: 0; }
     }
 
-    /* === WRAPPER === */
     .page-wrapper {
         position: relative;
         z-index: 1;
@@ -82,7 +77,6 @@
         margin: 0 auto;
     }
 
-    /* === HEADER === */
     .header-block {
         text-align: center;
         margin-bottom: 60px;
@@ -137,7 +131,6 @@
         box-shadow: 0 0 10px var(--teal);
     }
 
-    /* === FORM CARD === */
     .form-card {
         background: rgba(255,255,255,0.07);
         border: 1px solid rgba(14,196,216,0.25);
@@ -146,14 +139,8 @@
         padding: 45px 40px;
         backdrop-filter: blur(18px);
         box-shadow: 0 25px 70px rgba(0, 0, 40, 0.5);
-        transition: all 0.4s ease;
     }
 
-    .form-card:hover {
-        box-shadow: 0 30px 85px rgba(0, 0, 40, 0.6);
-    }
-
-    /* Labels */
     .form-label {
         font-weight: 600;
         color: var(--teal);
@@ -164,7 +151,6 @@
         display: block;
     }
 
-    /* Inputs y Textarea */
     .form-control {
         background: rgba(255,255,255,0.08);
         border: 2px solid rgba(14,196,216,0.3);
@@ -173,39 +159,10 @@
         color: white;
         font-size: 1.02rem;
         transition: all 0.3s ease;
+        width: 100%;
+        margin-bottom: 20px;
     }
 
-    .form-control:focus {
-        border-color: var(--teal);
-        box-shadow: 0 0 0 4px rgba(14,196,216,0.25);
-        background: rgba(255,255,255,0.12);
-        outline: none;
-    }
-
-    .form-control::placeholder {
-        color: rgba(255,255,255,0.4);
-    }
-
-    /* Miembros Scroll */
-    .members-scroll {
-        background: rgba(255,255,255,0.06);
-        border: 2px solid rgba(14,196,216,0.25);
-        border-radius: 16px;
-        padding: 18px;
-        max-height: 210px;
-        overflow-y: auto;
-        color: white;
-    }
-
-    .members-scroll::-webkit-scrollbar {
-        width: 8px;
-    }
-    .members-scroll::-webkit-scrollbar-thumb {
-        background: var(--teal);
-        border-radius: 20px;
-    }
-
-    /* Preview Box */
     .preview-box {
         background: rgba(255,255,255,0.08);
         border: 2px solid rgba(14,196,216,0.3);
@@ -221,7 +178,6 @@
         box-shadow: 0 10px 30px rgba(0,0,0,0.4);
     }
 
-    /* Botón Guardar */
     .btn-save {
         background: linear-gradient(135deg, var(--teal), #00e0ff);
         color: #000;
@@ -235,90 +191,54 @@
         box-shadow: 0 10px 30px rgba(14,196,216,0.4);
         transition: all 0.4s ease;
         width: 100%;
+        cursor: pointer;
     }
 
     .btn-save:hover {
-        background: linear-gradient(135deg, #00e0ff, var(--teal));
         transform: translateY(-4px);
         box-shadow: 0 15px 40px rgba(14,196,216,0.6);
     }
-
-    /* Scrollbar bonito para miembros */
-    .members-scroll::-webkit-scrollbar-thumb:hover {
-        background: #00e0ff;
-    }
 </style>
 
-<!-- Burbujas flotantes -->
 <div class="bubbles">
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
+    <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
 </div>
 
 <div class="page-wrapper">
-
-    <!-- Header -->
     <div class="header-block">
         <p class="header-eyebrow">Configuración</p>
         <h1 class="header-title">Grupo</h1>
-        <div class="header-divider">
-            <span></span><i></i><span></span>
-        </div>
-        <p class="header-sub">Personaliza tu agrupación artística</p>
+        <div class="header-divider"><span></span><i></i><span></span></div>
     </div>
 
-    <!-- Formulario -->
     <div class="form-card">
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-
             <div class="row g-4">
                 <div class="col-lg-7">
-
                     <div class="mb-4">
                         <label class="form-label">Nombre del grupo</label>
                         {{ form.name }}
                     </div>
-
                     <div class="mb-4">
                         <label class="form-label">Descripción</label>
                         {{ form.description }}
                     </div>
-
                     <div class="mb-4">
                         <label class="form-label">Imagen del grupo</label>
                         {{ form.profile_image }}
                     </div>
-
-                    <div class="mb-4">
-                        <label class="form-label">Miembros</label>
-                        <div class="members-scroll">
-                            {{ form.members }}
-                        </div>
-                    </div>
-
                 </div>
 
-                <!-- Vista Previa -->
                 <div class="col-lg-5 text-center">
                     <label class="form-label mb-3">Vista previa</label>
-                    
                     <div class="preview-box">
                         {% if grupo.profile_image %}
                             <img id="preview" src="{{ grupo.profile_image.url }}" class="preview-img img-fluid">
                         {% else %}
                             <img id="preview" class="preview-img img-fluid d-none">
                             <div id="no-image" style="height: 260px; display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,0.6);">
-                                <div class="text-center">
-                                    <p style="font-size: 1.1rem; margin-bottom: 15px;">Sin imagen aún</p>
-                                    <span style="font-size: 4.8rem;">🖼️</span>
-                                </div>
+                                🖼️ Sin imagen aún
                             </div>
                         {% endif %}
                     </div>
@@ -326,17 +246,13 @@
             </div>
 
             <div class="mt-5 pt-3">
-                <button type="submit" class="btn-save">
-                    💾 Guardar cambios
-                </button>
+                <button type="submit" class="btn-save">💾 Guardar cambios</button>
             </div>
         </form>
     </div>
-
 </div>
 
 <script>
-    // Preview de imagen
     const fileInput = document.querySelector('input[type="file"]');
     const previewImg = document.getElementById('preview');
     const noImageDiv = document.getElementById('no-image');
@@ -355,5 +271,4 @@
         });
     }
 </script>
-
 {% endblock %}

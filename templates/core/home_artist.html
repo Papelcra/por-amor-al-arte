@@ -187,7 +187,7 @@
             <!-- Mi perfil o Crear perfil -->
             <div class="col-md-4">
                 {% if request.user.artist %}
-                    <a href="{% url 'artists:ver' request.user.artist.id %}" class="art-card">
+                    <a href="{% url 'artists:ver_artista' request.user.artist.id %}" class="art-card">
                         <i class="bi bi-person-circle art-card-icon"></i>
                         <p class="art-card-label">Mi perfil</p>
                         <p class="art-card-desc">Ver y editar</p>

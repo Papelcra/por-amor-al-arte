@@ -41,7 +41,7 @@
         100% { filter: hue-rotate(-8deg) brightness(0.96); }
     }
 
-    /* === BURBUJAS === */
+    /* === BURBUJAS FLOTANTES === */
     .bubbles {
         position: fixed;
         inset: 0;
@@ -57,17 +57,17 @@
         animation: floatUp linear infinite;
     }
 
-    .bubble:nth-child(1)  { width: 35px; height: 35px; left: 7%;  animation-duration: 15s; animation-delay: 0s;  background: rgba(14,196,216,0.08); }
-    .bubble:nth-child(2)  { width: 60px; height: 60px; left: 19%; animation-duration: 19s; animation-delay: 3s;  background: rgba(255,255,255,0.04); }
-    .bubble:nth-child(3)  { width: 22px; height: 22px; left: 33%; animation-duration: 11s; animation-delay: 1s;  background: rgba(14,196,216,0.06); }
-    .bubble:nth-child(4)  { width: 80px; height: 80px; left: 49%; animation-duration: 22s; animation-delay: 5s;  background: rgba(26,107,255,0.10); }
-    .bubble:nth-child(5)  { width: 30px; height: 30px; left: 63%; animation-duration: 13s; animation-delay: 2s;  background: rgba(14,196,216,0.07); }
-    .bubble:nth-child(6)  { width: 50px; height: 50px; left: 75%; animation-duration: 17s; animation-delay: 7s;  background: rgba(255,255,255,0.03); }
-    .bubble:nth-child(7)  { width: 18px; height: 18px; left: 86%; animation-duration: 10s; animation-delay: 4s;  background: rgba(14,196,216,0.09); }
-    .bubble:nth-child(8)  { width: 55px; height: 55px; left: 93%; animation-duration: 20s; animation-delay: 0s;  background: rgba(26,107,255,0.08); }
+    .bubble:nth-child(1)  { width: 35px; height: 35px; left: 7%;  animation-duration: 15s; background: rgba(14,196,216,0.08); }
+    .bubble:nth-child(2)  { width: 60px; height: 60px; left: 19%; animation-duration: 19s; animation-delay: 3s; background: rgba(255,255,255,0.04); }
+    .bubble:nth-child(3)  { width: 22px; height: 22px; left: 33%; animation-duration: 11s; animation-delay: 1s; background: rgba(14,196,216,0.06); }
+    .bubble:nth-child(4)  { width: 80px; height: 80px; left: 49%; animation-duration: 22s; animation-delay: 5s; background: rgba(26,107,255,0.10); }
+    .bubble:nth-child(5)  { width: 30px; height: 30px; left: 63%; animation-duration: 13s; animation-delay: 2s; background: rgba(14,196,216,0.07); }
+    .bubble:nth-child(6)  { width: 50px; height: 50px; left: 75%; animation-duration: 17s; animation-delay: 7s; background: rgba(255,255,255,0.03); }
+    .bubble:nth-child(7)  { width: 18px; height: 18px; left: 86%; animation-duration: 10s; animation-delay: 4s; background: rgba(14,196,216,0.09); }
+    .bubble:nth-child(8)  { width: 55px; height: 55px; left: 93%; animation-duration: 20s; background: rgba(26,107,255,0.08); }
 
     @keyframes floatUp {
-        0%   { transform: translateY(0) scale(1);        opacity: 0; }
+        0%   { transform: translateY(0) scale(1); opacity: 0; }
         10%  { opacity: 1; }
         90%  { opacity: 0.5; }
         100% { transform: translateY(-110vh) scale(1.15); opacity: 0; }
@@ -149,8 +149,8 @@
     /* === GRID === */
     .grupos-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 26px;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 30px;
     }
 
     /* === CARD === */
@@ -165,54 +165,45 @@
         display: flex;
         flex-direction: column;
         backdrop-filter: blur(16px);
-        transition: transform 0.3s, box-shadow 0.3s, background 0.3s, border-color 0.3s;
-        animation: cardIn 0.5s ease both;
+        transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.4s ease, background 0.3s ease;
+        animation: cardIn 0.6s ease both;
     }
 
     .grupo-card:hover {
-        transform: translateY(-8px);
+        transform: translateY(-10px);
         background: rgba(255,255,255,0.10);
-        border-color: rgba(14,196,216,0.45);
-        box-shadow: 0 20px 50px rgba(0,0,40,0.4), 0 0 30px rgba(14,196,216,0.08);
+        border-color: rgba(14,196,216,0.5);
+        box-shadow: 0 25px 60px rgba(0,0,30,0.5), 0 0 40px rgba(14,196,216,0.1);
     }
 
     @keyframes cardIn {
-        from { opacity: 0; transform: translateY(20px); }
+        from { opacity: 0; transform: translateY(30px); }
         to   { opacity: 1; transform: translateY(0); }
     }
 
-    .grupo-card:nth-child(1)  { animation-delay: 0.05s; }
-    .grupo-card:nth-child(2)  { animation-delay: 0.10s; }
-    .grupo-card:nth-child(3)  { animation-delay: 0.15s; }
-    .grupo-card:nth-child(4)  { animation-delay: 0.20s; }
-    .grupo-card:nth-child(5)  { animation-delay: 0.25s; }
-    .grupo-card:nth-child(6)  { animation-delay: 0.30s; }
-    .grupo-card:nth-child(7)  { animation-delay: 0.35s; }
-    .grupo-card:nth-child(8)  { animation-delay: 0.40s; }
-    .grupo-card:nth-child(9)  { animation-delay: 0.45s; }
+    /* Retraso de animación para las primeras tarjetas */
+    .grupo-card:nth-child(1) { animation-delay: 0.1s; }
+    .grupo-card:nth-child(2) { animation-delay: 0.2s; }
+    .grupo-card:nth-child(3) { animation-delay: 0.3s; }
 
-    /* === IMAGEN === */
     .card-img-wrap {
         width: 100%;
-        height: 200px;
+        height: 220px;
         overflow: hidden;
         position: relative;
-        flex-shrink: 0;
     }
 
     .card-img-wrap img {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        display: block;
-        transition: transform 0.5s ease;
+        transition: transform 0.6s ease;
     }
 
     .grupo-card:hover .card-img-wrap img {
-        transform: scale(1.06);
+        transform: scale(1.08);
     }
 
-    /* Avatar por defecto */
     .default-avatar {
         width: 100%;
         height: 100%;
@@ -222,27 +213,8 @@
         justify-content: center;
     }
 
-    .default-avatar svg {
-        width: 72px;
-        height: 72px;
-        opacity: 0.7;
-    }
-
-    /* Degradado inferior sobre imagen */
-    .card-img-wrap::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 60px;
-        background: linear-gradient(to top, rgba(0,24,64,0.7), transparent);
-        pointer-events: none;
-    }
-
-    /* === CARD BODY === */
     .card-body {
-        padding: 22px 24px 26px;
+        padding: 25px;
         display: flex;
         flex-direction: column;
         flex: 1;
@@ -253,146 +225,98 @@
         letter-spacing: 3px;
         text-transform: uppercase;
         color: var(--teal);
-        font-weight: 500;
-        margin-bottom: 8px;
-        opacity: 0.8;
+        font-weight: 600;
+        margin-bottom: 10px;
     }
 
     .card-title {
         font-family: 'Playfair Display', serif;
         font-weight: 700;
-        font-size: 1.25rem;
+        font-size: 1.4rem;
         color: var(--white);
-        margin-bottom: 10px;
-        line-height: 1.2;
-        letter-spacing: -0.3px;
+        margin-bottom: 12px;
+        letter-spacing: -0.5px;
     }
 
     .card-desc {
-        font-size: 13px;
-        color: rgba(255,255,255,0.45);
+        font-size: 14px;
+        color: rgba(255,255,255,0.5);
         line-height: 1.6;
-        font-weight: 300;
-        margin-bottom: 18px;
+        margin-bottom: 20px;
         flex: 1;
     }
 
-    /* === DIVISOR === */
     .card-sep {
         height: 1px;
-        background: linear-gradient(90deg, rgba(14,196,216,0.2), transparent);
-        margin-bottom: 14px;
+        background: linear-gradient(90deg, rgba(14,196,216,0.3), transparent);
+        margin-bottom: 18px;
     }
 
-    /* === MIEMBROS === */
     .miembros-label {
-        font-size: 0.62rem;
-        letter-spacing: 2.5px;
+        font-size: 0.65rem;
+        letter-spacing: 2px;
         text-transform: uppercase;
         color: var(--teal);
-        font-weight: 600;
-        margin-bottom: 10px;
-        opacity: 0.8;
+        margin-bottom: 12px;
     }
 
     .miembros-wrap {
         display: flex;
         flex-wrap: wrap;
-        gap: 6px;
+        gap: 8px;
     }
 
     .badge-miembro {
         background: rgba(14,196,216,0.12);
         color: var(--teal);
         border: 1px solid rgba(14,196,216,0.25);
-        padding: 4px 12px;
-        border-radius: 2px;
-        font-size: 11.5px;
+        padding: 5px 14px;
+        border-radius: 3px;
+        font-size: 12px;
         font-weight: 500;
-        letter-spacing: 0.3px;
-        transition: background 0.2s;
-    }
-
-    .grupo-card:hover .badge-miembro {
-        background: rgba(14,196,216,0.2);
     }
 
     .no-miembros {
-        font-size: 12px;
+        font-size: 13px;
         color: rgba(255,255,255,0.25);
         font-style: italic;
     }
 
-    /* === EMPTY STATE === */
     .empty-state {
         grid-column: 1 / -1;
         text-align: center;
-        padding: 80px 40px;
-        background: rgba(255,255,255,0.04);
-        border: 1px solid rgba(14,196,216,0.12);
-        border-top: 2px solid var(--teal);
-        border-radius: 4px;
-        backdrop-filter: blur(16px);
-    }
-
-    .empty-state p {
-        color: rgba(255,255,255,0.35);
-        font-size: 1rem;
-        font-weight: 300;
-        letter-spacing: 0.5px;
-        margin-top: 16px;
-    }
-
-    .empty-icon {
-        font-family: 'Playfair Display', serif;
-        font-style: italic;
-        font-size: 3rem;
-        color: rgba(14,196,216,0.3);
+        padding: 100px 40px;
+        background: rgba(255,255,255,0.03);
+        border-radius: 8px;
+        border: 1px dashed rgba(14,196,216,0.2);
     }
 </style>
 
-<!-- Burbujas -->
 <div class="bubbles">
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
+    <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+    <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
 </div>
 
 <div class="page-wrapper">
-
-    <!-- Header -->
     <div class="header-block">
         <p class="header-eyebrow">Comunidad artística</p>
         <h1 class="header-title">Agrupaciones</h1>
-        <div class="header-divider">
-            <span></span><i></i><span></span>
-        </div>
-        <p class="header-sub">Descubre los grupos que hacen parte de la comunidad</p>
+        <div class="header-divider"><span></span><i></i><span></span></div>
+        <p class="header-sub">Explora los colectivos y grupos que dan vida al arte</p>
     </div>
 
-    <!-- Grid -->
     <div class="grupos-grid">
-
         {% for grupo in grupos %}
-        <a href="/groups/{{ grupo.id }}/" class="grupo-card">
-
+        <a href="{% url 'groups:ver_grupo' grupo.id %}" class="grupo-card">
             <div class="card-img-wrap">
                 {% if grupo.profile_image %}
                     <img src="{{ grupo.profile_image.url }}" alt="{{ grupo.name }}">
                 {% else %}
                     <div class="default-avatar">
-                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" fill="none">
-                            <circle cx="50" cy="50" r="48" fill="rgba(14,196,216,0.06)" stroke="rgba(14,196,216,0.25)" stroke-width="1.5"/>
-                            <!-- Personas: tres figuras superpuestas -->
-                            <circle cx="35" cy="36" r="12" fill="rgba(14,196,216,0.5)"/>
-                            <path d="M12 72 C12 55 58 55 58 72" fill="rgba(14,196,216,0.5)"/>
-                            <circle cx="65" cy="33" r="10" fill="rgba(14,196,216,0.7)"/>
-                            <path d="M42 70 C42 55 88 55 88 70" fill="rgba(14,196,216,0.7)"/>
+                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" fill="none" style="width:80px; opacity:0.4;">
+                            <circle cx="50" cy="50" r="48" stroke="var(--teal)" stroke-width="1"/>
+                            <path d="M30 70 Q50 30 70 70" stroke="var(--teal)" stroke-width="2"/>
+                            <circle cx="50" cy="40" r="10" stroke="var(--teal)" stroke-width="2"/>
                         </svg>
                     </div>
                 {% endif %}
@@ -401,30 +325,27 @@
             <div class="card-body">
                 <span class="card-index">Agrupación</span>
                 <h5 class="card-title">{{ grupo.name }}</h5>
-                <p class="card-desc">
-                    {{ grupo.description|truncatewords:20|default:"Sin descripción disponible" }}
-                </p>
+                <p class="card-desc">{{ grupo.description|truncatewords:18 }}</p>
 
                 <div class="card-sep"></div>
 
                 <p class="miembros-label">Miembros</p>
                 <div class="miembros-wrap">
-                    {% for miembro in grupo.members.all %}
+                    {# ✅ Corregido para usar la relación automática de tus modelos #}
+                    {% for miembro in grupo.artists.all %}
                         <span class="badge-miembro">{{ miembro.stage_name }}</span>
                     {% empty %}
                         <span class="no-miembros">Sin miembros aún</span>
                     {% endfor %}
                 </div>
             </div>
-
         </a>
         {% empty %}
         <div class="empty-state">
-            <div class="empty-icon">∅</div>
-            <p>No hay agrupaciones disponibles en este momento.</p>
+            <p style="font-size: 2rem; opacity: 0.3;">∅</p>
+            <p>Aún no se han registrado agrupaciones artísticas.</p>
         </div>
         {% endfor %}
-
     </div>
 </div>
 

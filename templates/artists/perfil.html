@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap');
 
@@ -9,12 +9,9 @@
         --blue: #1a6bff;
         --blue-dark: #0040cc;
         --blue-mid: #2979ff;
-        --blue-light: #6fa8ff;
         --white: #ffffff;
         --black: #0a0a0a;
     }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
         font-family: 'DM Sans', sans-serif;
@@ -24,7 +21,7 @@
         position: relative;
     }
 
-    /* === FONDO ANIMADO === */
+    /* Fondo animado */
     body::before {
         content: '';
         position: fixed;
@@ -34,7 +31,7 @@
             radial-gradient(ellipse 60% 80% at 80% 80%, #0040cc88 0%, transparent 60%),
             radial-gradient(ellipse 50% 50% at 50% 50%, #2979ff22 0%, transparent 70%),
             linear-gradient(135deg, #001a66 0%, #0040cc 40%, #1a6bff 70%, #003399 100%);
-        z-index: 0;
+        z-index: -1;
         animation: bgShift 12s ease-in-out infinite alternate;
     }
 
@@ -44,7 +41,7 @@
         100% { filter: hue-rotate(-10deg) brightness(0.95); }
     }
 
-    /* === BURBUJAS === */
+    /* Burbujas */
     .bubbles {
         position: fixed;
         inset: 0;
@@ -61,14 +58,14 @@
         animation: floatUp linear infinite;
     }
 
-    .bubble:nth-child(1)  { width: 40px;  height: 40px;  left: 8%;   animation-duration: 14s; animation-delay: 0s; }
-    .bubble:nth-child(2)  { width: 70px;  height: 70px;  left: 18%;  animation-duration: 18s; animation-delay: 3s; background: rgba(255,255,255,0.04); }
-    .bubble:nth-child(3)  { width: 25px;  height: 25px;  left: 32%;  animation-duration: 11s; animation-delay: 1s; }
-    .bubble:nth-child(4)  { width: 90px;  height: 90px;  left: 48%;  animation-duration: 22s; animation-delay: 5s; background: rgba(26,107,255,0.15); }
-    .bubble:nth-child(5)  { width: 35px;  height: 35px;  left: 62%;  animation-duration: 13s; animation-delay: 2s; }
-    .bubble:nth-child(6)  { width: 55px;  height: 55px;  left: 74%;  animation-duration: 17s; animation-delay: 7s; background: rgba(255,255,255,0.03); }
-    .bubble:nth-child(7)  { width: 20px;  height: 20px;  left: 85%;  animation-duration: 10s; animation-delay: 4s; }
-    .bubble:nth-child(8)  { width: 60px;  height: 60px;  left: 92%;  animation-duration: 20s; animation-delay: 0s; background: rgba(26,107,255,0.1); }
+    .bubble:nth-child(1)  { width: 40px; height: 40px; left: 8%; animation-duration: 14s; }
+    .bubble:nth-child(2)  { width: 70px; height: 70px; left: 18%; animation-duration: 18s; animation-delay: 3s; background: rgba(255,255,255,0.04); }
+    .bubble:nth-child(3)  { width: 25px; height: 25px; left: 32%; animation-duration: 11s; animation-delay: 1s; }
+    .bubble:nth-child(4)  { width: 90px; height: 90px; left: 48%; animation-duration: 22s; animation-delay: 5s; background: rgba(26,107,255,0.15); }
+    .bubble:nth-child(5)  { width: 35px; height: 35px; left: 62%; animation-duration: 13s; animation-delay: 2s; }
+    .bubble:nth-child(6)  { width: 55px; height: 55px; left: 74%; animation-duration: 17s; animation-delay: 7s; background: rgba(255,255,255,0.03); }
+    .bubble:nth-child(7)  { width: 20px; height: 20px; left: 85%; animation-duration: 10s; animation-delay: 4s; }
+    .bubble:nth-child(8)  { width: 60px; height: 60px; left: 92%; animation-duration: 20s; animation-delay: 0s; background: rgba(26,107,255,0.1); }
 
     @keyframes floatUp {
         0%   { transform: translateY(0) scale(1); opacity: 0; }
@@ -77,14 +74,12 @@
         100% { transform: translateY(-110vh) scale(1.2); opacity: 0; }
     }
 
-    /* === WRAPPER === */
     .page-wrapper {
         position: relative;
         z-index: 1;
         padding: 60px 20px 80px;
     }
 
-    /* === CARD === */
     .artist-card {
         max-width: 660px;
         margin: 0 auto;
@@ -93,391 +88,269 @@
         overflow: hidden;
         box-shadow: 0 20px 60px rgba(0,0,60,0.45);
         border: 2px solid rgba(255,255,255,0.15);
-        animation: cardIn 0.6s ease both;
     }
 
-    @keyframes cardIn {
-        from { opacity: 0; transform: translateY(28px); }
-        to   { opacity: 1; transform: translateY(0); }
-    }
-
-    /* === HERO === */
     .image-top {
-        height: 220px;
+        height: 240px;
         background: url('https://images.unsplash.com/photo-1511379938547-c1f69419868d') center/cover;
         position: relative;
-        animation: zoomHero 10s ease-in-out infinite alternate;
-    }
-
-    @keyframes zoomHero {
-        from { background-size: 100%; }
-        to   { background-size: 110%; }
     }
 
     .overlay {
         position: absolute;
         inset: 0;
-        background: linear-gradient(180deg, rgba(0,40,180,0.5), rgba(0,20,120,0.75));
-        color: var(--white);
+        background: linear-gradient(180deg, rgba(0,40,180,0.45), rgba(0,20,120,0.8));
+        color: white;
         display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
-        padding: 24px;
+        align-items: flex-end;
+        padding: 30px;
     }
 
     .overlay h2 {
         font-family: 'Syne', sans-serif;
         font-weight: 800;
-        font-size: 1.7rem;
-        text-shadow: 0 2px 12px rgba(0,0,0,0.4);
-        margin-bottom: 4px;
+        font-size: 1.9rem;
+        text-shadow: 0 3px 15px rgba(0,0,0,0.5);
     }
 
-    .overlay p {
-        font-size: 0.95rem;
-        opacity: 0.85;
-        letter-spacing: 0.5px;
-    }
-
-    /* === FORM BODY === */
     .card-body {
         padding: 40px 44px;
     }
 
-    .form-title {
-        font-family: 'Syne', sans-serif;
-        font-weight: 800;
-        font-size: 1.6rem;
-        color: var(--black);
-        text-align: center;
-        margin-bottom: 6px;
-    }
-
-    .form-subtitle {
-        text-align: center;
-        color: #666;
-        font-size: 13.5px;
-        margin-bottom: 32px;
-    }
-
-    /* === LABELS === */
     label {
         display: block;
         font-weight: 600;
         color: var(--black);
-        font-size: 14px;
-        margin-bottom: 6px;
-    }
-
-    .mb-field {
-        margin-bottom: 20px;
-    }
-
-    /* === INPUTS === */
-    input[type="text"],
-    input[type="email"],
-    textarea,
-    select {
-        width: 100%;
-        border-radius: 10px !important;
-        padding: 11px 14px !important;
-        border: 1.5px solid #c7d9ff !important;
-        background: #f4f8ff !important;
-        font-family: 'DM Sans', sans-serif;
-        font-size: 14px;
-        color: var(--black);
-        outline: none;
-        transition: border-color 0.2s, box-shadow 0.2s;
-    }
-
-    input[type="text"]:focus,
-    textarea:focus,
-    select:focus {
-        border-color: var(--blue) !important;
-        box-shadow: 0 0 0 3px rgba(26,107,255,0.15) !important;
-        background: #fff !important;
-    }
-
-    textarea {
-        resize: vertical;
-        min-height: 90px;
-    }
-
-    /* === PREVIEW IMAGEN === */
-    .image-preview-wrap {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 12px;
         margin-bottom: 8px;
     }
 
+    .mb-field {
+        margin-bottom: 24px;
+    }
+
+    input[type="text"], textarea, select {
+        width: 100%;
+        padding: 14px;
+        border: 1.5px solid #c7d9ff;
+        border-radius: 12px;
+        background: #f4f8ff;
+        font-family: inherit;
+    }
+
+    .image-preview-wrap {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
     .image-preview img {
-        width: 100px;
-        height: 100px;
+        width: 130px;
+        height: 130px;
         border-radius: 50%;
         object-fit: cover;
-        border: 3px solid var(--blue);
-        box-shadow: 0 4px 16px rgba(26,107,255,0.3);
+        border: 4px solid var(--blue);
+        box-shadow: 0 6px 20px rgba(26,107,255,0.3);
     }
 
-    input[type="file"] {
-        background: #f4f8ff !important;
-        border: 1.5px dashed #93b8ff !important;
-        padding: 10px !important;
-        border-radius: 10px !important;
-        cursor: pointer;
-        width: 100%;
-        font-size: 13px;
-        color: #444;
-    }
-
-    /* === GÉNEROS === */
+    /* Contenedor de géneros dinámicos */
     .genres-container {
         display: flex;
         flex-wrap: wrap;
-        gap: 8px;
-        margin-top: 4px;
+        gap: 10px;
+        margin-top: 8px;
     }
 
-    .genres-container input {
+    .genres-container input[type="checkbox"] {
         display: none;
     }
 
     .genres-container label {
         background: #dce9ff;
         color: var(--blue-dark);
-        padding: 7px 15px;
-        border-radius: 20px;
-        margin: 0;
+        padding: 9px 18px;
+        border-radius: 30px;
         cursor: pointer;
-        font-size: 13px;
+        font-size: 14px;
         font-weight: 600;
-        transition: background 0.2s, color 0.2s, transform 0.15s;
-        border: 1.5px solid transparent;
+        transition: all 0.2s;
+        margin-bottom: 0;
     }
 
     .genres-container label:hover {
         background: #b8d0ff;
-        transform: scale(1.04);
+        transform: scale(1.05);
     }
 
     .genres-container input:checked + label {
         background: var(--blue);
-        color: var(--white);
-        border-color: var(--blue-dark);
-        box-shadow: 0 3px 10px rgba(26,107,255,0.35);
+        color: white;
     }
 
-    #genre-warning {
-        font-size: 12.5px;
-        color: #dc2626;
-        margin-top: 6px;
-        display: none;
-    }
-
-    /* === PREVIEW CARD === */
-    .preview-card {
-        background: #f0f6ff;
-        border: 1.5px solid #c7d9ff;
-        border-radius: 14px;
-        padding: 16px 18px;
-        margin-top: 24px;
-    }
-
-    .preview-card h6 {
-        font-size: 12px;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        color: #888;
-        font-weight: 600;
-        margin-bottom: 12px;
-    }
-
-    .preview-inner {
-        display: flex;
-        align-items: center;
-        gap: 14px;
-    }
-
-    .preview-inner img {
-        width: 54px;
-        height: 54px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 2px solid var(--blue);
-    }
-
-    .preview-inner strong {
-        color: var(--black);
-        font-size: 15px;
-        display: block;
-        margin-bottom: 3px;
-    }
-
-    .preview-inner span {
-        color: #666;
-        font-size: 13px;
-    }
-
-    /* === BOTÓN SUBMIT === */
     .btn-main {
-        display: block;
         width: 100%;
-        margin-top: 28px;
+        padding: 16px;
         background: var(--black);
-        color: var(--white);
+        color: white;
         border: none;
         border-radius: 12px;
-        padding: 14px;
-        font-family: 'Syne', sans-serif;
-        font-size: 1rem;
         font-weight: 700;
-        letter-spacing: 0.5px;
+        font-size: 1.1rem;
+        margin-top: 30px;
         cursor: pointer;
-        transition: background 0.25s, transform 0.2s, box-shadow 0.25s;
+        transition: background 0.3s;
     }
 
     .btn-main:hover {
         background: var(--blue);
-        transform: translateY(-2px) scale(1.02);
-        box-shadow: 0 10px 28px rgba(26,107,255,0.45);
     }
 </style>
 
-<!-- Burbujas de fondo -->
 <div class="bubbles">
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
+    <div class="bubble"></div><div class="bubble"></div>
+    <div class="bubble"></div><div class="bubble"></div>
+    <div class="bubble"></div><div class="bubble"></div>
+    <div class="bubble"></div><div class="bubble"></div>
 </div>
 
 <div class="page-wrapper">
     <div class="artist-card">
-
-        <!-- Hero -->
         <div class="image-top">
             <div class="overlay">
-                <h2>Haz que tu talento brille ✨</h2>
-                <p>Tu arte merece ser descubierto</p>
+                <h2>Edita tu perfil artístico</h2>
             </div>
         </div>
 
-        <!-- Form -->
         <div class="card-body">
-
-            <h3 class="form-title">🎭 Crea tu perfil artístico</h3>
-            <p class="form-subtitle">🎧 Más de 500 artistas ya están compartiendo su talento</p>
-
-            <form method="POST" enctype="multipart/form-data">
+            <form method="POST" enctype="multipart/form-data" id="profile-form">
                 {% csrf_token %}
 
-                <!-- Nombre -->
                 <div class="mb-field">
-                    <label>Nombre artístico</label>
-                    {{ form.stage_name }}
+                    <label for="id_stage_name">Nombre artístico</label>
+                    <input type="text" name="stage_name" id="id_stage_name" 
+                           value="{{ artist.stage_name|default:'' }}" placeholder="Ej: Rayo Azul">
                 </div>
 
-                <!-- Descripción -->
                 <div class="mb-field">
-                    <label>Descripción</label>
-                    {{ form.description }}
+                    <label for="id_description">Descripción</label>
+                    <textarea name="description" id="id_description" rows="4" 
+                              placeholder="Cuéntanos sobre tu arte...">{{ artist.description|default:'' }}</textarea>
                 </div>
 
-                <!-- Imagen -->
                 <div class="mb-field">
                     <label>Imagen de perfil</label>
                     <div class="image-preview-wrap">
                         <div class="image-preview">
-                            <img id="preview" src="https://via.placeholder.com/100">
+                            {% if artist.profile_image %}
+                                <img id="preview" src="{{ artist.profile_image.url }}">
+                            {% else %}
+                                <img id="preview" src="https://via.placeholder.com/130" alt="Preview">
+                            {% endif %}
                         </div>
                     </div>
-                    {{ form.profile_image }}
+                    <input type="file" name="profile_image" id="id_profile_image" accept="image/*" 
+                           style="border: 1.5px dashed #93b8ff; width: 100%; padding: 12px; border-radius: 12px;">
                 </div>
 
-                <!-- Géneros -->
                 <div class="mb-field">
-                    <label>Géneros (máx 3)</label>
-                    <div class="genres-container">
-                        {% for checkbox in form.genres %}
-                            {{ checkbox.tag }}
-                            <label for="{{ checkbox.id_for_label }}">{{ checkbox.choice_label }}</label>
+                    <label for="linea-select">Línea artística</label>
+                    <select name="linea" id="linea-select">
+                        <option value="">Selecciona una línea</option>
+                        {% for linea in lineas %}
+                            <option value="{{ linea.id }}" 
+                                {% if artist.linea and artist.linea.id == linea.id %}selected{% endif %}>
+                                {{ linea.nombre }}
+                            </option>
                         {% endfor %}
-                    </div>
-                    <small id="genre-warning">⚠️ Solo puedes seleccionar hasta 3 géneros</small>
+                    </select>
                 </div>
 
-                <!-- Vista previa -->
-                <div class="preview-card">
-                    <h6>Vista previa</h6>
-                    <div class="preview-inner">
-                        <img id="preview-card-img" src="https://via.placeholder.com/60">
-                        <div>
-                            <strong id="preview-name">Tu nombre artístico</strong>
-                            <span id="preview-desc">Tu descripción aparecerá aquí...</span>
+                <div class="mb-field">
+                    <label for="group-select">Grupo</label>
+                    <select name="group" id="group-select">
+                        <option value="">Sin grupo</option>
+                        {% for grupo in grupos %}
+                            <option value="{{ grupo.id }}"
+                                {% if artist.group and artist.group.id == grupo.id %}selected{% endif %}>
+                                {{ grupo.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-field">
+                    <label>Géneros asociados (máximo 3)</label>
+                    <div id="genres-container" class="genres-container">
                         </div>
-                    </div>
+                    <small id="genre-warning" style="color: #dc2626; display: none; margin-top: 10px; font-weight: 600;">
+                        ⚠️ Solo puedes seleccionar hasta 3 géneros
+                    </small>
                 </div>
 
-                <!-- Botón -->
-                <button type="submit" class="btn-main">
-                    🚀 Publicar mi talento
-                </button>
-
+                <button type="submit" class="btn-main">💾 Guardar cambios</button>
             </form>
         </div>
     </div>
 </div>
 
 <script>
-// 📸 PREVIEW IMAGEN
-const input = document.querySelector('input[type="file"]');
-const preview = document.getElementById('preview');
-const previewCardImg = document.getElementById('preview-card-img');
+    // 1. Preview de imagen
+    const fileInput = document.getElementById('id_profile_image');
+    const previewImg = document.getElementById('preview');
 
-if (input) {
-    input.addEventListener('change', e => {
-        const file = e.target.files[0];
-        if (file) {
-            const url = URL.createObjectURL(file);
-            preview.src = url;
-            previewCardImg.src = url;
+    if (fileInput) {
+        fileInput.addEventListener('change', function(e) {
+            if (e.target.files[0]) {
+                previewImg.src = URL.createObjectURL(e.target.files[0]);
+            }
+        });
+    }
+
+    // 2. Géneros dinámicos
+    const lineaSelect = document.getElementById('linea-select');
+    const genresContainer = document.getElementById('genres-container');
+    const warning = document.getElementById('genre-warning');
+
+    function loadGenres(lineaId) {
+        if (!lineaId) {
+            genresContainer.innerHTML = '<p style="color: #666; font-size: 0.9rem;">Selecciona una línea para ver los géneros.</p>';
+            return;
         }
-    });
-}
 
-// ✍️ PREVIEW TEXTO
-const nameInput = document.querySelector('input[name="stage_name"]');
-const descInput = document.querySelector('textarea[name="description"]');
+        fetch(`/catalog/generos/${lineaId}/`)
+            .then(res => res.json())
+            .then(data => {
+                genresContainer.innerHTML = '';
+                const generosActuales = [{% for g in artist.genres.all %}{{ g.id }},{% endfor %}];
 
-nameInput?.addEventListener('input', e => {
-    document.getElementById('preview-name').innerText = e.target.value || "Tu nombre artístico";
-});
+                data.forEach(g => {
+                    const input = document.createElement('input');
+                    input.type = 'checkbox';
+                    input.name = 'genres';
+                    input.value = g.id;
+                    input.id = 'g_' + g.id;
+                    if (generosActuales.includes(g.id)) input.checked = true;
 
-descInput?.addEventListener('input', e => {
-    document.getElementById('preview-desc').innerText = e.target.value || "Tu descripción aparecerá aquí...";
-});
+                    const label = document.createElement('label');
+                    label.htmlFor = input.id;
+                    label.textContent = g.nombre;
 
-// 🎵 LÍMITE GÉNEROS
-const checkboxes = document.querySelectorAll('.genres-container input');
-const warning = document.getElementById('genre-warning');
+                    input.addEventListener('change', () => {
+                        const checkedCount = genresContainer.querySelectorAll('input:checked').length;
+                        if (checkedCount > 3) {
+                            input.checked = false;
+                            warning.style.display = 'block';
+                        } else {
+                            warning.style.display = 'none';
+                        }
+                    });
 
-checkboxes.forEach(cb => {
-    cb.addEventListener('change', () => {
-        const checked = document.querySelectorAll('.genres-container input:checked');
-        if (checked.length > 3) {
-            cb.checked = false;
-            warning.style.display = 'block';
-        } else {
-            warning.style.display = 'none';
-        }
-    });
-});
+                    genresContainer.appendChild(input);
+                    genresContainer.appendChild(label);
+                });
+            })
+            .catch(err => console.error("Error:", err));
+    }
+
+    lineaSelect.addEventListener('change', function() { loadGenres(this.value); });
+    if (lineaSelect.value) { loadGenres(lineaSelect.value); }
 </script>
-
 {% endblock %}

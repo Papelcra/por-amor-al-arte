@@ -7,5 +7,5 @@ urlpatterns = [
     path('perfil/', views.perfil_artista, name='perfil'),
     path('perfil/editar/', views.editar_perfil, name='editar'),  # ← NUEVA
     path('lista/', views.lista_artistas, name='lista'),
-    path('ver/<int:id>/', views.ver_artista, name='ver'),
+    path('<int:artist_id>/', views.ver_artista, name='ver_artista'),
 ]
