@@ -6,7 +6,6 @@ from django.contrib.auth.models import User
 
 User = settings.AUTH_USER_MODEL
 
-# artists/models.py
 class Artist(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     stage_name = models.CharField(max_length=100, unique=True)

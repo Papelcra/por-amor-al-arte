@@ -146,34 +146,6 @@
         transition: border-color 0.2s, box-shadow 0.2s;
     }
 
-    input[type="text"]::placeholder,
-    textarea::placeholder {
-        color: #5a7a90 !important;
-    }
-
-    input[type="text"]:focus,
-    textarea:focus,
-    select:focus {
-        border-color: var(--blue-mid) !important;
-        box-shadow: 0 0 0 3px rgba(58,180,224,0.15) !important;
-    }
-
-    textarea {
-        resize: vertical;
-        min-height: 100px;
-    }
-
-    input[type="file"] {
-        width: 100%;
-        background: #f4f8ff !important;
-        border: 1.5px dashed #3ab4e0 !important;
-        border-radius: 8px !important;
-        padding: 14px 16px !important;
-        color: #5a7a90 !important;
-        font-size: 13px;
-        cursor: pointer;
-    }
-
     .members-scroll {
         background: #f4f8ff;
         border: 1.5px solid #c2dff0;
@@ -289,7 +261,19 @@
             <div class="field-wrap">
                 <label class="field-label">Miembros</label>
                 <div class="members-scroll">
-                    {{ form.members }}
+                    {% for artista in form.members.field.queryset %}
+                        <label>
+                            <input type="checkbox" 
+                                   name="members" 
+                                   value="{{ artista.id }}"
+                                   {% if form.members.value and artista.id in form.members.value %}checked{% endif %}>
+                            {{ artista.stage_name }}
+                        </label>
+                    {% empty %}
+                        <p style="color:#5a7a90; padding: 20px 10px; text-align: center; font-style: italic;">
+                            No hay artistas registrados.
+                        </p>
+                    {% endfor %}
                 </div>
             </div>
 

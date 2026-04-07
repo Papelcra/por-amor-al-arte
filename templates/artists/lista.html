@@ -65,7 +65,114 @@
         font-weight: 500;
     }
 
-    /* Contenedor de Filtros */
+    /* Carrusel */
+    .carrusel-outer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 18px;
+        margin-bottom: 50px;
+    }
+
+    .carrusel-btn {
+        flex-shrink: 0;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: #fff;
+        border: 1.5px solid #c2dff0;
+        font-size: 24px;
+        color: var(--dark);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 14px rgba(0,80,160,0.10);
+        transition: all 0.25s;
+    }
+
+    .carrusel-btn:hover {
+        background: var(--blue);
+        color: #fff;
+        border-color: var(--blue);
+        transform: scale(1.10);
+        box-shadow: 0 6px 20px rgba(26,143,196,0.30);
+    }
+
+    .carrusel-btn:active { transform: scale(0.95); }
+
+    .carrusel-stage {
+        flex: 1;
+        max-width: 680px;
+        overflow: hidden;
+        border-radius: 22px;
+        padding: 0 60px;
+        position: relative;
+    }
+
+    .carrusel-track {
+        display: flex;
+        gap: 16px;
+        transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        will-change: transform;
+    }
+
+    .carrusel-slide {
+        flex: 0 0 100%;
+        border-radius: 18px;
+        overflow: hidden;
+        position: relative;
+        aspect-ratio: 4 / 3;
+        background: linear-gradient(135deg, #1578a8, #3ab4e0);
+        box-shadow: 0 8px 30px rgba(0,80,160,0.18);
+        transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .carrusel-slide img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.6s ease;
+    }
+
+    .carrusel-slide:hover img { transform: scale(1.05); }
+
+    .carrusel-avatar {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 5rem;
+        color: rgba(255,255,255,0.85);
+    }
+
+    .carrusel-dots {
+        display: flex;
+        justify-content: center;
+        gap: 7px;
+        margin-top: 16px;
+    }
+
+    .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #b8d8ec;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        transition: all 0.3s ease;
+    }
+
+    .dot.active {
+        background: var(--blue);
+        width: 24px;
+        border-radius: 4px;
+    }
+
+    /* Filtros */
     .filtros {
         display: flex;
         flex-wrap: wrap;
@@ -90,25 +197,11 @@
         font-weight: 500;
         min-width: 200px;
         cursor: pointer;
-        transition: all 0.3s ease;
     }
 
-    /* ESTADO INICIAL DEL GÉNERO: Oculto y deshabilitado */
-    #id_genero_filter {
-        display: none; 
-        opacity: 0;
-    }
-
-    /* Clase para mostrar con animación */
-    .show-filter {
-        display: block !important;
-        opacity: 1 !important;
-        animation: fadeIn 0.5s forwards;
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(5px); }
-        to { opacity: 1; transform: translateY(0); }
+    select:focus {
+        border-color: var(--blue-mid);
+        box-shadow: 0 0 0 4px rgba(58,180,224,0.15);
     }
 
     .filtros button {
@@ -128,6 +221,7 @@
         transform: translateY(-2px);
     }
 
+    /* Grid */
     .contenedor {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -173,9 +267,7 @@
         background: linear-gradient(135deg, #1578a8, #3ab4e0);
     }
 
-    .card-body {
-        padding: 22px 24px;
-    }
+    .card-body { padding: 22px 24px; }
 
     .card h3 {
         color: var(--dark);
@@ -185,7 +277,16 @@
         margin-bottom: 8px;
     }
 
-    .genero-tag {
+    .card p {
+        color: var(--text);
+        font-size: 14px;
+        line-height: 1.55;
+        margin-bottom: 12px;
+    }
+
+    .card strong { color: var(--dark); }
+
+    .genero {
         display: inline-block;
         background: #e8f6fc;
         color: var(--blue);
@@ -213,19 +314,63 @@
 
     .btn-ver:hover {
         background: var(--blue);
+        transform: translateY(-2px);
     }
 </style>
 
 <div class="page-wrapper">
 
+    <!-- Título -->
     <div class="titulo-bloque">
         <h2>🎨 Artistas</h2>
         <p>Descubre el talento de nuestra comunidad</p>
     </div>
 
-    <form method="GET" class="filtros" id="filter-form">
-        <select name="line" id="id_linea_filter">
-            <option value="">Selecciona una línea...</option>
+    <!-- Carrusel -->
+    <div class="carrusel-outer">
+        <button class="carrusel-btn" onclick="moverCarrusel(-1)">&#8249;</button>
+
+        <div style="flex:1; max-width:680px;">
+            <div class="carrusel-stage">
+                <div class="carrusel-track" id="carruselTrack">
+                    {% for artista in artistas %}
+                        {% if artista.profile_image %}
+                        <div class="carrusel-slide">
+                            <img src="{{ artista.profile_image.url }}" alt="{{ artista.stage_name }}">
+                        </div>
+                        {% else %}
+                        <div class="carrusel-slide">
+                            <div class="carrusel-avatar">👤</div>
+                        </div>
+                        {% endif %}
+                        {% for img in artista.images.all %}
+                        <div class="carrusel-slide">
+                            <img src="{{ img.image.url }}" alt="{{ artista.stage_name }}">
+                        </div>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="carrusel-dots" id="carruselDots"></div>
+        </div>
+
+        <button class="carrusel-btn" onclick="moverCarrusel(1)">&#8250;</button>
+    </div>
+
+    <!-- Filtros -->
+    <form method="GET" class="filtros">
+        <select name="genre">
+            <option value="">Todos los géneros</option>
+            {% for genero in generos %}
+                <option value="{{ genero.id }}"
+                    {% if request.GET.genre == genero.id|stringformat:"s" %}selected{% endif %}>
+                    {{ genero.nombre }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <select name="line">
+            <option value="">Todas las líneas</option>
             {% for linea in lineas %}
                 <option value="{{ linea.id }}"
                     {% if request.GET.line == linea.id|stringformat:"s" %}selected{% endif %}>
@@ -234,21 +379,10 @@
             {% endfor %}
         </select>
 
-        <select name="genre" id="id_genero_filter">
-            <option value="">Todos los géneros</option>
-            {% if request.GET.line %}
-                {% for genero in generos %}
-                    <option value="{{ genero.id }}"
-                        {% if request.GET.genre == genero.id|stringformat:"s" %}selected{% endif %}>
-                        {{ genero.nombre }}
-                    </option>
-                {% endfor %}
-            {% endif %}
-        </select>
-
         <button type="submit">Filtrar</button>
     </form>
 
+    <!-- Grid de artistas -->
     <div class="contenedor">
         {% for artista in artistas %}
         <div class="card">
@@ -259,67 +393,113 @@
                     <div class="default-avatar">👤</div>
                 {% endif %}
             </div>
-
             <div class="card-body">
                 <h3>{{ artista.stage_name|default:artista.user.username }}</h3>
-                <p><strong>Línea:</strong> {{ artista.linea.nombre|default:"Sin línea" }}</p>
+                <p>{{ artista.description|truncatewords:15|default:"Sin descripción" }}</p>
+
                 <p><strong>Géneros:</strong><br>
                     {% for genero in artista.genres.all %}
-                        <span class="genero-tag">{{ genero.nombre }}</span>
+                        <span class="genero">{{ genero.nombre }}</span>
                     {% empty %}
                         <span style="color:#5a7a90;">Sin géneros</span>
                     {% endfor %}
                 </p>
+
+                <p><strong>Línea:</strong> {{ artista.linea.nombre|default:"Sin línea" }}</p>
+
+                <p><strong>Grupo:</strong>
+                    <span id="grupo-{{ artista.id }}" data-artista="{{ artista.id }}">
+                        {% if artista.group %}
+                            <strong style="color: #1a8fc4;">{{ artista.group.name }}</strong>
+                        {% else %}
+                            <span style="color:#5a7a90;">Sin grupo</span>
+                        {% endif %}
+                    </span>
+                </p>
+
                 <a href="{% url 'artists:ver_artista' artista.id %}" class="btn-ver">Ver perfil</a>
             </div>
         </div>
-        {% empty %}
-            <p style="grid-column: 1/-1; text-align: center; color: var(--text); padding: 40px;">
-                No se encontraron artistas.
-            </p>
         {% endfor %}
     </div>
+
 </div>
 
 <script>
-    const lineaSelect = document.getElementById('id_linea_filter');
-    const generoSelect = document.getElementById('id_genero_filter');
+    let pos = 0;
+    let autoplay;
+    const track  = document.getElementById('carruselTrack');
+    const dotsEl = document.getElementById('carruselDots');
+    const total  = track.children.length;
 
-    // Función para manejar la visibilidad
-    function checkVisibility() {
-        if (lineaSelect.value !== "") {
-            generoSelect.classList.add('show-filter');
-        } else {
-            generoSelect.classList.remove('show-filter');
-            generoSelect.value = ""; // Limpiar género si quitan la línea
-        }
+    for (let i = 0; i < total; i++) {
+        const d = document.createElement('button');
+        d.className = 'dot' + (i === 0 ? ' active' : '');
+        d.addEventListener('click', () => { irA(i); resetAutoplay(); });
+        dotsEl.appendChild(d);
     }
 
-    // Ejecutar al cargar la página (por si ya hay filtros aplicados)
-    checkVisibility();
+    function updateDots() {
+        dotsEl.querySelectorAll('.dot').forEach((d, i) =>
+            d.classList.toggle('active', i === pos));
+    }
 
-    lineaSelect.addEventListener('change', function() {
-        const lineaId = this.value;
-        
-        checkVisibility();
+    function irA(index) {
+        pos = (index + total) % total;
+        track.style.transform = `translateX(calc(-${pos * 100}% - ${pos * 16}px))`;
+        updateDots();
+    }
 
-        // Limpiar géneros actuales
-        generoSelect.innerHTML = '<option value="">Todos los géneros</option>';
+    function moverCarrusel(dir) {
+        irA(pos + dir);
+        resetAutoplay();
+    }
 
-        if (lineaId) {
-            fetch(`/artists/ajax/generos/?linea_id=${lineaId}`)
-                .then(response => response.json())
-                .then(data => {
-                    data.forEach(genero => {
-                        const option = document.createElement('option');
-                        option.value = genero.id;
-                        option.textContent = genero.nombre;
-                        generoSelect.appendChild(option);
-                    });
-                })
-                .catch(error => console.error('Error:', error));
-        }
+    function resetAutoplay() {
+        clearInterval(autoplay);
+        autoplay = setInterval(() => irA(pos + 1), 3500);
+    }
+
+    let tx = 0;
+    track.addEventListener('touchstart', e => tx = e.touches[0].clientX);
+    track.addEventListener('touchend', e => {
+        const d = tx - e.changedTouches[0].clientX;
+        if (Math.abs(d) > 40) moverCarrusel(d > 0 ? 1 : -1);
     });
+
+    resetAutoplay();
+
+    /* ── Polling grupos ── */
+    const estadoGrupos = {};
+    document.querySelectorAll('[id^="grupo-"]').forEach(el => {
+        estadoGrupos[el.dataset.artista] = el.innerHTML.trim();
+    });
+
+    function checkGrupos() {
+        document.querySelectorAll('[id^="grupo-"]').forEach(el => {
+            const id = el.dataset.artista;
+            fetch(`/artists/${id}/grupo/`)
+                .then(r => r.json())
+                .then(data => {
+                    const nuevoHtml = data.group_name
+                        ? `<strong style="color:#1a8fc4;">${data.group_name}</strong>`
+                        : `<span style="color:#5a7a90;">Sin grupo</span>`;
+
+                    if (estadoGrupos[id] !== nuevoHtml) {
+                        estadoGrupos[id] = nuevoHtml;
+                        el.innerHTML = nuevoHtml;
+                        el.style.transition = 'background 0.4s';
+                        el.style.background = '#d1fae5';
+                        el.style.borderRadius = '4px';
+                        el.style.padding = '2px 6px';
+                        setTimeout(() => { el.style.background = 'transparent'; }, 1500);
+                    }
+                })
+                .catch(() => {});
+        });
+    }
+
+    setInterval(checkGrupos, 5000);
 </script>
 
 {% endblock %}

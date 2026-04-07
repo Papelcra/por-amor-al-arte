@@ -14,16 +14,18 @@
         --white: #ffffff;
     }
 
-    body {
+    /* 🔥 evitar afectar todo el body */
+    .page-wrapper {
         font-family: 'DM Sans', sans-serif;
         background: var(--blue-bg);
         min-height: 100vh;
-        overflow-x: hidden;
+        padding: 70px 20px 90px;
+        max-width: 1100px;
+        margin: 0 auto;
         position: relative;
-        color: var(--dark);
     }
 
-    body::before {
+    .page-wrapper::before {
         content: '';
         position: fixed;
         inset: 0;
@@ -34,31 +36,26 @@
         z-index: 0;
     }
 
-    .page-wrapper {
+    .header-block {
+        text-align: center;
+        margin-bottom: 50px;
         position: relative;
         z-index: 1;
-        padding: 70px 20px 90px;
-        max-width: 1100px;
-        margin: 0 auto;
     }
-
-    .header-block { text-align: center; margin-bottom: 50px; }
 
     .header-eyebrow {
         font-family: 'Cormorant Garamond', serif;
-        font-weight: 600;
         font-size: 0.85rem;
         letter-spacing: 5px;
         text-transform: uppercase;
         color: var(--blue);
-        margin-bottom: 12px;
+        margin-bottom: 10px;
     }
 
     .header-title {
         font-family: 'Great Vibes', cursive;
         font-size: clamp(2.5rem, 5vw, 3.8rem);
         color: var(--dark);
-        letter-spacing: -1px;
     }
 
     .grupo-card {
@@ -72,6 +69,8 @@
         height: 100%;
         display: flex;
         flex-direction: column;
+        position: relative;
+        z-index: 1;
     }
 
     .grupo-card:hover {
@@ -84,7 +83,6 @@
         width: 100%;
         height: 200px;
         overflow: hidden;
-        border-bottom: 1px solid #c2dff0;
         background: linear-gradient(135deg, #1a8fc4, #3ab4e0);
     }
 
@@ -95,15 +93,20 @@
         transition: transform 0.6s ease;
     }
 
-    .grupo-card:hover img { transform: scale(1.1); }
+    .grupo-card:hover img {
+        transform: scale(1.1);
+    }
 
-    .card-body { padding: 25px; flex-grow: 1; }
+    .card-body {
+        padding: 25px;
+        flex-grow: 1;
+    }
 
     .grupo-name {
         font-family: 'Cormorant Garamond', serif;
         font-size: 1.5rem;
         font-weight: 700;
-        margin-bottom: 12px;
+        margin-bottom: 10px;
         color: var(--dark);
     }
 
@@ -111,14 +114,13 @@
         font-size: 0.9rem;
         color: var(--text);
         line-height: 1.6;
-        margin-bottom: 0;
     }
 
     .card-actions {
         padding: 20px 25px;
         border-top: 1px solid #e0f0f8;
         display: flex;
-        gap: 12px;
+        gap: 10px;
     }
 
     .btn-art {
@@ -167,44 +169,70 @@
 </style>
 
 <div class="page-wrapper">
+
     <div class="header-block">
         <p class="header-eyebrow">Mi Galería Personal</p>
         <h1 class="header-title">Mis Agrupaciones</h1>
     </div>
 
     <div class="row g-4">
+
         {% for grupo in grupos %}
         <div class="col-md-6 col-lg-4">
             <div class="grupo-card">
+
                 <div class="img-container">
                     {% if grupo.profile_image %}
                         <img src="{{ grupo.profile_image.url }}" alt="{{ grupo.name }}">
                     {% else %}
-                        <div class="d-flex align-items-center justify-content-center h-100" style="color: rgba(255,255,255,0.7); font-size: 3rem;">
+                        <div class="d-flex align-items-center justify-content-center h-100"
+                             style="color: rgba(255,255,255,0.7); font-size: 3rem;">
                             🎨
                         </div>
                     {% endif %}
                 </div>
 
                 <div class="card-body">
-                    <h3 class="grupo-name">{{ grupo.name }}</h3>
-                    <p class="grupo-desc">{{ grupo.description|truncatewords:15|default:"Sin descripción artística disponible." }}</p>
+                    <h3 class="grupo-name">
+                        {{ grupo.name|default:"Sin nombre" }}
+                    </h3>
+
+                    <p class="grupo-desc">
+                        {{ grupo.description|truncatewords:15|default:"Sin descripción artística disponible." }}
+                    </p>
                 </div>
 
                 <div class="card-actions">
-                    <a href="{% url 'groups:ver_grupo' grupo.id %}" class="btn-art btn-ver">Explorar</a>
-                    <a href="{% url 'groups:editar_grupo' grupo.id %}" class="btn-art btn-edit">Editar Agrupación</a>
+                    <a href="{% url 'groups:ver_grupo' grupo.id %}" class="btn-art btn-ver">
+                        Explorar
+                    </a>
+
+                    {% if request.user.is_authenticated and grupo.owner == request.user %}
+                        <a href="{% url 'groups:editar_grupo' grupo.id %}" class="btn-art btn-edit">
+                            Editar
+                        </a>
+                    {% endif %}
                 </div>
+
             </div>
         </div>
+
         {% empty %}
         <div class="col-12">
             <div class="empty-state">
-                <p style="font-size: 1.2rem; margin-bottom: 25px;">Aún no has plasmado ninguna agrupación en tu lienzo.</p>
-                <a href="{% url 'groups:crear_grupo' %}" class="btn-art btn-ver" style="display: inline-block; padding: 15px 40px;">Empezar Creación</a>
+                <p style="font-size: 1.2rem; margin-bottom: 25px;">
+                    Aún no has creado ninguna agrupación.
+                </p>
+
+                <a href="{% url 'groups:crear_grupo' %}"
+                   class="btn-art btn-ver"
+                   style="display: inline-block; padding: 15px 40px;">
+                    Crear grupo
+                </a>
             </div>
         </div>
         {% endfor %}
+
     </div>
 </div>
 

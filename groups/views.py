@@ -1,41 +1,35 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from .forms import GroupForm
 from .models import Group
 from artists.models import Artist
 
-# 👥 CREAR GRUPO
-@login_required
+
+
 def crear_grupo(request):
-
-    # 🔒 Solo admin de agrupación
-    if request.user.role != 'group_admin':
-        return redirect('core:home')
-
     if request.method == 'POST':
         form = GroupForm(request.POST, request.FILES)
 
+        # 🔥 obtenemos los miembros correctamente
+        selected_members = request.POST.getlist('members')
+
         if form.is_valid():
-            group = form.save(commit=False)
-            group.owner = request.user
-            group.save()
+            grupo = form.save(commit=False)
+            grupo.save()
 
-            form.save_m2m()
+            # 🔥 guardamos relación many-to-many
+            grupo.members.set(selected_members)
 
-            # 🔥 Validación: artista solo en un grupo
-            miembros = form.cleaned_data.get('members')
-            group.members.clear()
-
-            for artista in miembros:
-                if not Group.objects.filter(members=artista).exists():
-                    group.members.add(artista)
-
-            return redirect('groups:mis_grupos')
-
+            return redirect('artists:lista_artistas')
     else:
         form = GroupForm()
+        selected_members = []
 
-    return render(request, 'groups/crear.html', {'form': form})
+    return render(request, 'artists/crear_grupo.html', {
+        'form': form,
+        'selected_members': selected_members
+    })
 
 
 # 📋 LISTA DE GRUPOS
@@ -47,10 +41,10 @@ def lista_grupos(request):
 # 🔍 VER GRUPO
 def ver_grupo(request, group_id):
     grupo = get_object_or_404(Group, id=group_id)
-    
-    # 💡 Buscamos a los artistas que marcaron este grupo en su perfil
-    miembros = Artist.objects.filter(group=grupo)
-    
+
+    # 🔥 usar relación consistente
+    miembros = grupo.members.all()
+
     return render(request, 'groups/ver_grupo.html', {
         'grupo': grupo,
         'miembros': miembros
@@ -61,17 +55,33 @@ def ver_grupo(request, group_id):
 def editar_grupo(request, group_id):
     grupo = get_object_or_404(Group, id=group_id)
 
-    # 🔒 Seguridad: solo el dueño puede editar
     if grupo.owner != request.user:
-        return redirect('lista_grupos')
+        return redirect('groups:lista_grupos')
 
     if request.method == 'POST':
         form = GroupForm(request.POST, request.FILES, instance=grupo)
+
         if form.is_valid():
             grupo = form.save(commit=False)
-            grupo.owner = request.user
             grupo.save()
-            form.save_m2m()
+
+            miembros_seleccionados = form.cleaned_data.get('members', [])
+
+            # 🔥 1. quitar grupo a los que ya no están
+            for artista in Artist.objects.filter(group=grupo):
+                if artista not in miembros_seleccionados:
+                    artista.group = None
+                    artista.save()
+
+            # 🔥 2. asignar grupo a los seleccionados
+            for artista in miembros_seleccionados:
+                artista.group = grupo
+                artista.save()
+
+            # 🔥 3. sincronizar ManyToMany
+            grupo.members.set(miembros_seleccionados)
+
+            messages.success(request, "✅ Grupo actualizado correctamente")
             return redirect('groups:ver_grupo', group_id=grupo.id)
     else:
         form = GroupForm(instance=grupo)
@@ -81,11 +91,10 @@ def editar_grupo(request, group_id):
         'grupo': grupo
     })
 
+
 # 📂 MIS GRUPOS
 @login_required
 def mis_grupos(request):
-
-    # 🔒 Solo admin de agrupación
     if request.user.role != 'group_admin':
         return redirect('core:home')
 

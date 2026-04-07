@@ -71,9 +71,7 @@
         text-shadow: 0 3px 15px rgba(0,0,0,0.5);
     }
 
-    .card-body {
-        padding: 40px 44px;
-    }
+    .card-body { padding: 40px 44px; }
 
     label {
         display: block;
@@ -82,9 +80,7 @@
         margin-bottom: 8px;
     }
 
-    .mb-field {
-        margin-bottom: 24px;
-    }
+    .mb-field { margin-bottom: 24px; }
 
     input[type="text"], textarea, select {
         width: 100%;
@@ -102,10 +98,8 @@
         box-shadow: 0 0 0 3px rgba(58,180,224,0.15);
     }
 
-    .image-preview-wrap {
-        text-align: center;
-        margin-bottom: 20px;
-    }
+    /* Imagen principal */
+    .image-preview-wrap { text-align: center; margin-bottom: 20px; }
 
     .image-preview img {
         width: 130px;
@@ -116,6 +110,81 @@
         box-shadow: 0 6px 20px rgba(26,143,196,0.25);
     }
 
+    /* Slots de imágenes extra */
+    .extra-images-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-bottom: 8px;
+    }
+
+    .extra-img-slot {
+        position: relative;
+        border-radius: 14px;
+        overflow: hidden;
+        aspect-ratio: 1 / 1;
+        border: 2px dashed #93b8ff;
+        background: #f4f8ff;
+        cursor: pointer;
+        transition: border-color 0.25s, background 0.25s;
+    }
+
+    .extra-img-slot:hover {
+        border-color: var(--blue);
+        background: #e8f4fc;
+    }
+
+    .extra-img-slot img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .extra-img-slot .placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        color: #7aaecf;
+        font-size: 13px;
+        font-weight: 600;
+        pointer-events: none;
+    }
+
+    .extra-img-slot .placeholder span { font-size: 28px; }
+
+    .extra-img-slot .change-badge {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(13,45,69,0.72);
+        color: #fff;
+        font-size: 12px;
+        font-weight: 600;
+        text-align: center;
+        padding: 7px 0;
+        opacity: 0;
+        transition: opacity 0.25s;
+        pointer-events: none;
+    }
+
+    .extra-img-slot:hover .change-badge { opacity: 1; }
+
+    .extra-img-slot input[type="file"] {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        cursor: pointer;
+        width: 100%;
+        height: 100%;
+    }
+
+    /* Géneros */
     .genres-container {
         display: flex;
         flex-wrap: wrap;
@@ -123,9 +192,7 @@
         margin-top: 8px;
     }
 
-    .genres-container input[type="checkbox"] {
-        display: none;
-    }
+    .genres-container input[type="checkbox"] { display: none; }
 
     .genres-container label {
         background: #dce9ff;
@@ -163,9 +230,7 @@
         transition: background 0.3s;
     }
 
-    .btn-main:hover {
-        background: var(--blue);
-    }
+    .btn-main:hover { background: var(--blue); }
 </style>
 
 <div class="page-wrapper">
@@ -192,8 +257,9 @@
                               placeholder="Cuéntanos sobre tu arte...">{{ artist.description|default:'' }}</textarea>
                 </div>
 
+                <!-- Imagen principal -->
                 <div class="mb-field">
-                    <label>Imagen de perfil</label>
+                    <label>Imagen de perfil principal</label>
                     <div class="image-preview-wrap">
                         <div class="image-preview">
                             {% if artist.profile_image %}
@@ -204,7 +270,35 @@
                         </div>
                     </div>
                     <input type="file" name="profile_image" id="id_profile_image" accept="image/*"
-                           style="border: 1.5px dashed #93b8ff; width: 100%; padding: 12px; border-radius: 12px;">
+                           style="border: 1.5px dashed #93b8ff; width:100%; padding:12px; border-radius:12px;">
+                </div>
+
+                <!-- Imágenes extra para el carrusel -->
+                <div class="mb-field">
+                    <label>
+                        Imágenes para el carrusel
+                        <small style="font-weight:400; color:#7aaecf;">(máximo 3 — haz clic para cambiar)</small>
+                    </label>
+                    <div class="extra-images-grid">
+
+                        {% for img in imagenes_extra %}
+                        <div class="extra-img-slot">
+                            {% if img %}
+                                <img id="prev{{ forloop.counter }}" src="{{ img.image.url }}" alt="Imagen {{ forloop.counter }}">
+                                <div class="change-badge">📷 Cambiar</div>
+                            {% else %}
+                                <div class="placeholder" id="ph{{ forloop.counter }}">
+                                    <span>＋</span>Foto {{ forloop.counter }}
+                                </div>
+                            {% endif %}
+                            <input type="file"
+                                   name="extra_image_{{ forloop.counter }}"
+                                   accept="image/*"
+                                   onchange="previewExtra(this, 'prev{{ forloop.counter }}', 'ph{{ forloop.counter }}')">
+                        </div>
+                        {% endfor %}
+
+                    </div>
                 </div>
 
                 <div class="mb-field">
@@ -239,7 +333,7 @@
                          class="genres-container"
                          data-generos="{% for g in artist.genres.all %}{{ g.id }}{% if not forloop.last %},{% endif %}{% endfor %}">
                     </div>
-                    <small id="genre-warning" style="color: #dc2626; display: none; margin-top: 10px; font-weight: 600;">
+                    <small id="genre-warning" style="color:#dc2626; display:none; margin-top:10px; font-weight:600;">
                         ⚠️ Solo puedes seleccionar hasta 3 géneros
                     </small>
                 </div>
@@ -251,42 +345,58 @@
 </div>
 
 <script>
-    const fileInput = document.getElementById('id_profile_image');
-    const previewImg = document.getElementById('preview');
+    /* ── Preview imagen principal ── */
+    document.getElementById('id_profile_image').addEventListener('change', function() {
+        if (this.files[0]) document.getElementById('preview').src = URL.createObjectURL(this.files[0]);
+    });
 
-    if (fileInput) {
-        fileInput.addEventListener('change', function(e) {
-            if (e.target.files[0]) {
-                previewImg.src = URL.createObjectURL(e.target.files[0]);
-            }
-        });
+    /* ── Preview imágenes extra ── */
+    function previewExtra(input, imgId, phId) {
+        if (!input.files[0]) return;
+        const slot = input.parentElement;
+        const url  = URL.createObjectURL(input.files[0]);
+
+        let img = document.getElementById(imgId);
+        if (!img) {
+            img = document.createElement('img');
+            img.id = imgId;
+            slot.insertBefore(img, input);
+        }
+        img.src = url;
+
+        const ph = document.getElementById(phId);
+        if (ph) ph.style.display = 'none';
+
+        let badge = slot.querySelector('.change-badge');
+        if (!badge) {
+            badge = document.createElement('div');
+            badge.className = 'change-badge';
+            badge.textContent = '📷 Cambiar';
+            slot.appendChild(badge);
+        }
     }
 
-    const lineaSelect = document.getElementById('linea-select');
+    /* ── Géneros ── */
+    const lineaSelect     = document.getElementById('linea-select');
     const genresContainer = document.getElementById('genres-container');
-    const warning = document.getElementById('genre-warning');
+    const warning         = document.getElementById('genre-warning');
 
     const generosActuales = genresContainer.dataset.generos
-        ? genresContainer.dataset.generos.split(',').map(Number)
-        : [];
+        ? genresContainer.dataset.generos.split(',').map(Number) : [];
 
     function loadGenres(lineaId) {
         if (!lineaId) {
-            genresContainer.innerHTML = '<p style="color: #666; font-size: 0.9rem;">Selecciona una línea para ver los géneros.</p>';
+            genresContainer.innerHTML = '<p style="color:#666;font-size:0.9rem;">Selecciona una línea para ver los géneros.</p>';
             return;
         }
-
         fetch(`/catalog/generos/${lineaId}/`)
-            .then(res => res.json())
+            .then(r => r.json())
             .then(data => {
                 genresContainer.innerHTML = '';
-
                 data.forEach(g => {
                     const input = document.createElement('input');
-                    input.type = 'checkbox';
-                    input.name = 'genres';
-                    input.value = g.id;
-                    input.id = 'g_' + g.id;
+                    input.type = 'checkbox'; input.name = 'genres';
+                    input.value = g.id; input.id = 'g_' + g.id;
                     if (generosActuales.includes(g.id)) input.checked = true;
 
                     const label = document.createElement('label');
@@ -294,24 +404,20 @@
                     label.textContent = g.nombre;
 
                     input.addEventListener('change', () => {
-                        const checkedCount = genresContainer.querySelectorAll('input:checked').length;
-                        if (checkedCount > 3) {
-                            input.checked = false;
-                            warning.style.display = 'block';
-                        } else {
-                            warning.style.display = 'none';
-                        }
+                        const checked = genresContainer.querySelectorAll('input:checked').length;
+                        if (checked > 3) { input.checked = false; warning.style.display = 'block'; }
+                        else warning.style.display = 'none';
                     });
 
                     genresContainer.appendChild(input);
                     genresContainer.appendChild(label);
                 });
-            })
-            .catch(err => console.error("Error:", err));
+            });
     }
 
     lineaSelect.addEventListener('change', function() { loadGenres(this.value); });
-    if (lineaSelect.value) { loadGenres(lineaSelect.value); }
+    if (lineaSelect.value) loadGenres(lineaSelect.value);
 </script>
 
 {% endblock %}
+.

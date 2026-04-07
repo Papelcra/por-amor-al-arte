@@ -79,10 +79,7 @@
     }
 
     @media (max-width: 992px) {
-        .perfil-grid {
-            grid-template-columns: 1fr;
-            gap: 40px;
-        }
+        .perfil-grid { grid-template-columns: 1fr; gap: 40px; }
     }
 
     .carousel-inner img {
@@ -137,9 +134,7 @@
         margin-bottom: 40px;
     }
 
-    .info-item {
-        margin-bottom: 28px;
-    }
+    .info-item { margin-bottom: 28px; }
 
     .info-text {
         font-size: 1.15rem;
@@ -188,6 +183,17 @@
     }
 
     .btn-outline-teal:hover { background: #3ab4e0; color: #fff; }
+
+    @keyframes flashGreen {
+        0%   { background: #d1fae5; }
+        100% { background: transparent; }
+    }
+
+    .grupo-actualizado {
+        animation: flashGreen 1.5s ease;
+        border-radius: 6px;
+        padding: 4px 6px;
+    }
 </style>
 
 <div class="perfil-hero">
@@ -204,6 +210,7 @@
 
         <div class="perfil-grid">
 
+            <!-- Columna izquierda: imágenes -->
             <div>
                 {% if artista.images.all %}
                 <div id="perfilCarousel" class="carousel slide" data-bs-ride="carousel">
@@ -230,6 +237,7 @@
                 {% endif %}
             </div>
 
+            <!-- Columna derecha: info -->
             <div>
                 {% if artista.profile_image %}
                     <img src="{{ artista.profile_image.url }}" class="profile-img-circle">
@@ -256,9 +264,10 @@
                     </div>
                 </div>
 
+                <!-- Grupo: se actualiza en tiempo real -->
                 <div class="info-item">
                     <p class="perfil-section-label">Agrupación / Proyecto</p>
-                    <p class="info-text">
+                    <p class="info-text" id="grupo-display">
                         {% if artista.group %}
                             <i class="bi bi-people-fill me-2" style="color: #3ab4e0;"></i>
                             <strong style="color: #1a8fc4;">{{ artista.group.name }}</strong>
@@ -283,5 +292,39 @@
         </div>
     </div>
 </div>
+
+<script>
+    const artistaId = {{ artist.id }};
+    const grupoEl   = document.getElementById('grupo-display');
+    let grupoActual = {{ artista.group.id|default:"null" }};
+
+    function renderGrupo(nombre) {
+        if (nombre) {
+            grupoEl.innerHTML = `
+                <i class="bi bi-people-fill me-2" style="color: #3ab4e0;"></i>
+                <strong style="color: #1a8fc4;">${nombre}</strong>`;
+        } else {
+            grupoEl.innerHTML = `
+                <span style="color:#5a7a90; font-style:italic;">Artista independiente (Sin grupo)</span>`;
+        }
+    }
+
+    function checkGrupo() {
+        fetch(`/artists/${artistaId}/grupo/`)
+            .then(r => r.json())
+            .then(data => {
+                if (data.group_id !== grupoActual) {
+                    grupoActual = data.group_id;
+                    renderGrupo(data.group_name);
+                    grupoEl.classList.remove('grupo-actualizado');
+                    void grupoEl.offsetWidth;
+                    grupoEl.classList.add('grupo-actualizado');
+                }
+            })
+            .catch(() => {});
+    }
+
+    setInterval(checkGrupo, 5000);
+</script>
 
 {% endblock %}
