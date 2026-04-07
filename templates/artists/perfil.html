@@ -88,7 +88,132 @@
         border: 1.5px solid #c2dff0;
         border-radius: 12px;
         background: #f4f8ff;
+        font-family: inherit;
         color: #0d2d45;
+    }
+
+    input[type="text"]:focus, textarea:focus, select:focus {
+        border-color: var(--blue-mid);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(58,180,224,0.15);
+    }
+
+    /* Imagen principal */
+    .image-preview-wrap { text-align: center; margin-bottom: 20px; }
+
+    .image-preview img {
+        width: 130px;
+        height: 130px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid var(--blue);
+        box-shadow: 0 6px 20px rgba(26,143,196,0.25);
+    }
+
+    /* Slots de imágenes extra */
+    .extra-images-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-bottom: 8px;
+    }
+
+    .extra-img-slot {
+        position: relative;
+        border-radius: 14px;
+        overflow: hidden;
+        aspect-ratio: 1 / 1;
+        border: 2px dashed #93b8ff;
+        background: #f4f8ff;
+        cursor: pointer;
+        transition: border-color 0.25s, background 0.25s;
+    }
+
+    .extra-img-slot:hover {
+        border-color: var(--blue);
+        background: #e8f4fc;
+    }
+
+    .extra-img-slot img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .extra-img-slot .placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        color: #7aaecf;
+        font-size: 13px;
+        font-weight: 600;
+        pointer-events: none;
+    }
+
+    .extra-img-slot .placeholder span { font-size: 28px; }
+
+    .extra-img-slot .change-badge {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(13,45,69,0.72);
+        color: #fff;
+        font-size: 12px;
+        font-weight: 600;
+        text-align: center;
+        padding: 7px 0;
+        opacity: 0;
+        transition: opacity 0.25s;
+        pointer-events: none;
+    }
+
+    .extra-img-slot:hover .change-badge { opacity: 1; }
+
+    .extra-img-slot input[type="file"] {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        cursor: pointer;
+        width: 100%;
+        height: 100%;
+    }
+
+    /* Géneros */
+    .genres-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 8px;
+    }
+
+    .genres-container input[type="checkbox"] { display: none; }
+
+    .genres-container label {
+        background: #dce9ff;
+        color: var(--blue-dark);
+        padding: 9px 18px;
+        border-radius: 30px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 600;
+        transition: all 0.2s;
+        margin-bottom: 0;
+    }
+
+    .genres-container label:hover {
+        background: #b8d0ff;
+        transform: scale(1.05);
+    }
+
+    .genres-container input:checked + label {
+        background: var(--blue);
+        color: white;
     }
 
     .btn-main {
@@ -99,8 +224,13 @@
         border: none;
         border-radius: 12px;
         font-weight: 700;
+        font-size: 1.1rem;
         margin-top: 30px;
+        cursor: pointer;
+        transition: background 0.3s;
     }
+
+    .btn-main:hover { background: var(--blue); }
 </style>
 
 <div class="page-wrapper">
@@ -112,22 +242,81 @@
         </div>
 
         <div class="card-body">
-            <form method="POST" enctype="multipart/form-data">
+            <form method="POST" enctype="multipart/form-data" id="profile-form">
                 {% csrf_token %}
 
                 <div class="mb-field">
-                    <label>Nombre artístico</label>
-                    <input type="text" name="stage_name" value="{{ artist.stage_name }}">
+                    <label for="id_stage_name">Nombre artístico</label>
+                    <input type="text" name="stage_name" id="id_stage_name"
+                           value="{{ artist.stage_name|default:'' }}" placeholder="Ej: Rayo Azul">
                 </div>
 
                 <div class="mb-field">
-                    <label>Descripción</label>
-                    <textarea name="description">{{ artist.description }}</textarea>
+                    <label for="id_description">Descripción</label>
+                    <textarea name="description" id="id_description" rows="4"
+                              placeholder="Cuéntanos sobre tu arte...">{{ artist.description|default:'' }}</textarea>
+                </div>
+
+                <!-- Imagen principal -->
+                <div class="mb-field">
+                    <label>Imagen de perfil principal</label>
+                    <div class="image-preview-wrap">
+                        <div class="image-preview">
+                            {% if artist.profile_image %}
+                                <img id="preview" src="{{ artist.profile_image.url }}">
+                            {% else %}
+                                <img id="preview" src="https://via.placeholder.com/130" alt="Preview">
+                            {% endif %}
+                        </div>
+                    </div>
+                    <input type="file" name="profile_image" id="id_profile_image" accept="image/*"
+                           style="border: 1.5px dashed #93b8ff; width:100%; padding:12px; border-radius:12px;">
+                </div>
+
+                <!-- Imágenes extra para el carrusel -->
+                <div class="mb-field">
+                    <label>
+                        Imágenes para el carrusel
+                        <small style="font-weight:400; color:#7aaecf;">(máximo 3 — haz clic para cambiar)</small>
+                    </label>
+                    <div class="extra-images-grid">
+
+                        {% for img in imagenes_extra %}
+                        <div class="extra-img-slot">
+                            {% if img %}
+                                <img id="prev{{ forloop.counter }}" src="{{ img.image.url }}" alt="Imagen {{ forloop.counter }}">
+                                <div class="change-badge">📷 Cambiar</div>
+                            {% else %}
+                                <div class="placeholder" id="ph{{ forloop.counter }}">
+                                    <span>＋</span>Foto {{ forloop.counter }}
+                                </div>
+                            {% endif %}
+                            <input type="file"
+                                   name="extra_image_{{ forloop.counter }}"
+                                   accept="image/*"
+                                   onchange="previewExtra(this, 'prev{{ forloop.counter }}', 'ph{{ forloop.counter }}')">
+                        </div>
+                        {% endfor %}
+
+                    </div>
                 </div>
 
                 <div class="mb-field">
-                    <label>Grupo</label>
-                    <select name="group">
+                    <label for="linea-select">Línea artística</label>
+                    <select name="linea" id="linea-select">
+                        <option value="">Selecciona una línea</option>
+                        {% for linea in lineas %}
+                            <option value="{{ linea.id }}"
+                                {% if artist.linea and artist.linea.id == linea.id %}selected{% endif %}>
+                                {{ linea.nombre }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-field">
+                    <label for="group-select">Grupo</label>
+                    <select name="group" id="group-select">
                         <option value="">Sin grupo</option>
                         {% for grupo in grupos %}
                             <option value="{{ grupo.id }}"
@@ -139,78 +328,95 @@
                 </div>
 
                 <div class="mb-field">
-                    <label>Línea artística</label>
-                    <select name="linea" id="linea-select">
-                        <option value="">Selecciona</option>
-                        {% for linea in lineas %}
-                            <option value="{{ linea.id }}"
-                                {% if artist.linea and artist.linea.id == linea.id %}selected{% endif %}>
-                                {{ linea.nombre }}
-                            </option>
-                        {% endfor %}
-                    </select>
+                    <label>Géneros asociados (máximo 3)</label>
+                    <div id="genres-container"
+                         class="genres-container"
+                         data-generos="{% for g in artist.genres.all %}{{ g.id }}{% if not forloop.last %},{% endif %}{% endfor %}">
+                    </div>
+                    <small id="genre-warning" style="color:#dc2626; display:none; margin-top:10px; font-weight:600;">
+                        ⚠️ Solo puedes seleccionar hasta 3 géneros
+                    </small>
                 </div>
 
-                <!-- 🔥 CONTENEDOR GENEROS CORREGIDO -->
-                <div id="genres-container"
-                     data-generos="{% for g in artist.genres.all %}{{ g.id }}{% if not forloop.last %},{% endif %}{% endfor %}">
-                </div>
-
-                <button type="submit" class="btn-main">Guardar</button>
+                <button type="submit" class="btn-main">💾 Guardar cambios</button>
             </form>
         </div>
     </div>
 </div>
 
 <script>
-    const lineaSelect = document.getElementById('linea-select');
+    /* ── Preview imagen principal ── */
+    document.getElementById('id_profile_image').addEventListener('change', function() {
+        if (this.files[0]) document.getElementById('preview').src = URL.createObjectURL(this.files[0]);
+    });
+
+    /* ── Preview imágenes extra ── */
+    function previewExtra(input, imgId, phId) {
+        if (!input.files[0]) return;
+        const slot = input.parentElement;
+        const url  = URL.createObjectURL(input.files[0]);
+
+        let img = document.getElementById(imgId);
+        if (!img) {
+            img = document.createElement('img');
+            img.id = imgId;
+            slot.insertBefore(img, input);
+        }
+        img.src = url;
+
+        const ph = document.getElementById(phId);
+        if (ph) ph.style.display = 'none';
+
+        let badge = slot.querySelector('.change-badge');
+        if (!badge) {
+            badge = document.createElement('div');
+            badge.className = 'change-badge';
+            badge.textContent = '📷 Cambiar';
+            slot.appendChild(badge);
+        }
+    }
+
+    /* ── Géneros ── */
+    const lineaSelect     = document.getElementById('linea-select');
     const genresContainer = document.getElementById('genres-container');
+    const warning         = document.getElementById('genre-warning');
 
     const generosActuales = genresContainer.dataset.generos
-        ? genresContainer.dataset.generos.split(',').map(Number)
-        : [];
+        ? genresContainer.dataset.generos.split(',').map(Number) : [];
 
     function loadGenres(lineaId) {
         if (!lineaId) {
-            genresContainer.innerHTML = '';
+            genresContainer.innerHTML = '<p style="color:#666;font-size:0.9rem;">Selecciona una línea para ver los géneros.</p>';
             return;
         }
-
         fetch(`/catalog/generos/${lineaId}/`)
             .then(r => r.json())
             .then(data => {
                 genresContainer.innerHTML = '';
-
                 data.forEach(g => {
-                    const wrapper = document.createElement('div');
-
                     const input = document.createElement('input');
-                    input.type = 'checkbox';
-                    input.name = 'genres';
-                    input.value = g.id;
-
-                    if (generosActuales.includes(g.id)) {
-                        input.checked = true;
-                    }
+                    input.type = 'checkbox'; input.name = 'genres';
+                    input.value = g.id; input.id = 'g_' + g.id;
+                    if (generosActuales.includes(g.id)) input.checked = true;
 
                     const label = document.createElement('label');
+                    label.htmlFor = input.id;
                     label.textContent = g.nombre;
 
-                    wrapper.appendChild(input);
-                    wrapper.appendChild(label);
+                    input.addEventListener('change', () => {
+                        const checked = genresContainer.querySelectorAll('input:checked').length;
+                        if (checked > 3) { input.checked = false; warning.style.display = 'block'; }
+                        else warning.style.display = 'none';
+                    });
 
-                    genresContainer.appendChild(wrapper);
+                    genresContainer.appendChild(input);
+                    genresContainer.appendChild(label);
                 });
             });
     }
 
-    if (lineaSelect.value) {
-        loadGenres(lineaSelect.value);
-    }
-
-    lineaSelect.addEventListener('change', function () {
-        loadGenres(this.value);
-    });
+    lineaSelect.addEventListener('change', function() { loadGenres(this.value); });
+    if (lineaSelect.value) loadGenres(lineaSelect.value);
 </script>
 
 {% endblock %}
