@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&family=Great+Vibes&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+:root {
+    --blue: #1a8fc4;
+    --blue-mid: #3ab4e0;
+    --dark: #0d2d45;
+    --text: #2e5570;
+    --white: #ffffff;
+}
+
+body {
+    font-family: 'DM Sans', sans-serif;
+    background: #eef6fb;
+}
+
+.page-wrapper {
+    max-width: 760px;
+    margin: auto;
+    padding: 60px 20px;
+}
+
+.header-block {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.header-title {
+    font-family: 'Great Vibes', cursive;
+    font-size: 3rem;
+    color: var(--dark);
+}
+
+.form-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+.field-wrap {
+    margin-bottom: 25px;
+}
+
+.field-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--blue);
+    font-size: 13px;
+    letter-spacing: 2px;
+}
+
+input, textarea, select {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #c2dff0;
+    background: #f4f8ff;
+}
+
+/* 🔥 NUEVO DISEÑO MIEMBROS */
+.members-scroll {
+    background: #f4f8ff;
+    border: 1.5px solid #c2dff0;
+    border-radius: 10px;
+    padding: 10px;
+    max-height: 220px;
+    overflow-y: auto;
+}
+
+.member-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 6px;
+    transition: background 0.2s ease;
+}
+
+.member-item:hover {
+    background: rgba(26, 143, 196, 0.08);
+}
+
+.member-item input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--blue);
+    cursor: pointer;
+}
+
+.member-item label {
+    flex: 1;
+    font-size: 14px;
+    color: var(--text);
+    cursor: pointer;
+    word-break: break-word;
+}
+
+.no-members {
+    text-align: center;
+    color: #6c8ea3;
+    padding: 20px;
+    font-style: italic;
+}
+
+.btn-submit {
+    width: 100%;
+    padding: 14px;
+    background: var(--dark);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-submit:hover {
+    background: var(--blue);
+}
+</style>
+
+<div class="page-wrapper">
+
+    <div class="header-block">
+        <h1 class="header-title">Crear agrupación</h1>
+    </div>
+
+    <div class="form-card">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="field-wrap">
+                <label class="field-label">Nombre</label>
+                {{ form.name }}
+            </div>
+
+            <div class="field-wrap">
+                <label class="field-label">Descripción</label>
+                {{ form.description }}
+            </div>
+
+            <div class="field-wrap">
+                <label class="field-label">Imagen del grupo</label>
+                {{ form.profile_image }}
+            </div>
+
+            <div class="field-wrap">
+                <label class="field-label">Miembros</label>
+
+                <div class="members-scroll">
+                    {% with selected_members=form.members.value %}
+                        {% for artista in form.members.field.queryset %}
+                            <div class="member-item">
+                                <input type="checkbox"
+                                       id="artista_{{ artista.id }}"
+                                       name="members"
+                                       value="{{ artista.id }}"
+                                       {% if selected_members and artista.id|stringformat:"s" in selected_members %}
+                                           checked
+                                       {% endif %}>
+
+                                <label for="artista_{{ artista.id }}">
+                                    {{ artista.stage_name }}
+                                </label>
+                            </div>
+                        {% empty %}
+                            <p class="no-members">No hay artistas registrados.</p>
+                        {% endfor %}
+                    {% endwith %}
+                </div>
+            </div>
+
+            <button type="submit" class="btn-submit">
+                Crear grupo →
+            </button>
+
+        </form>
+    </div>
+</div>
+
+{% endblock %}

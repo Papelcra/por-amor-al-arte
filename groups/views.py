@@ -26,7 +26,7 @@ def crear_grupo(request):
         form = GroupForm()
         selected_members = []
 
-    return render(request, 'artists/crear_grupo.html', {
+    return render(request, 'groups/crear_grupo.html', {
         'form': form,
         'selected_members': selected_members
     })
