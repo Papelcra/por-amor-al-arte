@@ -162,17 +162,18 @@ LOGOUT_REDIRECT_URL = '/accounts/login/'
 # ====================== 📨 ALLAUTH ======================
 
 ACCOUNT_SIGNUP_FORM_CLASS = 'users.forms.CustomSignupForm'
-
 ACCOUNT_ADAPTER = 'users.adapter.MyAccountAdapter'
-SOCIALACCOUNT_ADAPTER = 'users.adapter.MySocialAccountAdapter'  # ← agrega esta línea
-ACCOUNT_LOGIN_METHODS = {'email', 'username'}
-ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*', 'password1*', 'password2*']
-ACCOUNT_EMAIL_VERIFICATION = 'optional'
+SOCIALACCOUNT_ADAPTER = 'users.adapter.MySocialAccountAdapter'
 
+ACCOUNT_AUTHENTICATION_METHOD = 'email' # Prioriza el email para loguearse
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_REQUIRED = False # Opcional, pero recomendado si usas email como ID
 
-# 🔥 AQUÍ ESTÁ LA CLAVE DE TU PROBLEMA (REDIRECCIÓN POR ROL)
-ACCOUNT_ADAPTER = 'users.adapter.MyAccountAdapter'
-
+# 🔥 ESTAS LÍNEAS ACTIVAN LA VINCULACIÓN AUTOMÁTICA
+SOCIALACCOUNT_QUERY_EMAIL = True
+SOCIALACCOUNT_AUTO_SIGNUP = True 
+ACCOUNT_EMAIL_VERIFICATION = 'none' # Para que confíe en el email que viene de Google sin pedir confirmación extra
 
 # ====================== 📧 EMAIL ======================
 

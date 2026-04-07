@@ -44,7 +44,6 @@
         margin: 0 auto;
     }
 
-    /* Título */
     .titulo-bloque {
         text-align: center;
         margin-bottom: 40px;
@@ -66,7 +65,7 @@
         font-weight: 500;
     }
 
-    /* Filtros */
+    /* Contenedor de Filtros */
     .filtros {
         display: flex;
         flex-wrap: wrap;
@@ -91,11 +90,25 @@
         font-weight: 500;
         min-width: 200px;
         cursor: pointer;
+        transition: all 0.3s ease;
     }
 
-    select:focus {
-        border-color: var(--blue-mid);
-        box-shadow: 0 0 0 4px rgba(58,180,224,0.15);
+    /* ESTADO INICIAL DEL GÉNERO: Oculto y deshabilitado */
+    #id_genero_filter {
+        display: none; 
+        opacity: 0;
+    }
+
+    /* Clase para mostrar con animación */
+    .show-filter {
+        display: block !important;
+        opacity: 1 !important;
+        animation: fadeIn 0.5s forwards;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(5px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 
     .filtros button {
@@ -115,7 +128,6 @@
         transform: translateY(-2px);
     }
 
-    /* Grid */
     .contenedor {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -173,19 +185,7 @@
         margin-bottom: 8px;
     }
 
-    .card p {
-        color: var(--text);
-        font-size: 14px;
-        line-height: 1.55;
-        margin-bottom: 12px;
-    }
-
-    .card strong {
-        color: var(--dark);
-    }
-
-    /* Géneros como badges ovalados */
-    .genero {
+    .genero-tag {
         display: inline-block;
         background: #e8f6fc;
         color: var(--blue);
@@ -213,32 +213,19 @@
 
     .btn-ver:hover {
         background: var(--blue);
-        transform: translateY(-2px);
     }
 </style>
 
 <div class="page-wrapper">
 
-    <!-- Título -->
     <div class="titulo-bloque">
         <h2>🎨 Artistas</h2>
         <p>Descubre el talento de nuestra comunidad</p>
     </div>
 
-    <!-- Filtros -->
-    <form method="GET" class="filtros">
-        <select name="genre">
-            <option value="">Todos los géneros</option>
-            {% for genero in generos %}
-                <option value="{{ genero.id }}"
-                    {% if request.GET.genre == genero.id|stringformat:"s" %}selected{% endif %}>
-                    {{ genero.nombre }}
-                </option>
-            {% endfor %}
-        </select>
-
-        <select name="line">
-            <option value="">Todas las líneas</option>
+    <form method="GET" class="filtros" id="filter-form">
+        <select name="line" id="id_linea_filter">
+            <option value="">Selecciona una línea...</option>
             {% for linea in lineas %}
                 <option value="{{ linea.id }}"
                     {% if request.GET.line == linea.id|stringformat:"s" %}selected{% endif %}>
@@ -247,14 +234,24 @@
             {% endfor %}
         </select>
 
+        <select name="genre" id="id_genero_filter">
+            <option value="">Todos los géneros</option>
+            {% if request.GET.line %}
+                {% for genero in generos %}
+                    <option value="{{ genero.id }}"
+                        {% if request.GET.genre == genero.id|stringformat:"s" %}selected{% endif %}>
+                        {{ genero.nombre }}
+                    </option>
+                {% endfor %}
+            {% endif %}
+        </select>
+
         <button type="submit">Filtrar</button>
     </form>
 
-    <!-- Grid de artistas -->
     <div class="contenedor">
         {% for artista in artistas %}
         <div class="card">
-
             <div class="card-img-wrapper">
                 {% if artista.profile_image %}
                     <img src="{{ artista.profile_image.url }}" alt="{{ artista.stage_name }}">
@@ -265,41 +262,64 @@
 
             <div class="card-body">
                 <h3>{{ artista.stage_name|default:artista.user.username }}</h3>
-                <p>{{ artista.description|truncatewords:15|default:"Sin descripción" }}</p>
-
-                <!-- Géneros -->
+                <p><strong>Línea:</strong> {{ artista.linea.nombre|default:"Sin línea" }}</p>
                 <p><strong>Géneros:</strong><br>
                     {% for genero in artista.genres.all %}
-                        <span class="genero">{{ genero.nombre }}</span>
+                        <span class="genero-tag">{{ genero.nombre }}</span>
                     {% empty %}
                         <span style="color:#5a7a90;">Sin géneros</span>
                     {% endfor %}
                 </p>
-
-                <!-- Línea artística -->
-                <p><strong>Línea:</strong> 
-                    {{ artista.linea.nombre|default:"Sin línea" }}
-                </p>
-
-                <!-- Grupo -->
-                <p><strong>Grupo:</strong> 
-                    {% if artista.group %}
-                        <strong style="color: #1a8fc4;">{{ artista.group.name }}</strong>
-                    {% else %}
-                        <span style="color:#5a7a90;">Sin grupo</span>
-                    {% endif %}
-                </p>
-
-                <a href="{% url 'artists:ver_artista' artista.id %}" class="btn-ver">
-                
-                    Ver perfil
-                </a>
+                <a href="{% url 'artists:ver_artista' artista.id %}" class="btn-ver">Ver perfil</a>
             </div>
-
         </div>
+        {% empty %}
+            <p style="grid-column: 1/-1; text-align: center; color: var(--text); padding: 40px;">
+                No se encontraron artistas.
+            </p>
         {% endfor %}
     </div>
-
 </div>
+
+<script>
+    const lineaSelect = document.getElementById('id_linea_filter');
+    const generoSelect = document.getElementById('id_genero_filter');
+
+    // Función para manejar la visibilidad
+    function checkVisibility() {
+        if (lineaSelect.value !== "") {
+            generoSelect.classList.add('show-filter');
+        } else {
+            generoSelect.classList.remove('show-filter');
+            generoSelect.value = ""; // Limpiar género si quitan la línea
+        }
+    }
+
+    // Ejecutar al cargar la página (por si ya hay filtros aplicados)
+    checkVisibility();
+
+    lineaSelect.addEventListener('change', function() {
+        const lineaId = this.value;
+        
+        checkVisibility();
+
+        // Limpiar géneros actuales
+        generoSelect.innerHTML = '<option value="">Todos los géneros</option>';
+
+        if (lineaId) {
+            fetch(`/artists/ajax/generos/?linea_id=${lineaId}`)
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(genero => {
+                        const option = document.createElement('option');
+                        option.value = genero.id;
+                        option.textContent = genero.nombre;
+                        generoSelect.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    });
+</script>
 
 {% endblock %}

@@ -145,3 +145,11 @@ def lista_artistas(request):
 def ver_artista(request, artist_id):
     artista = get_object_or_404(Artist, id=artist_id)
     return render(request, 'artists/ver.html', {'artista': artista})
+
+
+from django.http import JsonResponse
+
+def obtener_generos_por_linea(request):
+    linea_id = request.GET.get('linea_id')
+    generos = Genre.objects.filter(linea_id=linea_id).values('id', 'nombre')
+    return JsonResponse(list(generos), safe=False)

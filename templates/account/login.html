@@ -7,7 +7,6 @@
 {% block content %}
 
 <style>
-
 /* 🌈 Fondo derecho */
 .bg-login {
     background: radial-gradient(circle at top left, #d9f1ff, #f8fcff);
@@ -66,6 +65,7 @@
     transform: translateY(-50%);
     color: #9ca3af;
     pointer-events: none;
+    z-index: 5;
 }
 
 .form-control {
@@ -80,6 +80,26 @@
     background: #ffffff !important;
     border-color: #0288d1 !important;
     box-shadow: 0 0 0 4px rgba(3,169,244,0.15) !important;
+}
+
+/* Estilo para errores */
+.error-text {
+    color: #dc3545;
+    font-size: 0.85rem;
+    margin-top: 4px;
+    margin-left: 5px;
+    display: block;
+}
+
+.alert-error-custom {
+    background-color: rgba(220, 53, 69, 0.1);
+    border: 1px solid rgba(220, 53, 69, 0.2);
+    color: #a94442;
+    padding: 12px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    text-align: center;
 }
 
 /* Botón login */
@@ -121,92 +141,92 @@
 .link-blue:hover {
     text-decoration: underline;
 }
-
 </style>
 
 <div class="container-fluid vh-100 p-0">
     <div class="row h-100">
 
-        <!-- IZQUIERDA -->
         <div class="col-lg-6 d-none d-lg-flex align-items-center justify-content-center position-relative overflow-hidden"
              style="background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&w=2070&auto=format&fit=crop') center/cover no-repeat;">
 
             <div class="text-center text-white px-5">
-                <h1 class="display-4 fw-bold mb-3" style="letter-spacing: -2px;">
-                    Por amor al arte
-                </h1>
-
+                <h1 class="display-4 fw-bold mb-3" style="letter-spacing: -2px;">Por amor al arte</h1>
                 <p class="lead mb-4 opacity-90">
                     Apoyamos el talento colombiano.<br>
                     Artes escénicas • Música • Artes plásticas • Literatura y más
                 </p>
-
                 <hr class="my-5 border-light opacity-25">
-
-                <p class="small opacity-75">
-                    Un proyecto en alianza con<br>
-                    <strong>Corporación Germina</strong>
-                </p>
+                <p class="small opacity-75">Un proyecto en alianza con<br><strong>Corporación Germina</strong></p>
             </div>
         </div>
 
-        <!-- DERECHA -->
         <div class="col-lg-6 d-flex align-items-center justify-content-center bg-login">
-
             <div class="login-card w-100" style="max-width: 420px;">
 
-                <div class="text-center mb-5">
+                <div class="text-center mb-4">
                     <h2 class="fw-bold" style="color:#0288d1;">Bienvenido de nuevo</h2>
                     <p class="text-muted">Inicia sesión para continuar</p>
                 </div>
 
+                {% if form.non_field_errors %}
+                <div class="alert-error-custom">
+                    {% for error in form.non_field_errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+                {% endif %}
+
                 <form method="POST" action="{% url 'account_login' %}">
                     {% csrf_token %}
 
-                    <div class="input-group mb-3">
-                        <span class="input-icon">👤</span>
-                        {{ form.login|add_class:"form-control" }}
+                    <div class="mb-3">
+                        <div class="input-group">
+                            <span class="input-icon">👤</span>
+                            {{ form.login|add_class:"form-control"|attr:"placeholder:Correo electrónico" }}
+                        </div>
+                        {% if form.login.errors %}
+                            {% for error in form.login.errors %}
+                                <span class="error-text">⚠️ {{ error }}</span>
+                            {% endfor %}
+                        {% endif %}
                     </div>
 
-                    <div class="input-group mb-2">
-                        <span class="input-icon">🔒</span>
-                        {{ form.password|add_class:"form-control" }}
+                    <div class="mb-2">
+                        <div class="input-group">
+                            <span class="input-icon">🔒</span>
+                            {{ form.password|add_class:"form-control"|attr:"placeholder:Contraseña" }}
+                        </div>
+                        {% if form.password.errors %}
+                            {% for error in form.password.errors %}
+                                <span class="error-text">⚠️ {{ error }}</span>
+                            {% endfor %}
+                        {% endif %}
                     </div>
 
                     <div class="text-end mb-3">
-                        <a href="{% url 'account_reset_password' %}" class="link-blue small">
-                            ¿Olvidaste tu contraseña?
-                        </a>
+                        <a href="{% url 'account_reset_password' %}" class="link-blue small">¿Olvidaste tu contraseña?</a>
                     </div>
 
                     <div class="form-check mb-4">
-                        {{ form.remember }}
+                        {{ form.remember|add_class:"form-check-input" }}
                         <label class="form-check-label">Recordarme</label>
                     </div>
 
-                    <button type="submit" class="btn btn-login w-100 py-3 mb-4">
-                        Ingresar
-                    </button>
+                    <button type="submit" class="btn btn-login w-100 py-3 mb-4">Ingresar</button>
                 </form>
 
                 <div class="text-center text-muted mb-3">o continúa con</div>
 
-                <!-- BOTÓN GOOGLE -->
                 <div class="text-center mb-4">
                     <a href="{% provider_login_url 'google' process='login' %}" 
                        class="btn btn-google w-100 py-3 d-flex align-items-center justify-content-center gap-2">
-
-                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" 
-                             style="width:20px;">
-
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" style="width:20px;">
                         Continuar con Google
                     </a>
                 </div>
 
                 <div class="text-center">
-                    <a href="{% url 'account_signup' %}" class="link-blue">
-                        Crear cuenta nueva
-                    </a>
+                    <a href="{% url 'account_signup' %}" class="link-blue">Crear cuenta nueva</a>
                 </div>
 
             </div>

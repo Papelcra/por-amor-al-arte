@@ -3,6 +3,7 @@
 from allauth.account.adapter import DefaultAccountAdapter
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from django.urls import reverse
+from users.models import User
 
 
 class MyAccountAdapter(DefaultAccountAdapter):
@@ -36,9 +37,35 @@ class MyAccountAdapter(DefaultAccountAdapter):
 # ✅ FIX: Adapter para Google — asigna role por defecto
 class MySocialAccountAdapter(DefaultSocialAccountAdapter):
 
+    def pre_social_login(self, request, sociallogin):
+        """
+        Si el email de Google ya existe en nuestra base de datos, 
+        conectamos la cuenta de Google al usuario existente automáticamente.
+        """
+        # 1. Si la cuenta ya está vinculada a un usuario, no hacemos nada
+        if sociallogin.is_existing:
+            return
+
+        # 2. Extraer el email de los datos que vienen de Google
+        # En Allauth moderno, el email viene dentro del diccionario 'extra_data'
+        email = sociallogin.account.extra_data.get('email')
+
+        if not email:
+            return
+
+        # 3. Intentar buscar al usuario por ese email
+        try:
+            user = User.objects.get(email=email)
+            # Vincular la cuenta de Google al usuario que ya existía
+            sociallogin.connect(request, user)
+        except User.objects.DoesNotExist:
+            # Si el usuario no existe, Allauth seguirá su curso y creará uno nuevo
+            pass
+
     def save_user(self, request, sociallogin, form=None):
         user = super().save_user(request, sociallogin, form)
-        if not user.role:          # si Google no trajo role, asigna uno por defecto
-            user.role = 'artist'   # ← cambia según tu lógica de negocio
+        # Si el usuario es nuevo (acaba de ser creado por Google)
+        if not user.role:
+            user.role = 'artist' # Rol por defecto para nuevos de Google
             user.save()
         return user

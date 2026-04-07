@@ -8,4 +8,5 @@ urlpatterns = [
     path('perfil/editar/', views.editar_perfil, name='editar'),  # ← NUEVA
     path('lista/', views.lista_artistas, name='lista'),
     path('<int:artist_id>/', views.ver_artista, name='ver_artista'),
+    path('ajax/generos/', views.obtener_generos_por_linea, name='ajax_generos'),
 ]
