@@ -8,9 +8,9 @@
     :root {
         --blue: #1a8fc4;
         --blue-mid: #3ab4e0;
-        --white: #ffffff;
         --dark: #0d2d45;
         --text: #2e5570;
+        --white: #ffffff;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -173,6 +173,29 @@
         color: #5a7a90;
         font-style: italic;
         font-size: 1.05rem;
+        padding: 20px 0;
+    }
+
+    /* Botón de editar (solo visible para el dueño) */
+    .btn-edit {
+        background: var(--dark);
+        color: white;
+        border: none;
+        border-radius: 50px;
+        padding: 12px 30px;
+        font-size: 1rem;
+        font-weight: 600;
+        margin-top: 30px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-edit:hover {
+        background: var(--blue);
+        transform: translateY(-3px);
     }
 </style>
 
@@ -198,7 +221,7 @@
             <h2 class="grupo-name">{{ grupo.name }}</h2>
             <p class="grupo-description">{{ grupo.description|default:"Sin descripción disponible." }}</p>
 
-            <div class="section-title">Integrantes Actuales</div>
+            <div class="section-title">👥 Integrantes Actuales</div>
             <div class="miembros-container">
                 {% for miembro in miembros %}
                     <a href="{% url 'artists:ver_artista' miembro.id %}" class="badge-miembro">
@@ -208,6 +231,13 @@
                     <p class="no-miembros">Este grupo aún no tiene miembros vinculados.</p>
                 {% endfor %}
             </div>
+
+            <!-- Botón de editar (solo si es el dueño) -->
+            {% if grupo.owner == request.user %}
+                <a href="{% url 'groups:editar_grupo' grupo.id %}" class="btn-edit">
+                    ✏️ Editar grupo
+                </a>
+            {% endif %}
         </div>
     </div>
 </div>

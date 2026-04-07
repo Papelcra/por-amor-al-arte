@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+
 from .models import Artist, ArtistImage
 from .forms import ArtistForm, ArtistImageForm
 from catalog.models import Genre, LineaArtistica
-from django.contrib import messages
 from groups.models import Group
 
 
@@ -31,82 +33,100 @@ def perfil_artista(request):
         'image_form': image_form,
         'images': images,
         'artist': artist,
+        'artista': artist,
     })
 
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-from .models import Artist
-from .forms import ArtistForm
-from catalog.models import Genre, LineaArtistica
-from groups.models import Group  # Asegúrate de tener esta importación
 
 @login_required
 def editar_perfil(request):
-    # Seguridad: Solo usuarios con rol 'artist' pueden acceder
     if request.user.role != 'artist':
         messages.error(request, "No tienes permiso para editar un perfil de artista.")
         return redirect('core:home')
 
-    # Obtener el perfil del artista vinculado al usuario actual o crearlo si no existe
     artist, created = Artist.objects.get_or_create(user=request.user)
-    
-    # Traer datos necesarios para los selects del template
     lineas = LineaArtistica.objects.all()
-    # Traer todos los grupos para el selector (puedes filtrar si lo deseas)
     grupos = Group.objects.all()
 
     if request.method == 'POST':
-        # Pasamos instance=artist para que Django sepa que estamos editando y no creando
         form = ArtistForm(request.POST, request.FILES, instance=artist)
 
         if form.is_valid():
-            # commit=False nos permite manipular el objeto antes de guardarlo en la DB
             artista = form.save(commit=False)
             artista.user = request.user
 
-            # 1. Procesar Línea Artística (Foreign Key)
+            # Línea artística
             linea_id = request.POST.get('linea')
-            if linea_id:
-                artista.linea_id = linea_id
-            else:
-                artista.linea = None
+            artista.linea_id = linea_id if linea_id else None
 
-            # 2. Procesar Grupo (Foreign Key)
-            # El 'name' en el <select> de tu HTML debe ser "group"
+            # Grupo
             group_id = request.POST.get('group')
+
+            group_id = request.POST.get('group')
+
+            # 🔥 limpiar relaciones anteriores
+            if artist.group:
+                artist.group.members.remove(artist)
+
             if group_id:
-                artista.group_id = group_id
+                try:
+                    grupo = Group.objects.get(id=group_id)
+                    artista.group = grupo
+                    artista.save()
+
+                    # 🔥 sincronizar MANY TO MANY
+                    grupo.members.add(artista)
+
+                except Group.DoesNotExist:
+                    artista.group = None
+                    artista.save()
             else:
                 artista.group = None
+                artista.save()
 
-            # Guardar el objeto principal
-            artista.save()
-
-            # 3. Procesar Géneros (Many-to-Many)
-            # Usamos getlist porque son múltiples checkboxes con name="genres"
-            generos_ids = request.POST.getlist('genres')
             
-            if len(generos_ids) <= 3:
-                artista.genres.set(generos_ids)
-                messages.success(request, "¡Perfil actualizado con éxito!")
-                return redirect('artists:ver_artista', artist_id=artista.id)
-            else:
-                messages.warning(request, "Se guardó el perfil, pero recuerda: solo se permiten máximo 3 géneros.")
-                # Aún así guardamos los primeros 3 o dejamos los anteriores
-                artista.genres.set(generos_ids[:3])
-                return redirect('artists:ver_artista', artist_id=artista.id)
+
+            # Imágenes extra para el carrusel (máximo 3)
+            imagenes_actuales = list(artist.images.order_by('order'))
+            slots = ['extra_image_1', 'extra_image_2', 'extra_image_3']
+
+            for i, slot in enumerate(slots):
+                archivo = request.FILES.get(slot)
+                if archivo:
+                    if i < len(imagenes_actuales):
+                        img_obj = imagenes_actuales[i]
+                        img_obj.image = archivo
+                        img_obj.save()
+                    else:
+                        if artist.images.count() < 3:
+                            ArtistImage.objects.create(
+                                artist=artista,
+                                image=archivo,
+                                order=i
+                            )
+
+            # Géneros (máximo 3)
+            generos_ids = request.POST.getlist('genres')
+            artista.genres.set(generos_ids[:3])
+
+            messages.success(request, "¡Perfil actualizado con éxito!")
+            return redirect('artists:ver_artista', artist_id=artista.id)
+
         else:
             messages.error(request, "Hubo un error en el formulario. Revisa los datos.")
     else:
-        # Si es GET, cargamos el formulario con los datos actuales
         form = ArtistForm(instance=artist)
+
+    imagenes = list(artist.images.order_by('order')[:3])
+    while len(imagenes) < 3:
+        imagenes.append(None)
 
     return render(request, 'artists/perfil.html', {
         'form': form,
         'lineas': lineas,
         'grupos': grupos,
         'artist': artist,
+        'artista': artist,
+        'imagenes_extra': imagenes,
     })
 
 
@@ -116,12 +136,19 @@ def ver_perfil(request):
         return redirect('core:home')
 
     artist = get_object_or_404(Artist, user=request.user)
-    return render(request, 'artists/ver.html', {'artista': artist})
+    return render(request, 'artists/ver.html', {
+        'artista': artist,
+        'artist': artist,
+    })
 
 
 def lista_artistas(request):
-    # Cargamos 'linea' y 'group' de una sola vez
-    artistas = Artist.objects.select_related('linea', 'group').prefetch_related('genres').all()
+    artistas = (
+        Artist.objects
+        .select_related('linea', 'group')
+        .prefetch_related('genres', 'images')
+        .all()
+    )
 
     genero_id = request.GET.get('genre')
     linea_id = request.GET.get('line')
@@ -144,4 +171,23 @@ def lista_artistas(request):
 
 def ver_artista(request, artist_id):
     artista = get_object_or_404(Artist, id=artist_id)
-    return render(request, 'artists/ver.html', {'artista': artista})
+    return render(request, 'artists/ver.html', {
+        'artista': artista,
+        'artist': artista,
+    })
+
+
+def get_grupo(request, artist_id):
+    artista = get_object_or_404(Artist, id=artist_id)
+    return JsonResponse({
+        'group_id': artista.group.id if artista.group else None,
+        'group_name': artista.group.name if artista.group else None,
+    })
+
+
+def get_artista_grupo(request, artista_id):
+    artista = get_object_or_404(Artist, id=artista_id)
+    return JsonResponse({
+        'group_id': artista.group.id if artista.group else None,
+        'group_name': artista.group.name if artista.group else None,
+    })

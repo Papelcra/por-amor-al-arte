@@ -44,7 +44,6 @@
         margin: 0 auto;
     }
 
-    /* Título */
     .titulo-bloque {
         text-align: center;
         margin-bottom: 40px;
@@ -64,6 +63,113 @@
         margin-top: 8px;
         letter-spacing: 1.5px;
         font-weight: 500;
+    }
+
+    /* Carrusel */
+    .carrusel-outer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 18px;
+        margin-bottom: 50px;
+    }
+
+    .carrusel-btn {
+        flex-shrink: 0;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: #fff;
+        border: 1.5px solid #c2dff0;
+        font-size: 24px;
+        color: var(--dark);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 14px rgba(0,80,160,0.10);
+        transition: all 0.25s;
+    }
+
+    .carrusel-btn:hover {
+        background: var(--blue);
+        color: #fff;
+        border-color: var(--blue);
+        transform: scale(1.10);
+        box-shadow: 0 6px 20px rgba(26,143,196,0.30);
+    }
+
+    .carrusel-btn:active { transform: scale(0.95); }
+
+    .carrusel-stage {
+        flex: 1;
+        max-width: 680px;
+        overflow: hidden;
+        border-radius: 22px;
+        padding: 0 60px;
+        position: relative;
+    }
+
+    .carrusel-track {
+        display: flex;
+        gap: 16px;
+        transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        will-change: transform;
+    }
+
+    .carrusel-slide {
+        flex: 0 0 100%;
+        border-radius: 18px;
+        overflow: hidden;
+        position: relative;
+        aspect-ratio: 4 / 3;
+        background: linear-gradient(135deg, #1578a8, #3ab4e0);
+        box-shadow: 0 8px 30px rgba(0,80,160,0.18);
+        transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .carrusel-slide img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.6s ease;
+    }
+
+    .carrusel-slide:hover img { transform: scale(1.05); }
+
+    .carrusel-avatar {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 5rem;
+        color: rgba(255,255,255,0.85);
+    }
+
+    .carrusel-dots {
+        display: flex;
+        justify-content: center;
+        gap: 7px;
+        margin-top: 16px;
+    }
+
+    .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #b8d8ec;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        transition: all 0.3s ease;
+    }
+
+    .dot.active {
+        background: var(--blue);
+        width: 24px;
+        border-radius: 4px;
     }
 
     /* Filtros */
@@ -161,9 +267,7 @@
         background: linear-gradient(135deg, #1578a8, #3ab4e0);
     }
 
-    .card-body {
-        padding: 22px 24px;
-    }
+    .card-body { padding: 22px 24px; }
 
     .card h3 {
         color: var(--dark);
@@ -180,11 +284,8 @@
         margin-bottom: 12px;
     }
 
-    .card strong {
-        color: var(--dark);
-    }
+    .card strong { color: var(--dark); }
 
-    /* Géneros como badges ovalados */
     .genero {
         display: inline-block;
         background: #e8f6fc;
@@ -225,6 +326,37 @@
         <p>Descubre el talento de nuestra comunidad</p>
     </div>
 
+    <!-- Carrusel -->
+    <div class="carrusel-outer">
+        <button class="carrusel-btn" onclick="moverCarrusel(-1)">&#8249;</button>
+
+        <div style="flex:1; max-width:680px;">
+            <div class="carrusel-stage">
+                <div class="carrusel-track" id="carruselTrack">
+                    {% for artista in artistas %}
+                        {% if artista.profile_image %}
+                        <div class="carrusel-slide">
+                            <img src="{{ artista.profile_image.url }}" alt="{{ artista.stage_name }}">
+                        </div>
+                        {% else %}
+                        <div class="carrusel-slide">
+                            <div class="carrusel-avatar">👤</div>
+                        </div>
+                        {% endif %}
+                        {% for img in artista.images.all %}
+                        <div class="carrusel-slide">
+                            <img src="{{ img.image.url }}" alt="{{ artista.stage_name }}">
+                        </div>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="carrusel-dots" id="carruselDots"></div>
+        </div>
+
+        <button class="carrusel-btn" onclick="moverCarrusel(1)">&#8250;</button>
+    </div>
+
     <!-- Filtros -->
     <form method="GET" class="filtros">
         <select name="genre">
@@ -254,7 +386,6 @@
     <div class="contenedor">
         {% for artista in artistas %}
         <div class="card">
-
             <div class="card-img-wrapper">
                 {% if artista.profile_image %}
                     <img src="{{ artista.profile_image.url }}" alt="{{ artista.stage_name }}">
@@ -262,12 +393,10 @@
                     <div class="default-avatar">👤</div>
                 {% endif %}
             </div>
-
             <div class="card-body">
                 <h3>{{ artista.stage_name|default:artista.user.username }}</h3>
                 <p>{{ artista.description|truncatewords:15|default:"Sin descripción" }}</p>
 
-                <!-- Géneros -->
                 <p><strong>Géneros:</strong><br>
                     {% for genero in artista.genres.all %}
                         <span class="genero">{{ genero.nombre }}</span>
@@ -276,30 +405,101 @@
                     {% endfor %}
                 </p>
 
-                <!-- Línea artística -->
-                <p><strong>Línea:</strong> 
-                    {{ artista.linea.nombre|default:"Sin línea" }}
+                <p><strong>Línea:</strong> {{ artista.linea.nombre|default:"Sin línea" }}</p>
+
+                <p><strong>Grupo:</strong>
+                    <span id="grupo-{{ artista.id }}" data-artista="{{ artista.id }}">
+                        {% if artista.group %}
+                            <strong style="color: #1a8fc4;">{{ artista.group.name }}</strong>
+                        {% else %}
+                            <span style="color:#5a7a90;">Sin grupo</span>
+                        {% endif %}
+                    </span>
                 </p>
 
-                <!-- Grupo -->
-                <p><strong>Grupo:</strong> 
-                    {% if artista.group %}
-                        <strong style="color: #1a8fc4;">{{ artista.group.name }}</strong>
-                    {% else %}
-                        <span style="color:#5a7a90;">Sin grupo</span>
-                    {% endif %}
-                </p>
-
-                <a href="{% url 'artists:ver_artista' artista.id %}" class="btn-ver">
-                
-                    Ver perfil
-                </a>
+                <a href="{% url 'artists:ver_artista' artista.id %}" class="btn-ver">Ver perfil</a>
             </div>
-
         </div>
         {% endfor %}
     </div>
 
 </div>
+
+<script>
+    let pos = 0;
+    let autoplay;
+    const track  = document.getElementById('carruselTrack');
+    const dotsEl = document.getElementById('carruselDots');
+    const total  = track.children.length;
+
+    for (let i = 0; i < total; i++) {
+        const d = document.createElement('button');
+        d.className = 'dot' + (i === 0 ? ' active' : '');
+        d.addEventListener('click', () => { irA(i); resetAutoplay(); });
+        dotsEl.appendChild(d);
+    }
+
+    function updateDots() {
+        dotsEl.querySelectorAll('.dot').forEach((d, i) =>
+            d.classList.toggle('active', i === pos));
+    }
+
+    function irA(index) {
+        pos = (index + total) % total;
+        track.style.transform = `translateX(calc(-${pos * 100}% - ${pos * 16}px))`;
+        updateDots();
+    }
+
+    function moverCarrusel(dir) {
+        irA(pos + dir);
+        resetAutoplay();
+    }
+
+    function resetAutoplay() {
+        clearInterval(autoplay);
+        autoplay = setInterval(() => irA(pos + 1), 3500);
+    }
+
+    let tx = 0;
+    track.addEventListener('touchstart', e => tx = e.touches[0].clientX);
+    track.addEventListener('touchend', e => {
+        const d = tx - e.changedTouches[0].clientX;
+        if (Math.abs(d) > 40) moverCarrusel(d > 0 ? 1 : -1);
+    });
+
+    resetAutoplay();
+
+    /* ── Polling grupos ── */
+    const estadoGrupos = {};
+    document.querySelectorAll('[id^="grupo-"]').forEach(el => {
+        estadoGrupos[el.dataset.artista] = el.innerHTML.trim();
+    });
+
+    function checkGrupos() {
+        document.querySelectorAll('[id^="grupo-"]').forEach(el => {
+            const id = el.dataset.artista;
+            fetch(`/artists/${id}/grupo/`)
+                .then(r => r.json())
+                .then(data => {
+                    const nuevoHtml = data.group_name
+                        ? `<strong style="color:#1a8fc4;">${data.group_name}</strong>`
+                        : `<span style="color:#5a7a90;">Sin grupo</span>`;
+
+                    if (estadoGrupos[id] !== nuevoHtml) {
+                        estadoGrupos[id] = nuevoHtml;
+                        el.innerHTML = nuevoHtml;
+                        el.style.transition = 'background 0.4s';
+                        el.style.background = '#d1fae5';
+                        el.style.borderRadius = '4px';
+                        el.style.padding = '2px 6px';
+                        setTimeout(() => { el.style.background = 'transparent'; }, 1500);
+                    }
+                })
+                .catch(() => {});
+        });
+    }
+
+    setInterval(checkGrupos, 5000);
+</script>
 
 {% endblock %}
